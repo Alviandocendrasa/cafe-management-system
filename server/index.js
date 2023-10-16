@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require('express');
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -11,7 +12,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const PORT = process.env.PORT || 3140;
-console.log(PORT)
+const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD)
+
+mongoose.connect(DB || 'mongodb://127.0.0.1:27017/csit314').then(con => {
+    console.log('DB connection successful')
+})
+
+
 app.listen(PORT, () => {
     console.log(`Server is starting on port ${PORT}`);
 });
