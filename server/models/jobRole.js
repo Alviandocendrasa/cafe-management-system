@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const jobRoleSchema = mongoose.model('JobRole', {
+const jobRoleSchema = new mongoose.Schema({
   jobTitle: { type: String, required: true },
   bidId: {
     type: mongoose.Schema.Types.ObjectId,
