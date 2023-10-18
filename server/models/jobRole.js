@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const jobRoleSchema = new mongoose.Schema({
   jobTitle: { type: String, required: true },
   bidId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Bid",
+    type: Array,
     required: true
   },
   workslotId: {
@@ -12,7 +11,12 @@ const jobRoleSchema = new mongoose.Schema({
     ref: "Workslot",
     required: true
   },
-  approvalStatus: { type: String, required: true }
+  approvalStatus: { 
+    type: String, 
+    enum : ['pending','processed'],
+    default: 'pending',
+    required: true 
+  }
 });
 
 const JobRole = mongoose.model("JobRole", jobRoleSchema);

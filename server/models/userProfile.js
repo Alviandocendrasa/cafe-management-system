@@ -9,6 +9,7 @@ const userProfileSchema = new mongoose.Schema({
   },
   username: { type: String, required: true },
   phoneNumber: { type: Number, required: true },
+  maxBidSlots: { type: Number, required: true },
 });
 
 const UserProfile = mongoose.model("UserProfile", userProfileSchema);
