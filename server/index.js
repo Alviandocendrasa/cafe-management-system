@@ -21,7 +21,7 @@ app.use("/api/auth", authRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3140;
-const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD)
+const DB = process.env.DATABASE?.replace('<PASSWORD>', process.env.DATABASE_PASSWORD)
 
 mongoose.connect(DB || 'mongodb://127.0.0.1:27017/csit314').then(con => {
     console.log('DB connection successful')
