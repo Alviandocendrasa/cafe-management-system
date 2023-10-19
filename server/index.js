@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 
 const errorHandler = require("./handlers/error");
 const authRoutes = require("./routes/authRoutes")
+const bidRoutes = require("./routes/bidRoutes")
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/bids/", bidRoutes)
 
 // error handler
 app.use(errorHandler);
