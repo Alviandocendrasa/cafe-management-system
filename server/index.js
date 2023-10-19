@@ -5,6 +5,9 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
+const swaggerUi = require("swagger-ui-express")
+const swaggerSpec = require("./swagger")
+
 const errorHandler = require("./handlers/error");
 const authRoutes = require("./routes/authRoutes")
 const bidRoutes = require("./routes/bidRoutes")
@@ -14,6 +17,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// api documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 // routes
 app.use("/api/auth", authRoutes);
