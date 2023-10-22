@@ -1,18 +1,9 @@
 const db = require("../models");
+const general = require("../handlers/general")
 
-exports.getAllBids = async function (req, res, next) {
-  try {
 
-    return res.status(200).json({
-      status: "success",
-      message: "Get all bids sucess",
-    });
-  }
-  catch (error) {
-    console.log("error: ", error)
-    return next({
-      httpCode: 400,
-      message: error.message
-    })
-  }
-}
+exports.getAllBids = general.getAll(db.Bid)
+exports.getBid = general.getOne(db.Bid)
+exports.updateBid = general.updateOne(db.Bid)
+exports.deleteBid = general.deleteOne(db.Bid)
+exports.createBid = general.createOne(db.Bid)

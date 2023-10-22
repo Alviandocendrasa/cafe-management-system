@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAllBids, getBid, updateBid, deleteBid, createBid } = require("../handlers/bid.js");
+const { getAllUsers, getUser, updateUser, deleteUser, createUser } = require("../handlers/user.js");
 const { protect } = require("../handlers/auth.js")
 
 const router = express.Router();
@@ -7,13 +7,13 @@ const router = express.Router();
 router.use(protect)
 
 router.route("/")
-  .get(getAllBids)
-  .post(createBid)
+  .get(getAllUsers)
+  .post(createUser)
 
 router.route("/:id/")
-  .get(getBid)
-  .patch(updateBid)
-  .delete(deleteBid)
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser)
 
 
 module.exports = router;

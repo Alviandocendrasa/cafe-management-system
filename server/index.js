@@ -9,8 +9,13 @@ const swaggerUi = require("swagger-ui-express")
 const swaggerSpec = require("./swagger")
 
 const errorHandler = require("./handlers/error");
+
 const authRoutes = require("./routes/authRoutes")
 const bidRoutes = require("./routes/bidRoutes")
+const workslotRoutes = require("./routes/workslotRoutes")
+const userRoutes = require("./routes/userRoutes")
+const userProfileRoutes = require("./routes/userProfileRoutes")
+const jobRoleRoutes = require("./routes/jobRoleRoutes")
 
 const app = express();
 
@@ -23,7 +28,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 // routes
 app.use("/api/auth", authRoutes);
-app.use("/api/bids/", bidRoutes)
+app.use("/api/bids", bidRoutes);
+app.use("/api/worklots", workslotRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/user-profiles", userProfileRoutes);
+app.use("/api/job-roles", jobRoleRoutes);
 
 // error handler
 app.use(errorHandler);
