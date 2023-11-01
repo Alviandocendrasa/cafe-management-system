@@ -1,6 +1,6 @@
 const express = require("express");
-const { getAllBids, getBid, updateBid, deleteBid, createBid } = require("../handlers/bid.js");
-const { protect } = require("../handlers/auth.js")
+const { getAllBids, getBid, updateBid, deleteBid, createBid } = require("../controllers/bid.js");
+const { protect } = require("../controllers/authController.js")
 
 const router = express.Router();
 

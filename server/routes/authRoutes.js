@@ -1,7 +1,9 @@
 const express = require("express");
-const { register, login } = require("../handlers/auth");
+//const { register, login } = require("../handlers/authController");
+const AuthController = require("../controllers/authController");
 
 const router = express.Router();
+const authController = new AuthController();
 
 /**
  * @swagger
@@ -34,7 +36,7 @@ const router = express.Router();
  *                - username
  *                - maxBidSlots 
  */
-router.post("/register", register);
+router.post("/register", authController.register.bind(authController));
 
 /**
  * @swagger
@@ -55,6 +57,6 @@ router.post("/register", register);
  *               - email
  *               - password
  */
-router.post("/login/", login)
+router.post("/login", authController.login.bind(authController));
 
 module.exports = router;

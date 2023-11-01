@@ -1,5 +1,5 @@
 const db = require("../models");
-const general = require("../handlers/general")
+const general = require("../controllers/general")
 
 
 exports.getAllBids = general.getAll(db.Bid)
