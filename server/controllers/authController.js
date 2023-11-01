@@ -1,9 +1,9 @@
 const db = require("../models");
-const UserEntity = require("../entities/userEntity");
-const UserProfileEntity = require("../entities/userProfileEntity")
-
 const jwt = require("jsonwebtoken");
-const { promisify } = require("util")
+const { promisify } = require("util");
+
+const UserEntity = require("../entities/userEntity");
+const UserProfileEntity = require("../entities/userProfileEntity");
 
 class AuthController {
     /* ============================= Controller methods ============================= */
@@ -43,9 +43,8 @@ class AuthController {
         try {
             const { email, password } = req.body
 
-            const user = await db.User.findOne({
-                email
-            })
+            const userEntity = new UserEntity();
+            const user = await userEntity.findUserByEmail(email);
 
             if (!user) {
                 return next({
@@ -54,7 +53,6 @@ class AuthController {
                 })
             }
 
-            const userEntity = new UserEntity();
             const isMatch = await userEntity.comparePassword(user, password);
 
             if (!isMatch) {
@@ -103,7 +101,9 @@ class AuthController {
 
             const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-            const currentUser = await db.User.findById(decoded.id);
+            const userEntity = new UserEntity
+            const currentUser = await userEntity.getUserById(decoded.id);
+
             if (!currentUser) {
                 return next({
                     httpCode: 401,
