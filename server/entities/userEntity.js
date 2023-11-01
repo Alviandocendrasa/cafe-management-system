@@ -5,12 +5,42 @@ class UserEntity {
     return db.User.create({ email, password });
   }
 
-  async findUserByEmail(email) {
-    return db.User.findOne({ email });
+  async getAllUsers() {
+    try {
+      return await db.User.find({});
+    }
+    catch (error) {
+      throw error;
+    }
   }
 
-  async getUserById(id) {
-    return db.User.findById(id);
+  async getUser(userId) {
+    return db.User.findById(userId);
+  }
+
+  async updateUser(userId, data) {
+    try {
+      return await db.User.findByIdAndUpdate(userId, data, {
+        new: true,
+        runValidators: true
+      })
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteUser(userId) {
+    try {
+      return await db.User.findByIdAndDelete(userId);
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+
+  async findUserByEmail(email) {
+    return db.User.findOne({ email });
   }
 
   async comparePassword(user, password) {

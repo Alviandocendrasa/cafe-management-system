@@ -102,7 +102,7 @@ class AuthController {
             const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
             const userEntity = new UserEntity
-            const currentUser = await userEntity.getUserById(decoded.id);
+            const currentUser = await userEntity.getUser(decoded.id);
 
             if (!currentUser) {
                 return next({

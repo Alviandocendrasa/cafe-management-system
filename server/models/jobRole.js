@@ -11,11 +11,11 @@ const jobRoleSchema = new mongoose.Schema({
     ref: "Workslot",
     required: true
   },
-  approvalStatus: { 
-    type: String, 
-    enum : ['pending','processed'],
+  approvalStatus: {
+    type: String,
+    enum: ['pending', 'processed'],
     default: 'pending',
-    required: true 
+    required: true
   }
 });
 
