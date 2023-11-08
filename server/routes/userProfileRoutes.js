@@ -1,19 +1,23 @@
 const express = require("express");
-const { getAllUserProfiles, getUserProfile, updateUserProfile, deleteUserProfile, createUserProfile } = require("../handlers/userProfile.js");
-const { protect } = require("../handlers/auth.js")
+
+const UserProfileController = require("../controllers/userProfileController.js")
+const AuthController = require("../controllers/authController.js")
+
+const userProfileController = new UserProfileController();
+const authController = new AuthController();
 
 const router = express.Router();
 
-router.use(protect)
+router.use(authController.protect.bind(authController))
 
 router.route("/")
-  .get(getAllUserProfiles)
-  .post(createUserProfile)
+  .get(userProfileController.getAllUserProfiles.bind(userProfileController))
+  .post(userProfileController.createUserProfile.bind(userProfileController))
 
 router.route("/:id/")
-  .get(getUserProfile)
-  .patch(updateUserProfile)
-  .delete(deleteUserProfile)
+  .get(userProfileController.getUserProfile.bind(userProfileController))
+  .patch(userProfileController.updateUserProfile.bind(userProfileController))
+  .delete(userProfileController.deleteUserProfile.bind(userProfileController))
 
 
 module.exports = router;

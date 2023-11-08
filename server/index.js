@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const swaggerUi = require("swagger-ui-express")
 const swaggerSpec = require("./swagger")
 
-const errorHandler = require("./handlers/error");
+const errorController = require("./controllers/errorController");
 
 const authRoutes = require("./routes/authRoutes")
 const bidRoutes = require("./routes/bidRoutes")
@@ -29,13 +29,13 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/bids", bidRoutes);
-app.use("/api/worklots", workslotRoutes);
+app.use("/api/workslots", workslotRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/user-profiles", userProfileRoutes);
 app.use("/api/job-roles", jobRoleRoutes);
 
 // error handler
-app.use(errorHandler);
+app.use(errorController);
 
 const PORT = process.env.PORT || 3140;
 const DB = process.env.NODE_ENV == "production" ? process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD) : null;

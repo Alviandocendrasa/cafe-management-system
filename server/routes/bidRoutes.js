@@ -1,19 +1,22 @@
 const express = require("express");
-const { getAllBids, getBid, updateBid, deleteBid, createBid } = require("../handlers/bid.js");
-const { protect } = require("../handlers/auth.js")
+
+const BidController = require("../controllers/bidController.js")
+const AuthController = require("../controllers/authController.js")
+
+const bidController = new BidController();
+const authController = new AuthController();
 
 const router = express.Router();
 
-router.use(protect)
+router.use(authController.protect.bind(authController))
 
 router.route("/")
-  .get(getAllBids)
-  .post(createBid)
+  .get(bidController.getAllBids.bind(bidController))
+  .post(bidController.createBid.bind(bidController))
 
 router.route("/:id/")
-  .get(getBid)
-  .patch(updateBid)
-  .delete(deleteBid)
-
+  .get(bidController.getBid.bind(bidController))
+  .patch(bidController.updateBid.bind(bidController))
+  .delete(bidController.deleteBid.bind(bidController))
 
 module.exports = router;
