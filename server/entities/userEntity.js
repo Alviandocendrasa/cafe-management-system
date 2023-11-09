@@ -1,8 +1,8 @@
 const db = require("../models");
 
 class UserEntity {
-  async createUser(email, password) {
-    return db.User.create({ email, password });
+  async createUser(username, password) {
+    return db.User.create({ username, password });
   }
 
   async getAllUsers() {
@@ -39,8 +39,8 @@ class UserEntity {
     }
   }
 
-  async findUserByEmail(email) {
-    return db.User.findOne({ email });
+  async findUserByUsername(username) {
+    return db.User.findOne({ username });
   }
 
   async comparePassword(user, password) {

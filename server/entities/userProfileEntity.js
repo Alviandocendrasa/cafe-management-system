@@ -1,13 +1,10 @@
 const db = require("../models");
 
 class UserProfileEntity {
-  async createUserProfile(email, password) {
-    return db.UserProfile.create({ email, password });
+  async createUserProfile(userId, role, phoneNumber, maxBidSlots) {
+    return db.UserProfile.create({ role, userId, phoneNumber, maxBidSlots });
   }
 
-  async findUserProfileByEmail(email) {
-    return db.UserProfile.findOne({ email });
-  }
 
   async getAllUserProfiles() {
     try {

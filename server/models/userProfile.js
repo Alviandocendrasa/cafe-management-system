@@ -7,8 +7,7 @@ const userProfileSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-  username: { type: String, required: true },
-  phoneNumber: { type: Number, required: true },
+  phoneNumber: { type: String, required: true },
   maxBidSlots: { type: Number, required: true },
 });
 

@@ -5,10 +5,10 @@ class UserController {
 
   async createUser(req, res, next) {
     try {
-      const { email, password } = req.params.body;
+      const { username, password } = req.params.body;
 
       const userEntity = new UserEntity();
-      const doc = await userEntity.createUser(email, password);
+      const doc = await userEntity.createUser(username, password);
 
       if (!doc) {
         return next({

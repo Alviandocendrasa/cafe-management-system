@@ -10,20 +10,21 @@ class AuthController {
 
     async register(req, res, next) {
         try {
-            const { email, password, role, username, phoneNumber, maxBidSlots } = req.body;
+            const { password, role, username, phoneNumber, maxBidSlots } = req.body;
+            console.log('req body: ', req.body)
 
 
             const userEntity = new UserEntity();
-            const newUser = await userEntity.createUser(email, password);
+            const newUser = await userEntity.createUser(username, password);
 
             const userProfileEntity = new UserProfileEntity();
-            const newUserProfile = await userProfileEntity.createUserProfile(newUser._id, username, phoneNumber, role, maxBidSlots)
+            const newUserProfile = await userProfileEntity.createUserProfile(newUser._id, role, phoneNumber, maxBidSlots)
 
             return res.status(200).json({
                 status: "success",
                 message: "User registered successfully",
                 data: {
-                    email,
+                    username,
                     role,
                     username,
                     phoneNumber,
@@ -41,10 +42,10 @@ class AuthController {
 
     async login(req, res, next) {
         try {
-            const { email, password } = req.body
+            const { username, password } = req.body
 
             const userEntity = new UserEntity();
-            const user = await userEntity.findUserByEmail(email);
+            const user = await userEntity.findUserByUsername(username);
 
             if (!user) {
                 return next({
@@ -58,7 +59,7 @@ class AuthController {
             if (!isMatch) {
                 return next({
                     httpCode: 404,
-                    message: "Email or password is incorrect!"
+                    message: "Username or password is incorrect!"
                 })
             }
 

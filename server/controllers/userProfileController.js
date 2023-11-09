@@ -5,7 +5,7 @@ class UserProfileController {
 
   async createUserProfile(req, res, next) {
     try {
-      const { email, password } = req.params.body;
+      const { role, userId, phoneNumber, maxBidSlots } = req.params.body;
 
       const userProfileEntity = new UserProfileEntity();
       const doc = await userProfileEntity.createUserProfile(email, password);
