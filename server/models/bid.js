@@ -6,15 +6,19 @@ const bidSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-  jobRoleId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "JobRole",
+  jobTitle: {
+    type: String,
     required: true
   },
   bidStatus: {
     type: String,
-    enum : ['pending', 'approved', 'rejected'],
+    enum: ['pending', 'approved', 'rejected'],
     default: 'pending',
+    required: true
+  },
+  workslotId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Workslot",
     required: true
   }
 });

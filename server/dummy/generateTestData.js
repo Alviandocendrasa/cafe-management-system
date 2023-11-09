@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { faker } = require('@faker-js/faker');
-const { User, UserProfile, JobRole, Workslot, Bid } = require("../models")
+const { User, UserProfile, Workslot, Bid } = require("../models")
 
 // MongoDB connection setup
 const DB = process.env.NODE_ENV == "production" ? process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD) : null;

@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const workslotSchema = new mongoose.Schema({
-  jobRole: { type: Array, required: true },
+  pendingJob: { type: Array, required: true },
+  approvedJob: { type: Array, required: true },
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
   cafeManagerId: {
