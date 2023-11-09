@@ -6,10 +6,10 @@ class BidController {
 
   async createBid(req, res, next) {
     try {
-      const { cafeStaffId, jobRoleId, bidStatus } = req.params.body;
+      const { cafeStaffId, jobRoleId, bidStatus, workslotId } = req.params.body;
 
       const bidEntity = new BidEntity();
-      const doc = await bidEntity.createBid(cafeStaffId, jobRoleId, bidStatus);
+      const doc = await bidEntity.createBid(cafeStaffId, jobRoleId, bidStatus, workslotId);
 
       if (!doc) {
         return next({
@@ -60,6 +60,7 @@ class BidController {
 
   async getAllBids(req, res, next) {
     try {
+
       const bidEntity = new BidEntity();
       const doc = await bidEntity.getAllBids();
 
@@ -127,6 +128,26 @@ class BidController {
         message: error.message
       })
     }
+  }
+
+  async getBidByCafeStaffId(req, res, next) {
+    const cafeStaffId = req.params.cafeStaffId;
+
+    if (!cafeStaffId) {
+      return next({
+        httpCode: 400,
+        message: "Cafe staff id cannot be empty"
+      })
+    }
+
+    const bidEntity = new BidEntity();
+    const doc = await bidEntity.getBidByCafeStaffId(cafeStaffId)
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Bid retrieved successfully',
+      data: doc
+    });
   }
 }
 
