@@ -15,7 +15,6 @@ const bidRoutes = require("./routes/bidRoutes")
 const workslotRoutes = require("./routes/workslotRoutes")
 const userRoutes = require("./routes/userRoutes")
 const userProfileRoutes = require("./routes/userProfileRoutes")
-const jobRoleRoutes = require("./routes/jobRoleRoutes")
 
 const app = express();
 
@@ -32,7 +31,6 @@ app.use("/api/bids", bidRoutes);
 app.use("/api/workslots", workslotRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/user-profiles", userProfileRoutes);
-app.use("/api/job-roles", jobRoleRoutes);
 
 // error handler
 app.use(errorController);

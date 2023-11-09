@@ -8,4 +8,3 @@ module.exports.User = require("./user");
 module.exports.UserProfile = require("./userProfile");
 module.exports.Workslot = require("./workslot");
 module.exports.Bid = require("./bid");
-module.exports.JobRole = require("./jobRole");

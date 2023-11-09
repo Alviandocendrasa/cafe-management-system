@@ -19,4 +19,7 @@ router.route("/:id/")
   .patch(bidController.updateBid.bind(bidController))
   .delete(bidController.deleteBid.bind(bidController))
 
+router.route("/cafe-staff-id/:cafeStaffId/")
+  .get(bidController.getBidByCafeStaffId.bind(bidController))
+
 module.exports = router;
