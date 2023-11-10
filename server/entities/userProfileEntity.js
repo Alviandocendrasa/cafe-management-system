@@ -39,6 +39,15 @@ class UserProfileEntity {
       throw error;
     }
   }
+
+  async getUserProfileByUserId(userId) {
+    try {
+      return await db.UserProfile.findOne({ userId })
+    }
+    catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = UserProfileEntity;

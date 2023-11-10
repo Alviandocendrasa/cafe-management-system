@@ -63,7 +63,18 @@ class AuthController {
                 })
             }
 
-            this.createSendToken(user, 200, req, res);
+            const userProfileEntity = new UserProfileEntity();
+            const userProfileData = await userProfileEntity.getUserProfileByUserId(user._id);
+
+            if (!userProfileData) {
+                return next({
+                    httpCode: 404,
+                    message: `User profile not found with user id ${user._id} not found`
+                })
+            }
+
+            const newUser = { ...user._doc, ...userProfileData._doc };
+            this.createSendToken(newUser, 200, req, res);
         }
         catch (error) {
             return next({
