@@ -6,10 +6,11 @@ class BidController {
 
   async createBid(req, res, next) {
     try {
-      const { cafeStaffId, jobRoleId, bidStatus, workslotId } = req.params.body;
+      const { cafeStaffId, jobTitle, bidStatus, workslotId } = req.body;
+      console.log(req.body);
 
       const bidEntity = new BidEntity();
-      const doc = await bidEntity.createBid(cafeStaffId, jobRoleId, bidStatus, workslotId);
+      const doc = await bidEntity.createBid(cafeStaffId, jobTitle, bidStatus, workslotId);
 
       if (!doc) {
         return next({
@@ -20,7 +21,7 @@ class BidController {
 
       res.status(201).json({
         status: 'success',
-        message: 'Bid created successfully',
+        message: 'Successfully bid!',
         data: doc
       });
     }

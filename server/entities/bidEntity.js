@@ -1,9 +1,9 @@
 const db = require("../models");
 
 class BidEntity {
-  async createBid(cafeStaffId, jobRoleId, bidStatus, workslotId) {
+  async createBid(cafeStaffId, jobTitle, bidStatus, workslotId) {
     try {
-      return await db.Bid.create({ cafeStaffId, jobRoleId, bidStatus, workslotId });
+      return await db.Bid.create({ cafeStaffId, jobTitle, bidStatus, workslotId });
     }
     catch (error) {
       throw error;
@@ -51,7 +51,8 @@ class BidEntity {
 
   async getBidByCafeStaffId(cafeStaffId) {
     try {
-      return await db.Bid.find({ cafeStaffId: cafeStaffId });
+      return await db.Bid.find({ cafeStaffId: cafeStaffId }).populate('workslotId');
+      
     }
     catch (error) {
       throw error;

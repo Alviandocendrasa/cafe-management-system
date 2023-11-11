@@ -1,39 +1,56 @@
 import React from 'react';
-
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 
-import navbarIcon from '../images/coffee-icon.png';
+import { AppBar, Box, Button, Container, IconButton, Toolbar  } from '@mui/material';
+import CoffeeIcon from '@mui/icons-material/Coffee';
 
-const NavBar = () => {
+const pages = [
+    {
+        title: "Login",
+        link: "/login"
+    },
+    {
+        title: "Register",
+        link: "/register"
+    },
+    {
+        title: "Workslots",
+        link: "/workslots"
+    },
+    {
+        title: "New Workslot",
+        link: "/workslot/new"
+    },
+    {
+        title: "Profile",
+        link: "/profile"
+    },
+];
 
-    /* let authToken = sessionStorage.getItem('Auth Token');
-
-    let navigate = useNavigate();
-
-    const handleLogout = () => {
-        sessionStorage.removeItem('Auth Token');
-        navigate('/')
-    } */
+const Navbar = () => {
 
     return (
-    <>
-        <img className='navbar-icon' src={navbarIcon}/>
-        <h className="navbar-header">Cafe Staff Management System</h> 
-            <nav>
-                <div className='menuitem'>
-
-                        <NavLink to='/Test'>Test</NavLink>
-                        <NavLink to='/Login'>Login</NavLink>
-                        <NavLink to='/Staff'>Staff</NavLink>
-                        <NavLink to='/Work'>Work</NavLink>
-                        <NavLink to='/Profile'>Profile</NavLink>
-                        {/* {authToken === null ? (<NavLink to='/Login'>Login</NavLink>):(<NavLink to='/Profile'>Profile</NavLink>)}
-                        {authToken === null ? "" :(<Link onClick={handleLogout}>Logout</Link>)} */}
-                        <hr></hr>
-                </div>
-            </nav>
-    </>
+    <AppBar position='relative'>
+        <Container maxWidth="xl">
+            <Toolbar disableGutters>
+                <NavLink to="/">
+                    <CoffeeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                </NavLink>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    {pages.map((page) => (
+                        <Button    
+                            key={page.title}
+                            sx={{ my: 2, color: 'white', display: 'block', fontWeight: '900' }}
+                        >
+                            <NavLink to={page.link}>{page.title}</NavLink>
+                        </Button>
+                    ))}
+                </Box>
+                
+            </Toolbar>
+        </Container>
+    </AppBar>
     )
 }
 
-export default NavBar
+export default Navbar

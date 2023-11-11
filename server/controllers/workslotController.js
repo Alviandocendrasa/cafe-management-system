@@ -5,10 +5,10 @@ class WorkslotController {
 
   async createWorkslot(req, res, next) {
     try {
-      const { jobRole, startTime, endTime, cafeManagerId } = req.params.body;
+      const { pendingJob, approvedJob, startTime, endTime, cafeManagerId } = req.body;
 
       const workslotEntity = new WorkslotEntity();
-      const doc = await workslotEntity.createWorkslot(jobRole, startTime, endTime, cafeManagerId);
+      const doc = await workslotEntity.createWorkslot(pendingJob, approvedJob, startTime, endTime, cafeManagerId);
 
       if (!doc) {
         return next({

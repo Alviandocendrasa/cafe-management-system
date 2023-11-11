@@ -74,6 +74,10 @@ class AuthController {
             }
 
             const newUser = { ...user._doc, ...userProfileData._doc };
+
+            // Remove _id from output to prevent conflict bug
+            newUser._id = undefined;
+
             this.createSendToken(newUser, 200, req, res);
         }
         catch (error) {
@@ -113,13 +117,14 @@ class AuthController {
 
             const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-            const userEntity = new UserEntity
+            const userEntity = new UserEntity();
             const currentUser = await userEntity.getUser(decoded.id);
+            console.log(decoded);
 
             if (!currentUser) {
                 return next({
                     httpCode: 401,
-                    message: 'The user belonging to this token does no longer exist.'
+                    message: 'The user belonging to this token not longer exist.'
                 })
             }
 
@@ -137,14 +142,14 @@ class AuthController {
 
     /* =============================== Helper methods =============================== */
 
-    signToken(id) {
-        return jwt.sign({ id }, process.env.JWT_SECRET, {
+    signToken(data) {
+        return jwt.sign(data, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_IN
         });
     }
 
     createSendToken = (user, statusCode, req, res) => {
-        const token = this.signToken(user._id);
+        const token = this.signToken({id: user.userId, role: user.role});
 
         res.cookie('jwt', token, {
             expires: new Date(

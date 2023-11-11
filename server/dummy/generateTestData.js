@@ -18,8 +18,8 @@ const createTestData = async () => {
   const users = [];
   for (let i = 0; i < 100; i++) {
     const newUser = {
-      username: faker.person.firstName() + " " + faker.person.middleName(),
-      password: "test password",
+      username: faker.person.firstName() + faker.person.middleName(),
+      password: "123",
     };
     const createdUser = await User.create(newUser);
     users.push(createdUser);
@@ -27,7 +27,7 @@ const createTestData = async () => {
 
   // USER PROFILES
   const userProfiles = users.map((user) => ({
-    role: faker.helpers.arrayElement(["cafeStaff", "cafeManager", "cafeOwner", "admin"]),
+    role: faker.helpers.arrayElement(["staff", "manager", "owner", "admin"]),
     userId: user._id,
     phoneNumber: faker.phone.number(),
     maxBidSlots: faker.number.int({ min: 1, max: 10 }),
@@ -36,12 +36,15 @@ const createTestData = async () => {
   await UserProfile.insertMany(userProfiles);
 
   // WORKSLOTS
-  const userProfileManager = userProfiles.filter((userProfile) => userProfile.role === "cafeManager")
+  const userProfileManager = userProfiles.filter((userProfile) => userProfile.role === "manager")
   let workslots = [];
   for (let i = 0; i < 100; i++) {
+    let pendingArr = faker.helpers.arrayElements(["chef", "waiter", "cashier", "bartender"], { min: 3, max: 4 });
+    let deltaPending = faker.helpers.arrayElements(["chef", "waiter", "bartender"], { min: 0, max: 3 })
+    
     const workslot = {
-      pendingJob: faker.helpers.arrayElements(["head chef", "sous chef", "waiter", "waitress", "bartender"], { min: 3, max: 5 }),
-      approvedJob: faker.helpers.arrayElements(["head chef", "sous chef", "waiter", "waitress", "bartender"], { min: 2, max: 3 }),
+      pendingJob: pendingArr.concat(deltaPending),
+      approvedJob: faker.helpers.arrayElements(["chef", "waiter", "cashier", "bartender"], { min: 1, max: 3 }),
       startTime: faker.date.past(),
       endTime: faker.date.future(),
       cafeManagerId: faker.helpers.arrayElement(userProfileManager).userId
@@ -53,7 +56,7 @@ const createTestData = async () => {
 
   // BIDS
   const bids = [];
-  const userProfileStaff = userProfiles.filter((userProfile) => userProfile.role === "cafeStaff")
+  const userProfileStaff = userProfiles.filter((userProfile) => userProfile.role === "staff")
   for (let i = 0; i < 100; i++) {
     const selectedWorkslot = faker.helpers.arrayElement(workslots);
     const selectedJobTitle = faker.helpers.arrayElement(selectedWorkslot.pendingJob);

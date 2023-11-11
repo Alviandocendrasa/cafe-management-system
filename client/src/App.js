@@ -1,50 +1,52 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { brown, deepOrange, orange, amber, grey } from '@mui/material/colors';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import './App.css';
-import logo from './logo.svg';
 
+import { removeMessage } from './store/actions';
 import Navbar from './components/Navbar';
-import Test from './components/Test';
 import Profile from './components/Profile';
-import LoginForm from './components/LoginForm';
-import StaffList from './components/Staff';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import WorkSlotsPage from './pages/WorkSlotsPage';
+import WorkSlotNewPage from './pages/WorkSlotNewPage';
+import ProfilePage from './pages/ProfilePage';
 
-const App = () => (
+const theme = createTheme({
+  palette: {
+    primary: brown,
+    secondary: grey,
+  },
+});
 
-  <Router>
+const App = () => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  
+  useEffect(()=>{
+      dispatch(removeMessage());
+  },[location])
 
-      <Navbar />
-      <div className='container'>
-        <Routes>
-          <Route path="/Test"  element ={ <Test />} />
-          <Route path="/Login"  element ={ <LoginForm />} />
-          <Route path="/Staff"  element ={ <StaffList />} />
-          <Route path="/Profile"  element ={ <Profile />} />
-        </Routes>
-      </div>
-      
-  </Router>
-);
-
-/* function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-} */
+    <ThemeProvider theme={theme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Navbar />
+        <Routes>
+          <Route path="/login"  element ={ <LoginPage />} />
+          <Route path="/register"  element ={ <RegisterPage />} />
+          <Route path="/workslots"  element ={ <WorkSlotsPage />} />
+          <Route path="/workslot/new"  element ={ <WorkSlotNewPage />} />
+          <Route path="/profile"  element ={ <ProfilePage />} />
+        </Routes>
+      </LocalizationProvider>
+    </ThemeProvider>      
+  )
+};
+
 
 export default App;

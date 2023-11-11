@@ -1,9 +1,9 @@
 const db = require("../models");
 
 class WorkslotEntity {
-  async createWorkslot(jobRole, startTime, endTime, cafeManagerId) {
+  async createWorkslot(pendingJob, approvedJob, startTime, endTime, cafeManagerId) {
     try {
-      return await db.Workslot.create({ jobRole, startTime, endTime, cafeManagerId });
+      return await db.Workslot.create({ pendingJob, approvedJob, startTime, endTime, cafeManagerId });
     }
     catch (error) {
       throw error;
