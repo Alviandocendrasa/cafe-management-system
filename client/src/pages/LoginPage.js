@@ -7,6 +7,7 @@ import { Visibility, VisibilityOff} from '@mui/icons-material';
 
 import { login } from '../store/actions';
 import Toast from "../components/Toast";
+import LoginBoundary from "../boundaries/LoginBoundary";
 
 const LoginPage = () => {
   const messages = useSelector(state => state.messages);
@@ -35,6 +36,8 @@ const LoginPage = () => {
       // Prevent page reload
       event.preventDefault();
 
+      const loginClass = new LoginBoundary();
+      loginClass.test();
       dispatch(login(formData, navigate));    
   };
 

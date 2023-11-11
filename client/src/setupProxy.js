@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.use(
     ["/api/*"],
     createProxyMiddleware({
-      target: "http://localhost:3140",
+      target: process.env.NODE_ENV === 'production' ? "production-url" : "http://localhost:3140",
     })
   );
 };

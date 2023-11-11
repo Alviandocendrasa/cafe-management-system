@@ -56,10 +56,23 @@ const WorkSlotNewPage = () => {
     }
 
     const handleStartingTime = (value) => {
-        console.log(value.toDate());
-        console.log(formData.startTime);
-        console.log(dayjs(formData.startTime));
+        setFormData(prevState => (
+            {
+                ...prevState,
+                startTime: value.toDate()
+            }
+        ));
     }
+
+    const handleEndingTime = (value) => {
+        setFormData(prevState => (
+            {
+                ...prevState,
+                endTime: value.toDate()
+            }
+        ));
+    }
+
 
     const handleSubmit = (event) => { 
         // Prevent page reload
@@ -128,7 +141,7 @@ const WorkSlotNewPage = () => {
                     <DateTimePicker
                     label="Ending Time"
                     value={dayjs(formData.startTime)}
-                    onChange={value => handleStartingTime(value)}
+                    onChange={value => handleEndingTime(value)}
                     />
                 </FormControl>
             </div>
