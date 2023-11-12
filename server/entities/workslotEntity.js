@@ -3,6 +3,19 @@ const db = require("../models");
 class WorkslotEntity {
   async createWorkslot(pendingJob, approvedJob, startTime, endTime, cafeManagerId) {
     try {
+      /*
+        NOTE FOR DOCS TEAM
+        return
+        {
+          _id,
+          pendingJob,
+          approvedJob,
+          startTime,
+          endTime,
+          cafeManagerId
+        }
+      */
+
       return await db.Workslot.create({ pendingJob, approvedJob, startTime, endTime, cafeManagerId });
     }
     catch (error) {
@@ -12,6 +25,19 @@ class WorkslotEntity {
 
   async getWorkslot(workslotId) {
     try {
+      /*
+        NOTE FOR DOCS TEAM
+        return
+        {
+          _id,
+          pendingJob,
+          approvedJob,
+          startTime,
+          endTime,
+          cafeManagerId
+        }
+      */
+
       return await db.Workslot.findById(workslotId);
     }
     catch (error) {
@@ -21,6 +47,19 @@ class WorkslotEntity {
 
   async getAllWorkslots() {
     try {
+      /*
+        NOTE FOR DOCS TEAM
+        return
+        {
+          status: "success",
+          data: [
+            {_id, pendingJob, approvedJob, startTime, endTime, cafeManagerId},
+            { .......... },
+            { .......... },
+            { .......... }
+          ]
+        }
+      */
       return await db.Workslot.find({});
     }
     catch (error) {
@@ -30,6 +69,19 @@ class WorkslotEntity {
 
   async updateWorkslot(workslotId, data) {
     try {
+      /*
+        NOTE FOR DOCS TEAM
+        return
+        {
+          _id,
+          pendingJob,
+          approvedJob,
+          startTime,
+          endTime,
+          cafeManagerId
+        }
+      */
+
       return await db.Workslot.findByIdAndUpdate(workslotId, data, {
         new: true,
         runValidators: true
@@ -42,6 +94,11 @@ class WorkslotEntity {
 
   async deleteWorkslot(workslotId) {
     try {
+      /*
+        NOTE FOR DOCS TEAM
+        return {}
+      */
+
       return await db.Workslot.findByIdAndDelete(workslotId);
     }
     catch (error) {
