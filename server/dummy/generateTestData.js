@@ -9,6 +9,22 @@ mongoose.connect(DB || 'mongodb://127.0.0.1:27017/csit314').then(con => {
   console.log('DB connection successful')
 })
 
+User.remove({}, function (err) {
+  console.log('User collection removed')
+})
+
+UserProfile.remove({}, function (err) {
+  console.log('User Profile collection removed')
+})
+
+Workslot.remove({}, function (err) {
+  console.log('Workslot collection removed')
+})
+
+Bid.remove({}, function (err) {
+  console.log('Bid collection removed')
+})
+
 // Function to generate ObjectId for random association
 const generateRandomObjectId = () => mongoose.Types.ObjectId();
 
@@ -41,12 +57,12 @@ const createTestData = async () => {
   for (let i = 0; i < 100; i++) {
     let pendingArr = faker.helpers.arrayElements(["chef", "waiter", "cashier", "bartender"], { min: 3, max: 4 });
     let deltaPending = faker.helpers.arrayElements(["chef", "waiter", "bartender"], { min: 0, max: 3 })
-    
+
     const workslot = {
       pendingJob: pendingArr.concat(deltaPending),
       approvedJob: faker.helpers.arrayElements(["chef", "waiter", "cashier", "bartender"], { min: 1, max: 3 }),
-      startTime: faker.date.past(),
-      endTime: faker.date.future(),
+      startTime: faker.date.between({ from: '2023-01-01T08:00:00.000Z', to: '2023-01-01T10:00:00.000Z' }),
+      endTime: faker.date.between({ from: '2023-01-01T15:00:00.000Z', to: '2023-01-01T20:00:00.000Z' }),
       cafeManagerId: faker.helpers.arrayElement(userProfileManager).userId
     }
 
