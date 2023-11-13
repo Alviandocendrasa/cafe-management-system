@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
 import BidList from "../components/BidList";
-import UserProfileView from "../boundaries/UserProfileView";
 import UserView from "../boundaries/UserView";
 import { ROLE } from "../constants";
 
@@ -31,24 +30,16 @@ const ProfilePage = () => {
     const fetchData = async () => {
         try {
             const userView = new UserView();
-            const userRes = await userView.fetchUser(auth.userId);
+            const res = await userView.fetchUser(auth.userId);
 
-            setProfile(prevState => (
-                {
-                    ...prevState,
-                    username: userRes.data.username
-                }
-            ))
+            const profile =   {
+                username: res.data.username,
+                maxBidSlots: res.data.maxBidSlots,
+                phoneNumber: res.data.phoneNumber,
+                role: res.data.userProfileId.role
+            }
 
-            const profileView = new UserProfileView();
-            const profileRes = await profileView.fetchUserProfileFromUserId(auth.userId);
-
-            setProfile(prevState => (
-                {
-                    ...prevState,
-                    ...profileRes.data
-                }
-            ))
+            setProfile(profile);
         } catch(err){
             console.log(err);
             toast.error(err.message);

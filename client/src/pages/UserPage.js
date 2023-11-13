@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
 import UserView from "../boundaries/UserView";
-import UserProfileView from "../boundaries/UserProfileView";
 import { ROLE } from "../constants";
 
 
@@ -16,12 +15,13 @@ const UserPage = () => {
 
     const { id } = useParams();
 
-    const [user, setUser] = useState({});
-    const [profile, setProfile] = useState({
-        role: '',
-        phoneNumber: '',
-        maxBidSlots: 0
-    });
+    const [user, setUser] = useState({
+        username: "",
+        password: "",
+        userProfileId: "",
+        maxBidSlots: 0,
+        phoneNumber: ""
+    })
 
     const [canSubmit, setCanSubmit] = useState(true); 
     const [openDialog, setOpenDialog] = useState(false);
@@ -33,15 +33,9 @@ const UserPage = () => {
     const fetchData = async () => {
         try {
             const userView = new UserView();
-            const userRes = await userView.fetchUser(id);
+            const res = await userView.fetchUser(id);
 
-            setUser(userRes.data);
-
-            const profileView = new UserProfileView();
-            const profileRes = await profileView.fetchUserProfileFromUserId(id);
-
-
-            setProfile(profileRes.data);
+            setUser(res.data);
         } catch(err){
             console.log(err);
             toast.error(err.message);
@@ -62,14 +56,9 @@ const UserPage = () => {
             setCanSubmit(false);
             
             const userView = new UserView();
-            const userRes = await userView.deleteUser(id);
+            const res = await userView.deleteUser(id);
 
-            console.log(profile);
-            const profileView = new UserProfileView();
-            const profileRes = await profileView.deleteUserProfile(profile._id);
-
-            toast.success(userRes.message);
-            toast.success(profileRes.message);
+            toast.success(res.message);
         } catch(err){
             console.log(err);
             toast.error(err.message);
@@ -106,7 +95,7 @@ const UserPage = () => {
                                 Role :
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {getCaptilize(profile.role)}
+                                {user.userProfileId ? getCaptilize(user.userProfileId.role) : ""}
                             </Typography>
                         </div>
 
@@ -115,17 +104,17 @@ const UserPage = () => {
                                 Phone Number :
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {profile.phoneNumber}
+                                {user.phoneNumber}
                             </Typography>
                         </div>
 
-                        {profile.role === ROLE.staff ?
+                        {user.userProfileId?.role === ROLE.staff ?
                         <div className="profile-group">
                             <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
                                 Max Bids For Work Slot :
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {profile.maxBidSlots}
+                                {user.maxBidSlots}
                             </Typography>
                         </div> : <></>   
                         }       

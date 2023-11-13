@@ -5,8 +5,6 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip,
 import { toast } from 'react-toastify';
 
 import UserView from "../boundaries/UserView";
-import UserProfileView from "../boundaries/UserProfileView";
-
 
 const header = ["Username", "Role", ""];
 
@@ -15,15 +13,14 @@ const UserList = () => {
     
     const [users, setUsers] = useState([]);
 
-
     useEffect(()=>{
         fetchData();
     },[])
 
     const fetchData = async () => {
         try {
-            const profileView = new UserProfileView();
-            const res = await profileView.fetchAllUserProfiles();
+            const userView = new UserView();
+            const res = await userView.fetchAllUsers();
 
             setUsers(res.data);
         } catch(err){
@@ -63,7 +60,7 @@ const UserList = () => {
     }
 
     const getCaptilize = (text) => {
-        return text.charAt(0).toUpperCase() + text.slice(1);
+        return text?.charAt(0).toUpperCase() + text?.slice(1);
     }
 
     return (
@@ -80,10 +77,10 @@ const UserList = () => {
                         {users.length > 0 ? sortData(users).map((user, i) => (
                             <TableRow key={i}>                            
                                 <TableCell component="th" scope="row">
-                                    {user?.userId?.username}
+                                    {user.username}
                                 </TableCell>
                                 <TableCell>
-                                    {getCaptilize(user?.role)}
+                                    {getCaptilize(user?.userProfileId?.role)}
                                 </TableCell>                            
                                 <TableCell>
                                 <Button 
@@ -91,7 +88,7 @@ const UserList = () => {
                                 id="bid-button" 
                                 variant="contained" 
                                 size="small" 
-                                onClick={() => navigate(`/users/${user?.userId?._id}`)}
+                                onClick={() => navigate(`/users/${user._id}`)}
                                 >
                                     View
                                 </Button>

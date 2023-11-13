@@ -9,8 +9,6 @@ import Toast from "../components/Toast";
 import UserView from "../boundaries/UserView";
 import UserProfileView from "../boundaries/UserProfileView";
 
-const roles = ["admin", "owner", "manager", "staff"];
-
 const UserEditPage = () => {  
     const navigate = useNavigate();
 
@@ -19,48 +17,62 @@ const UserEditPage = () => {
     const [formData, setFormData] = useState({
         username: "",
         password: "",
-        role: "",
+        userProfileId: "",
         maxBidSlots: 0,
         phoneNumber: ""
     })
-    const [profileId, setProfileId] = useState("");
 
-    const [showPassword, setShowPassword] = useState(false);  
+    const [userProfiles, setUserProfile] = useState([]);
+    const [currentUserProfileId, setCurrentUserProfileId] = useState(""); 
     const [canSubmit, setCanSubmit] = useState(true); 
+    const [showPassword, setShowPassword] = useState(false);  
   
     useEffect(() => {
+        fetchUserProfiles();
         fetchData();
     },[])
 
     const fetchData = async () => {
         try {
             const userView = new UserView();
-            const userRes = await userView.fetchUser(id);
+            const res = await userView.fetchUser(id);
 
-            setFormData(prevState => (
-                {
-                    ...prevState,
-                    username: userRes.data.username,                   
-                }
-            ))
-            
-            const profileView = new UserProfileView();
-            const profileRes = await profileView.fetchUserProfileFromUserId(id);
-            
-            setFormData(prevState => (
-                {
-                    ...prevState,
-                    role: profileRes.data.role,   
-                    phoneNumber: profileRes.data.phoneNumber,
-                    maxBidSlots: profileRes.data.maxBidSlots                
-                }
-            ))
+            const data =  {
+                username: res.data.username,                   
+                userProfileId: res.data.userProfileId._id,   
+                phoneNumber: res.data.phoneNumber,
+                maxBidSlots: res.data.maxBidSlots    
+            }
 
-            setProfileId(profileRes.data._id);            
+            setCurrentUserProfileId(res.data.userProfileId._id);
+            setFormData(data);               
         } catch(err){
             console.log(err);
             toast.error(err.message);
         }
+    }
+
+    const fetchUserProfiles = async () => {
+        try{
+            const userProfileView = new UserProfileView();
+            const res = await userProfileView.fetchAllUserProfiles();
+
+            setUserProfile(res.data);
+        } catch(err){
+            console.log(err);
+            toast.error(err.message);
+        }
+    }
+
+    const handleUserProfileChange = (event) => {
+        setCurrentUserProfileId(event.target.value); 
+
+        setFormData(prevState => (
+            {
+                ...prevState,
+                userProfileId: event.target.value
+            }
+        ));
     }
 
     const handleChange = (event) => {
@@ -79,34 +91,18 @@ const UserEditPage = () => {
         updateUser(formData);
     };
 
-    const updateUser = async (formData) => {
+    const updateUser = async (userData) => {
         try{
             setCanSubmit(false);
-            
-            const userData = {
-                username: formData.username,
-                password: formData.password
-            }
             
             if (!userData.password){
                 delete userData.password;
             }
 
             const userView = new UserView();
-            const userRes = await userView.updateUser(userData, id);
+            const res = await userView.updateUser(userData, id);
 
-            const profileData = {
-                role: formData.role,
-                phoneNumber: formData.phoneNumber,
-                maxBidSlots: formData.maxBidSlots
-            }
-
-            const profileView = new UserProfileView();
-            const profileRes = await profileView.updateUserProfile(profileData, profileId);
-
-            toast.success(userRes.message);
-
-            toast.success(profileRes.message);
+            toast.success(res.message);
         } catch(err){
             console.log(err);
             toast.error(err.message);
@@ -114,6 +110,10 @@ const UserEditPage = () => {
             setCanSubmit(true);
         }
     };
+
+    const getRole = (userProfileId) => {    
+        return userProfiles.find(el => el._id === userProfileId)?.role;
+    }
 
     return (
         <div className="form-page">
@@ -161,30 +161,7 @@ const UserEditPage = () => {
                 </FormControl>
             </div>
 
-            <div>
-                <FormControl
-                    sx={{m:'8px', width: '25ch' }}
-                >
-                    <InputLabel htmlFor="role" required>Role</InputLabel>
-                    <Select
-                    id="role"
-                    name="role"
-                    label="role"
-                    onChange={handleChange}
-                    value={formData.role}
-                    >
-                        {
-                            roles.map((role) => {
-                                let text = role.charAt(0).toUpperCase() + role.slice(1);
-
-                                return(
-                                    <MenuItem key={role} value={role}>{text}</MenuItem>
-                                )                
-                            })
-                        }
-                    </Select>
-                </FormControl>
-
+            <div>              
                 <FormControl
                 sx={{m:'8px', width: '25ch' }}
                 >
@@ -197,9 +174,34 @@ const UserEditPage = () => {
                     onChange={handleChange}
                     />
                 </FormControl>
+
+                <FormControl
+                    sx={{m:'8px', width: '25ch' }}
+                >
+                    <InputLabel htmlFor="role" required>User Profile</InputLabel>
+                    <Select
+                    id="role"
+                    name="userProfileId"
+                    onChange={handleUserProfileChange}
+                    value={formData.userProfileId}
+                    required
+                    >
+                        {
+                            userProfiles?.map((up) => {
+                                const role = up.role;
+                                let text = role.charAt(0).toUpperCase() + role.slice(1);
+
+                                return(
+                                    <MenuItem key={text} value={up._id}>{text}</MenuItem>
+                                )                
+                            })
+                        }
+                    </Select>
+                </FormControl>
             </div>
+
             <div>
-                {formData.role === 'staff' ? 
+                {getRole(currentUserProfileId) === 'staff' ? 
                     <FormControl
                     sx={{m:'8px', width: '50ch'}}
                     >

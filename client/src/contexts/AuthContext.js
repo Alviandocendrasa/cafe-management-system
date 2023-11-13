@@ -18,8 +18,8 @@ export const AuthProvider = props => {
     const setCurrentUser = (user) => {
         setAuth({
             isAuthenticated: true,
-            role: user.role,
-            userId: user.userId
+            role: user.userProfileId.role,
+            userId: user._id
         });
     };
     

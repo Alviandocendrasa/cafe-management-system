@@ -5,7 +5,6 @@ import { Paper, FormControl, OutlinedInput, InputLabel, InputAdornment, IconButt
 import { Visibility, VisibilityOff} from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
-
 import Toast from "../components/Toast";
 import UserView from "../boundaries/UserView";
 import UserProfileView from "../boundaries/UserProfileView";
@@ -16,13 +15,14 @@ const UserNewPage = () => {
     const [formData, setFormData] = useState({
         username: "",
         password: "",
-        userProfile: {},
+        userProfileId: "",
         maxBidSlots: 0,
         phoneNumber: ""
     })
-    const [userProfiles, setUserProfile] = useState([]);
-    const [currentRole, setCurrentRole] = useState(""); 
 
+    const [userProfiles, setUserProfile] = useState([]);
+    const [currentUserProfileId, setCurrentUserProfileId] = useState(""); 
+    const [canSubmit, setCanSubmit] = useState(true); 
     const [showPassword, setShowPassword] = useState(false);  
   
     useEffect(() => {
@@ -44,12 +44,12 @@ const UserNewPage = () => {
     }
 
     const handleUserProfileChange = (event) => {
-        setCurrentRole(event.target.value.role);
+        setCurrentUserProfileId(event.target.value); 
 
         setFormData(prevState => (
             {
                 ...prevState,
-                userProfile: event.target.value
+                userProfileId: event.target.value
             }
         ));
     }
@@ -67,21 +67,13 @@ const UserNewPage = () => {
         // Prevent page reload
         event.preventDefault();
 
-        const userData = {
-            username: formData.username,
-            password: formData.password,
-            userProfileId: formData.userProfile?._id,
-            maxBidSlots: formData.maxBidSlots,
-            phoneNumber: formData.phoneNumber
-        }
-
-        console.log(userData);
-
-        createUser(userData);
+        createUser(formData);
     };
 
     const createUser = async (userData) => {
         try {
+            setCanSubmit(false);
+            
             const userView = new UserView();
             const res = await userView.createUser(userData);
 
@@ -89,7 +81,13 @@ const UserNewPage = () => {
           } catch(err){
             console.log(err);
             toast.error(err.message);
+
+            setCanSubmit(true);
           }
+    }
+
+    const getRole = (userProfileId) => {    
+        return userProfiles.find(el => el._id === userProfileId)?.role;
     }
 
     return (
@@ -164,7 +162,7 @@ const UserNewPage = () => {
                     id="role"
                     name="userProfileId"
                     onChange={handleUserProfileChange}
-                    value={formData.userProfile}
+                    value={formData.userProfileId}
                     required
                     >
                         {
@@ -173,7 +171,7 @@ const UserNewPage = () => {
                                 let text = role.charAt(0).toUpperCase() + role.slice(1);
 
                                 return(
-                                    <MenuItem key={text} value={up}>{text}</MenuItem>
+                                    <MenuItem key={text} value={up._id}>{text}</MenuItem>
                                 )                
                             })
                         }
@@ -181,7 +179,7 @@ const UserNewPage = () => {
                 </FormControl>
             </div>
             <div>
-                {currentRole === 'staff' ? 
+                {getRole(currentUserProfileId) === 'staff' ? 
                     <FormControl
                     sx={{m:'8px', width: '50ch'}}
                     >
@@ -209,7 +207,7 @@ const UserNewPage = () => {
             </div>
 
             <div style={{marginTop: '12px'}}>
-                <Button variant="contained" size="large" type="submit">Submit</Button>
+                <Button disabled={!canSubmit} variant="contained" size="large" type="submit">Submit</Button>
             </div>        
             </form>
         </Paper>
