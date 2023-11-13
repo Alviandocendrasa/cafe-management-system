@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Workslot = require("./workslot");
+const UserProfile = require("./userProfile");
 
 const bidSchema = new mongoose.Schema({
   cafeStaffId: {
@@ -23,6 +24,23 @@ const bidSchema = new mongoose.Schema({
     required: true
   }
 });
+
+bidSchema.pre('save', async function (next) {
+  try {
+    const bidData = this;
+
+    const staffBidList = await Bid.find({ cafeStaffId: bidData.cafeStaffId })
+    const { maxBidSlots } = await UserProfile.findOne({ userId: bidData.cafeStaffId })
+
+    if (staffBidList.length > maxBidSlots) {
+      throw new Error('Exceeded maximum bid slots');
+    }
+  }
+  catch (error) {
+    console.log(error)
+    next(error);
+  }
+})
 
 bidSchema.pre('findOneAndUpdate', async function (next) {
   try {
