@@ -31,22 +31,7 @@ class AuthController {
                 })
             }
 
-            const userProfileEntity = new UserProfileEntity();
-            const userProfileData = await userProfileEntity.getUserProfileByUserId(user._id);
-
-            if (!userProfileData) {
-                return next({
-                    httpCode: 404,
-                    message: `User profile not found with user id ${user._id} not found`
-                })
-            }
-
-            const newUser = { ...user._doc, ...userProfileData._doc };
-
-            // Remove _id from output to prevent conflict bug
-            newUser._id = undefined;
-
-            this.createSendToken(newUser, 200, req, res);
+            this.createSendToken(user, 200, req, res);
         }
         catch (error) {
             return next({
@@ -117,7 +102,7 @@ class AuthController {
     }
 
     createSendToken = (user, statusCode, req, res) => {
-        const token = this.signToken({id: user.userId, role: user.role});
+        const token = this.signToken({id: user._id});
 
         res.cookie('jwt', token, {
             expires: new Date(
