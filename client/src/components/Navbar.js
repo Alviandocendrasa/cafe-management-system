@@ -10,8 +10,8 @@ const pages = [
         link: "/login"
     },
     {
-        title: "Register",
-        link: "/register"
+        title: "Create User",
+        link: "/users/new"
     },
     {
         title: "Workslots",

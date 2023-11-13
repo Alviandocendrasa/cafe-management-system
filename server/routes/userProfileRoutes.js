@@ -8,7 +8,7 @@ const authController = new AuthController();
 
 const router = express.Router();
 
-router.use(authController.protect.bind(authController))
+// router.use(authController.protect.bind(authController))
 
 router.route("/")
   .get(userProfileController.getAllUserProfiles.bind(userProfileController))
@@ -19,8 +19,8 @@ router.route("/:id/")
   .patch(userProfileController.updateUserProfile.bind(userProfileController))
   .delete(userProfileController.deleteUserProfile.bind(userProfileController))
 
-router.route("/user-id/:userId/")
-  .get(userProfileController.getUserProfileByUserId.bind(userProfileController))
+router.route("/role/")
+  .get(userProfileController.getUserProfileByRole.bind(userProfileController))
 
 
 module.exports = router;

@@ -8,7 +8,7 @@ const authController = new AuthController();
 
 const router = express.Router();
 
-router.use(authController.protect.bind(authController))
+// router.use(authController.protect.bind(authController))
 
 router.route("/")
   .get(userController.getAllUsers.bind(userController))

@@ -8,43 +8,6 @@ const UserProfileEntity = require("../entities/userProfileEntity");
 class AuthController {
     /* ============================= Controller methods ============================= */
 
-    async register(req, res, next) {
-        try {
-            const { password, role, username, phoneNumber, maxBidSlots } = req.body;
-            console.log('req body: ', req.body)
-
-
-            const userEntity = new UserEntity();
-            const newUser = await userEntity.createUser(username, password);
-
-            const userProfileEntity = new UserProfileEntity();
-            const newUserProfile = await userProfileEntity.createUserProfile(newUser._id, role, phoneNumber, maxBidSlots)
-
-            return res.status(200).json({
-                status: "success",
-                message: "User registered successfully",
-                data: {
-                    username,
-                    role,
-                    username,
-                    phoneNumber,
-                    maxBidSlots
-                }
-            });
-        }
-        catch (error) {
-            // if validation fail
-            if(error.code === 11000){
-                error.message = "Sorry, the username is used.";
-            }
-            
-            return next({
-                httpCode: 400,
-                message: error.message
-            })
-        }
-    }
-
     async login(req, res, next) {
         try {
             const { username, password } = req.body

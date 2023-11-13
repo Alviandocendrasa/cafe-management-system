@@ -21,6 +21,16 @@ class UserView {
         }
     }
 
+    async createUser(userData){
+        try{
+            const res = await apiCall("post", `/api/users/`, userData);
+
+            return res;
+        } catch(err){
+            throw err;
+        }
+    }
+
     async updateUser(userData, userId){
         try{
             const res = await apiCall("patch", `/api/users/${userId}`, userData);

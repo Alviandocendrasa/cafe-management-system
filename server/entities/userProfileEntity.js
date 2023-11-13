@@ -1,20 +1,17 @@
 const db = require("../models");
 
 class UserProfileEntity {
-  async createUserProfile(userId, role, phoneNumber, maxBidSlots) {
+  async createUserProfile(role, permissions) {
     /*
       NOTE FOR DOCS TEAM
       return
       {
-        _id,
-        userId,
         role,
-        phoneNumber,
-        maxBidSlots
+        permissions[]
       }
     */
 
-    return db.UserProfile.create({ role, userId, phoneNumber, maxBidSlots });
+    return db.UserProfile.create({ role, permissions });
   }
 
 
@@ -24,14 +21,14 @@ class UserProfileEntity {
         NOTE FOR DOCS TEAM
         return
         [
-          {_id, userId, phoneNumber, maxBidSlots},
+          {_id, role, permissions[]},
           { .......... },
           { .......... },
           { .......... }
         ]
       */
 
-      return await db.UserProfile.find({}).populate('userId');
+      return await db.UserProfile.find({});
     }
     catch (error) {
       throw error;
@@ -44,7 +41,7 @@ class UserProfileEntity {
       return
       {
         status: "success",
-        data: {_id, role, userId, phoneNumber, maxBidSlots}
+        data: {_id, role, permissions[]}
       }
     */
 
@@ -58,7 +55,7 @@ class UserProfileEntity {
         return
         {
           status: "success",
-          data: {_id, role, userId, phoneNumber, maxBidSlots}
+          data: {_id, role, permissions[]}
         }
       */
 
@@ -86,21 +83,19 @@ class UserProfileEntity {
     }
   }
 
-  async getUserProfileByUserId(userId) {
+  async getUserProfileByRole(role) {
     try {
       /*
         NOTE FOR DOCS TEAM
         return
         {
           _id,
-          userId,
           role,
-          phoneNumber,
-          maxBidSlots
+          permissions[]
         }
       */
 
-      return await db.UserProfile.findOne({ userId })
+      return await db.UserProfile.findOne({ role })
     }
     catch (error) {
       throw error;

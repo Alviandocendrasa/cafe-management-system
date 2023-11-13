@@ -1,9 +1,9 @@
 import { apiCall } from '../services/api';
 
 class UserProfileView {
-    async fetchUserProfileFromUserId(userId){
+    async fetchUserProfileFromRole(role){
         try{
-            const res = await apiCall("get", `/api/user-profiles/user-id/${userId}`);
+            const res = await apiCall("get", `/api/user-profiles/role/`, {role});
 
             return res;
         } catch(err){
@@ -24,6 +24,16 @@ class UserProfileView {
     async fetchAllUserProfiles(){
         try{
             const res = await apiCall("get", `/api/user-profiles/`);
+
+            return res;
+        } catch(err){
+            throw err;
+        }
+    }
+
+    async createUserProfile(profileData){
+        try{
+            const res = await apiCall("post", `/api/users-profiles/`, profileData);
 
             return res;
         } catch(err){

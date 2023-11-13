@@ -5,17 +5,10 @@ class UserController {
 
   async createUser(req, res, next) {
     try {
-      const { username, password } = req.params.body;
-
+      const { username, password, phoneNumber, maxBidSlots, userProfileId } = req.body;
+   
       const userEntity = new UserEntity();
-      const doc = await userEntity.createUser(username, password);
-
-      if (!doc) {
-        return next({
-          httpCode: 404,
-          message: "No document found with that ID"
-        })
-      }
+      const doc = await userEntity.createUser(username, password, phoneNumber, maxBidSlots, userProfileId);
 
       res.status(201).json({
         status: 'success',
@@ -24,6 +17,11 @@ class UserController {
       });
     }
     catch (error) {
+      // if validation fail
+      if(error.code === 11000){
+        error.message = "Sorry, the username is used.";
+      } 
+
       return next({
         httpCode: 400,
         message: error.message
@@ -50,6 +48,7 @@ class UserController {
       });
     }
     catch (error) {
+      
       return next({
         httpCode: 400,
         message: error.message

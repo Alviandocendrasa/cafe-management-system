@@ -5,21 +5,21 @@ class UserProfileController {
 
   async createUserProfile(req, res, next) {
     try {
-      const { role, userId, phoneNumber, maxBidSlots } = req.params.body;
+      const { role, permissions } = req.body;
 
       const userProfileEntity = new UserProfileEntity();
-      const doc = await userProfileEntity.createUserProfile(email, password);
+      const doc = await userProfileEntity.createUserProfile(role, permissions);
 
       if (!doc) {
         return next({
           httpCode: 404,
-          message: "No document found with that ID"
+          message: "Failed to create User Profile."
         })
       }
 
       res.status(201).json({
         status: 'success',
-        message: 'UserProfile created successfully',
+        message: 'User Profile created successfully.',
         data: doc
       });
     }
@@ -39,13 +39,13 @@ class UserProfileController {
       if (!doc) {
         return next({
           httpCode: 404,
-          message: "No document found with that ID"
+          message: "No document found with that ID."
         })
       }
 
       res.status(200).json({
         status: 'success',
-        message: 'UserProfile retrieved successfully',
+        message: 'UserProfile retrieved successfully.',
         data: doc
       });
     }
@@ -64,7 +64,7 @@ class UserProfileController {
 
       res.status(200).json({
         status: 'success',
-        message: `All userProfiles retrieved successfully`,
+        message: `All User Profile retrieved successfully.`,
         data: doc
       });
     }
@@ -84,13 +84,13 @@ class UserProfileController {
       if (!doc) {
         return next({
           httpCode: 400,
-          message: "No document found with that ID"
+          message: "No document found with that ID."
         })
       }
 
       res.status(200).json({
         status: 'success',
-        message: 'UserProfile updated successfully',
+        message: 'UserProfile updated successfully.',
         data: doc
       });
     }
@@ -110,13 +110,13 @@ class UserProfileController {
       if (!doc) {
         return next({
           httpCode: 400,
-          message: "No document found with that ID"
+          message: "No document found with that ID."
         })
       }
 
       res.status(200).json({
         status: 'success',
-        message: 'UserProfile deleted successfully',
+        message: 'UserProfile deleted successfully.',
         data: null
       });
     }
@@ -128,28 +128,30 @@ class UserProfileController {
     }
   }
 
-  async getUserProfileByUserId(req, res, next) {
+  async getUserProfileByRole(req, res, next) {
     try {
-      if (!req.params.userId) {
+      const { role } = req.body
+
+      if (!role) {
         return next({
           httpCode: 404,
-          message: `userId cannot be empty`
+          message: `Role cannot be empty`
         })
       }
 
       const userProfileEntity = new UserProfileEntity();
-      const userProfileData = await userProfileEntity.getUserProfileByUserId(req.params.userId);
+      const userProfileData = await userProfileEntity.getUserProfileByRole(role);
 
       if (!userProfileData) {
         return next({
           httpCode: 404,
-          message: `User profile not found with user id ${req.params.userId} not found`
+          message: `User Profile not found with role ${role} not found.`
         })
       }
 
       res.status(200).json({
         status: 'success',
-        message: 'UserProfile retrieved successfully',
+        message: 'User Profile retrieved successfully.',
         data: userProfileData
       });
     }
