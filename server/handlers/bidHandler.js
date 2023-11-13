@@ -1,7 +1,10 @@
 const CreateBidController = require('../controllers/Bid/CreateBidController')
 const UpdateBidController = require('../controllers/Bid/UpdateBidController');
-const GetOneBidController = require('../controllers/Bid/GetOneBidController');
+const SearchBidController = require('../controllers/Bid/SearchBidController');
+const GetAllBidsController = require('../controllers/Bid/GetAllBidsController');
 const DeleteBidController = require('../controllers/Bid/DeleteBidController');
+const ViewBiddingHistoryController = require('../controllers/Bid/ViewBiddingHistoryController');
+const ViewAllPendingBidsController = require('../controllers/Bid/ViewAllPendingBidsController');
 
 exports.createBid = async function (req, res, next) {
   try {
@@ -58,7 +61,7 @@ exports.getOneBid = async function (req, res, next) {
       throw Error("Bid id params cannot be empty");
     }
 
-    const getOneBid = new GetOneBidController();
+    const getOneBid = new SearchBidController();
     const doc = await getOneBid.getOneBid(req.params.id);
 
     res.status(200).json({
@@ -87,6 +90,67 @@ exports.deleteBid = async function (req, res, next) {
     res.status(200).json({
       status: 'success',
       message: 'Bid deleted1 successfully',
+      data: doc
+    });
+  }
+  catch (error) {
+    return next({
+      httpCode: 400,
+      message: error.message
+    })
+  }
+}
+
+exports.getAllBids = async function (req, res, next) {
+  try {
+    const getAllBids = new GetAllBidsController();
+    const doc = await getAllBids.getAllBids();
+
+    res.status(200).json({
+      status: 'success',
+      message: `All bids retrieved successfully`,
+      data: doc
+    });
+  }
+  catch (error) {
+    return next({
+      httpCode: 400,
+      message: error.message
+    })
+  }
+}
+
+exports.viewBiddingHistory = async function (req, res, next) {
+  try {
+    if (!req.params.cafeStaffId) {
+      throw Error("Please provide cafe staff id")
+    }
+
+    const viewBiddingHistory = new ViewBiddingHistoryController();
+    const doc = await viewBiddingHistory.viewBiddingHistory(req.params.cafeStaffId);
+
+    res.status(200).json({
+      status: 'success',
+      message: `All bids by ${req.params.cafeStaffId} retrieved successfully`,
+      data: doc
+    });
+  }
+  catch (error) {
+    return next({
+      httpCode: 400,
+      message: error.message
+    })
+  }
+}
+
+exports.viewAllPendingBids = async function (req, res, next) {
+  try {
+    const viewAllPendingBids = new ViewAllPendingBidsController();
+    const doc = await viewAllPendingBids.viewAllPendingBids(req.params.cafeStaffId);
+
+    res.status(200).json({
+      status: 'success',
+      message: `All pending bids by ${req.params.cafeStaffId} retrieved successfully`,
       data: doc
     });
   }

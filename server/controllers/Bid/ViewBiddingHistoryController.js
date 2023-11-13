@@ -1,17 +1,13 @@
 const BidEntity = require("../../entities/bidEntity")
 
-class GetOneBidController {
+class ViewBiddingHistoryController {
 
   /* ============================= Controller methods ============================= */
 
-  async getOneBid(bidId) {
+  async viewBiddingHistory(cafeStaffId) {
     try {
       const bidEntity = new BidEntity();
-      const doc = await bidEntity.getBid(bidId);
-
-      if (!doc) {
-        throw Error("No document found with that ID")
-      }
+      const doc = await bidEntity.getBidByCafeStaffId(cafeStaffId)
 
       return doc;
     }
@@ -21,4 +17,4 @@ class GetOneBidController {
   }
 }
 
-module.exports = GetOneBidController;
+module.exports = ViewBiddingHistoryController;
