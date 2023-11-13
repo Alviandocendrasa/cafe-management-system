@@ -19,7 +19,7 @@ const Toast = ({onSuccessDone, onErrorDone}) => {
     return (
           <ToastContainer
             position="top-center"
-            autoClose={3000}
+            autoClose={2000}
             style={{width: "max-content"}}
             limit={3}
             closeOnClick={false}

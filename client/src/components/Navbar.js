@@ -26,6 +26,10 @@ const pages = [
         link: "/bids"
     },
     {
+        title: "Users",
+        link: "/users"
+    },
+    {
         title: "Profile",
         link: "/profile"
     },

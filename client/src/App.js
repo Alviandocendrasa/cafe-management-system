@@ -17,6 +17,10 @@ import WorkSlotsPage from './pages/WorkSlotsPage';
 import WorkSlotNewPage from './pages/WorkSlotNewPage';
 import WorkSlotEditPage from './pages/WorkSlotEditPage';
 import BidsPage from './pages/BidsPage';
+import BidPage from './pages/BidPage';
+import UsersPage from './pages/UsersPage';
+import UserPage from './pages/UserPage';
+import UserEditPage from './pages/UserEditPage';
 import ProfilePage from './pages/ProfilePage';
 
 const theme = createTheme({
@@ -41,6 +45,10 @@ const App = () => {
             <Route path="/workslots/new"  element ={ <WorkSlotNewPage />} />
             <Route path="/workslots/:id/edit"  element ={ <WorkSlotEditPage />} />
             <Route path="/bids"  element ={ <BidsPage />} />
+            <Route path="/bids/:id"  element ={ <BidPage />} />
+            <Route path="/users"  element ={ <UsersPage />} />
+            <Route path="/users/:id"  element ={ <UserPage />} />
+            <Route path="/users/:id/edit"  element ={ <UserEditPage />} />
             <Route path="/profile"  element ={ <ProfilePage />} />
           </Routes>
         </AuthProvider>

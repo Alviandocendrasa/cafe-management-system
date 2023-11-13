@@ -12,6 +12,16 @@ class BidView {
         }
     }
 
+    async fetchBid(bidId){
+        try{
+            const res = await apiCall("get", `/api/bids/${bidId}`);
+
+            return res;
+        } catch(err){
+            throw err;
+        }
+    }
+
     async fetchAllBids(){
         try{
             const res = await apiCall("get", `/api/bids/`);

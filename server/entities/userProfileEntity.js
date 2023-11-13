@@ -31,7 +31,7 @@ class UserProfileEntity {
         ]
       */
 
-      return await db.UserProfile.find({});
+      return await db.UserProfile.find({}).populate('userId');
     }
     catch (error) {
       throw error;
