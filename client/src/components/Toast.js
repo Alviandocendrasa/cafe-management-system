@@ -5,42 +5,24 @@ import { MESSAGE_TYPES } from "../constants";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Toast = ({messages}) => {
-
-
-    useEffect(()=>{
-        if(!messages.message) return;
-
-        switch(messages.type){
-            case MESSAGE_TYPES.success:
-                toast.success(messages.message);
-                break;
-            case MESSAGE_TYPES.error:
-                toast.error(messages.message);
-                break;
-            case MESSAGE_TYPES.warning:
-                toast.warning(messages.message);
-                break;
-            case MESSAGE_TYPES.info:
-                toast.info(messages.message);
-                break;
-            default:
-                break;
+const Toast = ({onSuccessDone, onErrorDone}) => {
+    toast.onChange(payload => {
+        if(onSuccessDone && payload.type === toast.TYPE.SUCCESS && payload.status === "removed") {
+            onSuccessDone();
         }
-    }, [messages]);
+        else if(onErrorDone && payload.type === toast.TYPE.ERROR && payload.status === "removed") {
+            onErrorDone();
+        }
+
+    });
     
     return (
           <ToastContainer
             position="top-center"
             autoClose={3000}
             style={{width: "max-content"}}
-            limit={1}
-            newestOnTop={false}
+            limit={3}
             closeOnClick={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
           />
     )
 }

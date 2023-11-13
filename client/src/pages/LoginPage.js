@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 
 import { Paper, FormControl, OutlinedInput, InputLabel, InputAdornment, IconButton, TextField, Button } from '@mui/material';
 import { Visibility, VisibilityOff} from '@mui/icons-material';
+import { toast } from 'react-toastify';
 
-import { login } from '../store/actions';
+import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
-import LoginBoundary from "../boundaries/LoginBoundary";
+import AuthView from "../boundaries/AuthView";
+
 
 const LoginPage = () => {
-  const messages = useSelector(state => state.messages);
-  const loading = useSelector(state => state.loading);
+  const { setCurrentUser} = useContext(AuthContext);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -36,14 +35,26 @@ const LoginPage = () => {
       // Prevent page reload
       event.preventDefault();
 
-      const loginClass = new LoginBoundary();
-      loginClass.test();
-      dispatch(login(formData, navigate));    
+      login(formData);  
   };
+
+  const login = async (formData) => {
+      try {
+        const authView = new AuthView();
+        const res = await authView.login(formData);
+    
+        setCurrentUser(res.data.user);
+
+        navigate('/profile');
+      } catch(err){
+        console.log(err);
+        toast.error(err.message);
+      }
+  }
 
   return (
     <div className="form-page">
-      <Toast messages={messages} />
+      <Toast />
 
       <Paper className="paper" sx={{ minWidth: 325, minHeight: 400 }}>
         <form className="login-form" name="loginForm" onSubmit={handleSubmit}>

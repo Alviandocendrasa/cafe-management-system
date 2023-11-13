@@ -33,6 +33,11 @@ class AuthController {
             });
         }
         catch (error) {
+            // if validation fail
+            if(error.code === 11000){
+                error.message = "Sorry, the username is used.";
+            }
+            
             return next({
                 httpCode: 400,
                 message: error.message

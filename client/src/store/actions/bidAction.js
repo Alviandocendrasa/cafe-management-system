@@ -8,7 +8,7 @@ export const loadBids = bids => ({
     bids
 })
 
-export const fetchBidsFromStaff = () => async (dispatch, getState) => {
+export const fetchBidsFromStaff = (auth) => async (dispatch, getState) => {
     let { auth } = getState();
 
     const staffId = auth.user.userId;
@@ -69,7 +69,7 @@ export const deleteBid = (id, navigate) => async dispatch => {
         dispatch(removeLoading());
 
         dispatch(addSuccess(res));
-        setTimeout(() => navigate('/'), 4000);
+        setTimeout(() => navigate(0), 4000);
     } catch(err){
         dispatch(removeLoading());
         dispatch(addError(err));

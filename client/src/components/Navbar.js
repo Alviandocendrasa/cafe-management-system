@@ -19,7 +19,11 @@ const pages = [
     },
     {
         title: "New Workslot",
-        link: "/workslot/new"
+        link: "/workslots/new"
+    },
+    {
+        title: "Bids",
+        link: "/bids"
     },
     {
         title: "Profile",

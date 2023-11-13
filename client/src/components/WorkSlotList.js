@@ -1,36 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip, Stack, Button, Menu, MenuItem, Typography } from '@mui/material';
+import { toast } from 'react-toastify';
 
-import { fetchWorkslots, createBid } from '../store/actions';
+import { AuthContext } from "../contexts";
+import BidView from "../boundaries/BidView";
+import WorkslotView from "../boundaries/WorkslotView";
+import Toast from "./Toast";
+import { ROLE } from "../constants";
 
-const header = ["Start Date", "End Date", "Positions"];
+const header = ["Start Date", "End Date", "Positions", ""];
 
-const WorkSlotList = ({data, canBid, handleBid}) => {
-    const loading = useSelector(state => state.loading);
-    const auth = useSelector(state => state.auth);
-    const workslots = useSelector(state => state.workslots);
+const WorkSlotList = () => {
+    const { auth } = useContext(AuthContext);
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     
+    const [workslots, setWorkslots] = useState([]);
     const [anchor, setAnchor] = useState(null);
-    const [forcusWorkslot, setFocusWorkslot] = useState(null);
+    const [focusWorkslot, setFocusWorkslot] = useState(null);
 
     const shouldOpen = Boolean(anchor);
 
     useEffect(()=>{
-        const fetchData = async () => {
-            await dispatch(fetchWorkslots());
-        }
-
         fetchData();
     },[])
 
-    const handleOpen = (event, workslot) => {
+    const fetchData = async () => {
+        try {
+            const workslotView = new WorkslotView();
+            const res = await workslotView.fetchWorkslots();
+
+            setWorkslots(res.data);
+        } catch(err){
+            console.log(err);
+            toast.error(err.message);
+        }
+    }
+
+    const handleOpenBid = (event, workslot) => {
         setAnchor(event.currentTarget);
         setFocusWorkslot(workslot);
     }
@@ -44,17 +54,29 @@ const WorkSlotList = ({data, canBid, handleBid}) => {
         const bidData = {
             jobTitle,
             workslotId,
-            cafeStaffId: auth.user.userId,
+            cafeStaffId: auth.userId,
             bidStatus: "pending"
         }
 
-        dispatch(createBid(bidData, navigate));
+        createBid(bidData);
 
         handleClose();
     }
 
+    const createBid = async (bidData) => {
+        try {
+            const bidView = new BidView();
+            const res = await bidView.createBid(bidData);
+
+            toast.success(res.message);
+        } catch(err){
+            console.log(err);
+            toast.error(err.message);
+        }
+    }
+
     const getTime = (time) => {
-        return dayjs(time).format("DD/MM/YYYY") + " " + dayjs(time).format("HH:mm");
+        return dayjs(time).format("DD-MM-YYYY") + " " + dayjs(time).format("hh:mm A");
     }
 
     const getUniqueRoles = (jobTitle) => {
@@ -104,10 +126,6 @@ const WorkSlotList = ({data, canBid, handleBid}) => {
     }
 
     const getTableHead = (header) => {    
-        if (canBid && !header.includes("")) {
-            header.push("");
-        }
-
         return (
             header.map((header) => (
                 <TableCell key={header}>{header}</TableCell>
@@ -137,6 +155,33 @@ const WorkSlotList = ({data, canBid, handleBid}) => {
         return data;
     }
 
+    const renderButton = (workslot) => {
+        switch(auth.role){
+            case ROLE.owner:
+                return <Button 
+                        disabled={false} 
+                        id="bid-button" 
+                        variant="contained" 
+                        size="small" 
+                        onClick={() => navigate(`/workslots/${workslot._id}/edit`)}
+                        >
+                            Edit
+                        </Button>
+            case ROLE.staff:
+                return <Button 
+                        disabled={false} 
+                        id="bid-button" 
+                        variant="contained" 
+                        size="small" 
+                        onClick={(event) => handleOpenBid(event, workslot)}
+                        >
+                            Bid
+                        </Button>
+            default:
+                return <></>
+        }
+    }
+
     return (
         <>
             <TableContainer>
@@ -159,31 +204,33 @@ const WorkSlotList = ({data, canBid, handleBid}) => {
                                 <TableCell>
                                     {getPositions(workslot.pendingJob)}
                                 </TableCell>
-                                {canBid ? 
-                                    <>
-                                        <TableCell>
-                                            <Button disabled={false} id="bid-button" variant="contained" size="small" onClick={(event) => handleOpen(event, workslot)} >Bid</Button>
-                                        </TableCell>                                                                       
-                                    </> :
-                                    null                              
-                                }
+                                <TableCell>
+                                    {renderButton(workslot)}
+                                </TableCell>
                             </TableRow>
-                        )) : <></>
+                        )) :
+                        <TableRow>
+                            <TableCell colSpan={4} align='center'>
+                                <Typography variant="button" gutterBottom>
+                                    No Workslot found
+                                </Typography>
+                            </TableCell>                                   
+                        </TableRow> 
                         }                    
                     </TableBody>               
                 </Table>          
             </TableContainer>
-            {forcusWorkslot ? 
+            {focusWorkslot ? 
              <Menu
              onClose={handleClose}
              anchorEl={anchor}
              open={shouldOpen}
              >
-                {getUniqueRoles(forcusWorkslot.pendingJob)?.map((jobTitle, i) => {
+                {getUniqueRoles(focusWorkslot.pendingJob)?.map((jobTitle, i) => {
                         let text = jobTitle.charAt(0).toUpperCase() + jobTitle.slice(1);
                     
                     return (
-                        <MenuItem key={i} onClick={() => handleSubmitBid(forcusWorkslot._id, jobTitle)}>{text}</MenuItem>
+                        <MenuItem key={i} onClick={() => handleSubmitBid(focusWorkslot._id, jobTitle)}>{text}</MenuItem>
                     )
                 })}
              </Menu>:

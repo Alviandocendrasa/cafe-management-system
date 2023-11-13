@@ -32,7 +32,7 @@ class BidEntity {
       //  workslotId
       // }
 
-      return await db.Bid.findById(bidId);
+      return await db.Bid.findById(bidId).populate('workslotId').populate('cafeStaffId');
     }
     catch (error) {
       throw error;
@@ -49,7 +49,7 @@ class BidEntity {
       //  { .......... }
       // ]
 
-      return await db.Bid.find({});
+      return await db.Bid.find({}).populate('workslotId').populate('cafeStaffId');
     }
     catch (error) {
       throw error;

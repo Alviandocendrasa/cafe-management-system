@@ -1,27 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 
 import { Paper, FormControl, OutlinedInput, InputLabel, InputAdornment, IconButton, TextField, Button, Select, MenuItem, Slider, Typography } from '@mui/material';
 import { Visibility, VisibilityOff} from '@mui/icons-material';
+import { toast } from 'react-toastify';
 
-import { register } from '../store/actions';
+
 import Toast from "../components/Toast";
+import AuthView from "../boundaries/AuthView";
 
-const roles = ["staff", "manager", "owner", "admin"];
+const roles = ["admin", "owner", "manager", "staff"];
 
-const RegisterPage = () => {
-    const messages = useSelector(state => state.messages);
-    const loading = useSelector(state => state.loading);
-  
-    const dispatch = useDispatch();
+const RegisterPage = () => {  
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         username: "",
         password: "",
         role: "",
-        maxBidSlots: 5,
+        maxBidSlots: 0,
         phoneNumber: ""
     })
 
@@ -39,15 +36,27 @@ const RegisterPage = () => {
     const handleSubmit = (event) => { 
         // Prevent page reload
         event.preventDefault();
-    
-        dispatch(register(formData, navigate));
+        
+        register(formData);
     };
+
+    const register = async (formData) => {
+        try {
+            const authView = new AuthView();
+            const res = await authView.register(formData);
+
+            toast.success(res.message);
+          } catch(err){
+            console.log(err);
+            toast.error(err.message);
+          }
+    }
 
     return (
         <div className="form-page">
-        <Toast messages={messages} />
+        <Toast onSuccessDone={() => navigate(0)}/>
 
-        <Paper className="paper" sx={{ minWidth: 325, minHeight: 500 }}>
+        <Paper className="paper" sx={{ minWidth: 325, minHeight: 350 }}>
             <form className="register-form" name="registerForm" onSubmit={handleSubmit}>
             <h1>Create User</h1>
             <div>
@@ -55,13 +64,13 @@ const RegisterPage = () => {
                     sx={{m:'8px', width: '25ch' }}
                 >
                     <TextField 
-                        id="username"
-                        name="username" 
-                        label="Username" 
-                        variant="outlined" 
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
+                    id="username"
+                    name="username" 
+                    label="Username" 
+                    variant="outlined" 
+                    value={formData.username}
+                    onChange={handleChange}
+                    required
                     />
                 </FormControl>
 
@@ -70,24 +79,24 @@ const RegisterPage = () => {
                 >
                     <InputLabel htmlFor="password" required>Password</InputLabel>
                     <OutlinedInput 
-                        id="password"
-                        name="password"  
-                        label="Password" 
-                        value={formData.password}
-                        type={showPassword ? 'text' : 'password'}
-                        onChange={handleChange}
-                        required
+                    id="password"
+                    name="password"  
+                    label="Password" 
+                    value={formData.password}
+                    type={showPassword ? 'text' : 'password'}
+                    onChange={handleChange}
+                    required
 
-                        endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                            onClick={() => setShowPassword((show) => !show)}
-                            onMouseDown={(event) => event.preventDefault()}
-                            >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                        </InputAdornment>
-                        }
+                    endAdornment={
+                    <InputAdornment position="end">
+                        <IconButton
+                        onClick={() => setShowPassword((show) => !show)}
+                        onMouseDown={(event) => event.preventDefault()}
+                        >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                    </InputAdornment>
+                    }
                     />
                 </FormControl>
             </div>
@@ -98,11 +107,11 @@ const RegisterPage = () => {
                 >
                     <InputLabel htmlFor="role" required>Role</InputLabel>
                     <Select
-                        id="role"
-                        name="role"
-                        label="role"
-                        onChange={handleChange}
-                        value={formData.role}
+                    id="role"
+                    name="role"
+                    label="role"
+                    onChange={handleChange}
+                    value={formData.role}
                     >
                         {
                             roles.map((role) => {
@@ -117,43 +126,45 @@ const RegisterPage = () => {
                 </FormControl>
 
                 <FormControl
-                    sx={{m:'8px', width: '25ch' }}
+                sx={{m:'8px', width: '25ch' }}
                 >
                     <TextField 
-                        id="phoneNumber"
-                        name="phoneNumber" 
-                        label="Phone Number" 
-                        variant="outlined" 
-                        value={formData.phoneNumber}
-                        onChange={handleChange}
-                        required
+                    id="phoneNumber"
+                    name="phoneNumber" 
+                    label="Phone Number" 
+                    variant="outlined" 
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    required
                     />
                 </FormControl>
             </div>
             <div>
-                <FormControl
+                {formData.role === 'staff' ? 
+                    <FormControl
                     sx={{m:'8px', width: '50ch'}}
-                >
-                    <Typography 
-                        htmlFor="maxBidSlots" 
-                        gutterBottom
-                        sx={{mt:'16px', mb:'40px', textAlign: 'left'}}
                     >
-                        Max Bids For Work Slot
-                    </Typography>
-                    <Slider
-                        required
-                        name="maxBidSlots"
-                        defaultValue={1}
-                        step={1}
-                        marks
-                        min={1}
-                        max={10}
-                        valueLabelDisplay="on"                       
-                        value={formData.maxBidSlots}
-                        onChange={handleChange}
-                    />
-                </FormControl>
+                        <Typography 
+                            htmlFor="maxBidSlots" 
+                            gutterBottom
+                            sx={{mt:'16px', mb:'40px', textAlign: 'left'}}
+                        >
+                            Max Bids For Work Slot
+                        </Typography>
+                        <Slider
+                            required
+                            name="maxBidSlots"
+                            defaultValue={0}
+                            step={1}
+                            marks
+                            min={0}
+                            max={10}
+                            valueLabelDisplay="on"                       
+                            value={formData.maxBidSlots}
+                            onChange={handleChange}
+                        />
+                    </FormControl> : <></>
+                }
             </div>
 
             <div style={{marginTop: '12px'}}>
