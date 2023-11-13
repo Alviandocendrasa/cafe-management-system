@@ -5,6 +5,8 @@ const GetAllBidsController = require('../controllers/Bid/GetAllBidsController');
 const DeleteBidController = require('../controllers/Bid/DeleteBidController');
 const ViewBiddingHistoryController = require('../controllers/Bid/ViewBiddingHistoryController');
 const ViewAllPendingBidsController = require('../controllers/Bid/ViewAllPendingBidsController');
+const ApproveBidController = require('../controllers/Bid/ApproveBidController');
+const DeclineBidController = require('../controllers/Bid/DeclineBidController');
 
 exports.createBid = async function (req, res, next) {
   try {
@@ -151,6 +153,44 @@ exports.viewAllPendingBids = async function (req, res, next) {
     res.status(200).json({
       status: 'success',
       message: `All pending bids by ${req.params.cafeStaffId} retrieved successfully`,
+      data: doc
+    });
+  }
+  catch (error) {
+    return next({
+      httpCode: 400,
+      message: error.message
+    })
+  }
+}
+
+exports.approveBid = async function (req, res, next) {
+  try {
+    const approveBid = new ApproveBidController();
+    const doc = await approveBid.approvedBid(req.params.id, req.body)
+
+    res.status(200).json({
+      status: 'success',
+      message: `Bid ${req.params.id} approved successfully`,
+      data: doc
+    });
+  }
+  catch (error) {
+    return next({
+      httpCode: 400,
+      message: error.message
+    })
+  }
+}
+
+exports.declineBid = async function (req, res, next) {
+  try {
+    const declineBid = new DeclineBidController();
+    const doc = await declineBid.declineBid(req.params.id, req.body)
+
+    res.status(200).json({
+      status: 'success',
+      message: `Bid ${req.params.id} declined successfully`,
       data: doc
     });
   }

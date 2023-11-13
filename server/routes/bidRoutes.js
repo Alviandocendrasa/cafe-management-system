@@ -1,5 +1,5 @@
 const express = require("express");
-const { createBid, getOneBid, updateBid, deleteBid, getAllBids, viewBiddingHistory, viewAllPendingBids } = require("../handlers/bidHandler")
+const { createBid, getOneBid, updateBid, deleteBid, getAllBids, viewBiddingHistory, viewAllPendingBids, approveBid, declineBid } = require("../handlers/bidHandler")
 
 const BidController = require("../controllers/bidController.js")
 const AuthController = require("../controllers/authController.js")
@@ -25,5 +25,11 @@ router.route("/cafe-staff-id/:cafeStaffId/")
 
 router.route("/pending/:cafeStaffId/")
   .get(viewAllPendingBids)
+
+router.route("/approve/:id/")
+  .patch(approveBid)
+
+router.route("/decline/:id/")
+  .patch(declineBid)
 
 module.exports = router;

@@ -128,6 +128,50 @@ class BidEntity {
       throw error;
     }
   }
+
+  async approveBid(bidId, data) {
+    try {
+      // NOTE FOR DOCS TEAM
+      // return
+      // {
+      //   _id,
+      //  cafeStaffId,
+      //  jobTitle,
+      //  bidStatus,
+      //  workslotId
+      // }
+
+      return await db.Bid.findByIdAndUpdate(bidId, data, {
+        new: true,
+        runValidators: true
+      })
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+
+  async declineBid(bidId, data) {
+    try {
+      // NOTE FOR DOCS TEAM
+      // return
+      // {
+      //   _id,
+      //  cafeStaffId,
+      //  jobTitle,
+      //  bidStatus,
+      //  workslotId
+      // }
+
+      return await db.Bid.findByIdAndUpdate(bidId, data, {
+        new: true,
+        runValidators: true
+      })
+    }
+    catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = BidEntity;
