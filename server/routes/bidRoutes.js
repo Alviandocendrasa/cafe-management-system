@@ -1,4 +1,5 @@
 const express = require("express");
+const { createBid, getOneBid, updateBid, deleteBid } = require("../handlers/bidHandler")
 
 const BidController = require("../controllers/bidController.js")
 const AuthController = require("../controllers/authController.js")
@@ -12,12 +13,12 @@ router.use(authController.protect.bind(authController))
 
 router.route("/")
   .get(bidController.getAllBids.bind(bidController))
-  .post(bidController.createBid.bind(bidController))
+  .post(createBid)
 
 router.route("/:id/")
-  .get(bidController.getBid.bind(bidController))
-  .patch(bidController.updateBid.bind(bidController))
-  .delete(bidController.deleteBid.bind(bidController))
+  .get(getOneBid)
+  .patch(updateBid)
+  .delete(deleteBid)
 
 router.route("/cafe-staff-id/:cafeStaffId/")
   .get(bidController.getBidByCafeStaffId.bind(bidController))
