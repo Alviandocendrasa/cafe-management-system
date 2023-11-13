@@ -32,8 +32,10 @@ bidSchema.pre('save', async function (next) {
     const staffBidList = await Bid.find({ cafeStaffId: bidData.cafeStaffId })
     const { maxBidSlots } = await UserProfile.findOne({ userId: bidData.cafeStaffId })
 
-    if (staffBidList.length > maxBidSlots) {
-      throw new Error('Exceeded maximum bid slots');
+    const holdingWorkslots = staffBidList.filter(el => (el.bidStatus != 'rejected'));
+
+    if (holdingWorkslots.length > maxBidSlots) {
+      throw new Error('You have reached maximum work slots.');
     }
   }
   catch (error) {
@@ -47,7 +49,7 @@ bidSchema.pre('findOneAndUpdate', async function (next) {
     const query = this.getQuery();
     const update = this.getUpdate();
 
-    if (update && update.bidStatus === "approved") {
+    if (update && (update.bidStatus === "approved")) {
       // Move jobTitle from pendingJob to approvedJob
       const dataPrevious = await this.model.findOne(query);
       const { jobTitle, workslotId } = await this.model.findOne(query);
@@ -64,7 +66,7 @@ bidSchema.pre('findOneAndUpdate', async function (next) {
 
         await Workslot.findByIdAndUpdate(workslotId, {
           pendingJob: updatedPendingJob,
-          approvedJob: updatedApprovedJob
+          processedJob: updatedApprovedJob
         }, {
           new: true,
           runValidators: true

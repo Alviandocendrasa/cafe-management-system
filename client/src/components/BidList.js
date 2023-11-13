@@ -221,15 +221,15 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
            return (
             <>
                 <div className="bids-section">
-                    <Typography variant="h6">Pending Bids</Typography>
+                    <Typography variant="h6">Pending Work Slots</Typography>
                     {renderBidTable(getFilteredBids('pending'))}
                 </div>
                 <div className="bids-section">
-                    <Typography variant="h6">Approved Bids</Typography>
+                    <Typography variant="h6">Approved Work Slots</Typography>
                     {renderBidTable(getFilteredBids('approved'))}
                 </div>
                 <div className="bids-section">
-                    <Typography variant="h6">Rejected Bids</Typography>
+                    <Typography variant="h6">Rejected Work Slots</Typography>
                     {renderBidTable(getFilteredBids('rejected'))}
                 </div>
             </>
