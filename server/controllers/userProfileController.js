@@ -128,6 +128,39 @@ class UserProfileController {
     }
   }
 
+  async getUserProfileByUserId(req, res, next) {
+    try {
+      if (!req.params.userId) {
+        return next({
+          httpCode: 404,
+          message: `userId cannot be empty`
+        })
+      }
+
+      const userProfileEntity = new UserProfileEntity();
+      const userProfileData = await userProfileEntity.getUserProfileByUserId(req.params.userId);
+
+      if (!userProfileData) {
+        return next({
+          httpCode: 404,
+          message: `User profile not found with user id ${req.params.userId} not found`
+        })
+      }
+
+      res.status(200).json({
+        status: 'success',
+        message: 'UserProfile retrieved successfully',
+        data: userProfileData
+      });
+    }
+    catch (error) {
+      return next({
+        httpCode: 400,
+        message: error.message
+      })
+    }
+  }
+
 }
 
 module.exports = UserProfileController;
