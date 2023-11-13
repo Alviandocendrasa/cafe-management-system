@@ -19,5 +19,8 @@ router.route("/:id/")
   .patch(userProfileController.updateUserProfile.bind(userProfileController))
   .delete(userProfileController.deleteUserProfile.bind(userProfileController))
 
+router.route("/user-id/:userId/")
+  .get(userProfileController.getUserProfileByUserId.bind(userProfileController))
+
 
 module.exports = router;
