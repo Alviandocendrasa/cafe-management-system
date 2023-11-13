@@ -26,10 +26,10 @@ class BidEntity {
       // return
       // {
       //   _id,
-      //  cafeStaffId,
+      //  cafeStaffIdObj,
       //  jobTitle,
       //  bidStatus,
-      //  workslotId
+      //  workslotIdObj
       // }
 
       return await db.Bid.findById(bidId).populate('workslotId').populate('cafeStaffId');
@@ -43,7 +43,7 @@ class BidEntity {
     try {
       // NOTE FOR DOCS TEAM
       // return [
-      //  {_id, cafeStaffId, jobTitle, bidStatus, workslotId},
+      //  {_id, cafeStaffIdObj, jobTitle, bidStatus, workslotIdObj},
       //  { .......... },
       //  { .......... },
       //  { .......... }

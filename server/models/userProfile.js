@@ -1,14 +1,8 @@
 const mongoose = require("mongoose");
 
 const userProfileSchema = new mongoose.Schema({
-  role: { type: String, required: true },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-  },
-  phoneNumber: { type: String, required: true },
-  maxBidSlots: { type: Number, required: true },
+  role: { type: String, required: true, unique: true },
+  permissions: [{type: String}]
 });
 
 const UserProfile = mongoose.model("UserProfile", userProfileSchema);

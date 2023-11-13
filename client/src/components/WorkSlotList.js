@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import { AuthContext } from "../contexts";
 import BidView from "../boundaries/BidView";
 import WorkslotView from "../boundaries/WorkslotView";
-import Toast from "./Toast";
 import { ROLE } from "../constants";
 
 const header = ["Start Date", "End Date", "Positions", ""];

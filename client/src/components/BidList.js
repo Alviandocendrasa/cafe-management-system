@@ -81,7 +81,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
     }
 
     const getTime = (time) => {
-        return dayjs(time).format("DD/MM/YYYY") + " " + dayjs(time).format("HH:mm");
+        return dayjs(time).format("DD-MM-YYYY") + " " + dayjs(time).format("hh:mm A");
     }
 
     const getTableHead = (header) => {    
@@ -90,6 +90,10 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
                 <TableCell key={header}>{header}</TableCell>
             ))
         )
+    }
+
+    const getCaptilize = (text) => {
+        return text?.charAt(0).toUpperCase() + text?.slice(1);
     }
 
     const sortData = (data) => {
@@ -186,7 +190,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
                                     {getTime(bid?.workslotId?.endTime)}
                                 </TableCell>
                                 <TableCell>
-                                    {bid.jobTitle}
+                                    {getCaptilize(bid.jobTitle)}
                                 </TableCell>
                                 <TableCell>
                                     {bid.bidStatus}
@@ -217,15 +221,15 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
            return (
             <>
                 <div className="bids-section">
-                    <Typography variant="h6">Pending Bids</Typography>
+                    <Typography variant="h6">Pending Work Slots</Typography>
                     {renderBidTable(getFilteredBids('pending'))}
                 </div>
                 <div className="bids-section">
-                    <Typography variant="h6">Approved Bids</Typography>
+                    <Typography variant="h6">Approved Work Slots</Typography>
                     {renderBidTable(getFilteredBids('approved'))}
                 </div>
                 <div className="bids-section">
-                    <Typography variant="h6">Rejected Bids</Typography>
+                    <Typography variant="h6">Rejected Work Slots</Typography>
                     {renderBidTable(getFilteredBids('rejected'))}
                 </div>
             </>

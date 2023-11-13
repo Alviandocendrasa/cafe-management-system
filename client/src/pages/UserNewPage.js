@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 import { Paper, FormControl, OutlinedInput, InputLabel, InputAdornment, IconButton, TextField, Button, Select, MenuItem, Slider, Typography } from '@mui/material';
@@ -7,23 +7,53 @@ import { toast } from 'react-toastify';
 
 
 import Toast from "../components/Toast";
-import AuthView from "../boundaries/AuthView";
+import UserView from "../boundaries/UserView";
+import UserProfileView from "../boundaries/UserProfileView";
 
-const roles = ["admin", "owner", "manager", "staff"];
-
-const RegisterPage = () => {  
+const UserNewPage = () => {  
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         username: "",
         password: "",
-        role: "",
+        userProfile: {},
         maxBidSlots: 0,
         phoneNumber: ""
     })
+    const [userProfiles, setUserProfile] = useState([]);
+    const [currentRole, setCurrentRole] = useState(""); 
 
     const [showPassword, setShowPassword] = useState(false);  
   
+    useEffect(() => {
+        fetchUserProfiles();
+    }, [])
+
+
+    const fetchUserProfiles = async () => {
+        try{
+            const userProfileView = new UserProfileView();
+            const res = await userProfileView.fetchAllUserProfiles();
+
+            setUserProfile(res.data);
+
+        } catch(err){
+            console.log(err);
+            toast.error(err.message);
+        }
+    }
+
+    const handleUserProfileChange = (event) => {
+        setCurrentRole(event.target.value.role);
+
+        setFormData(prevState => (
+            {
+                ...prevState,
+                userProfile: event.target.value
+            }
+        ));
+    }
+
     const handleChange = (event) => {
         setFormData(prevState => (
             {
@@ -36,14 +66,24 @@ const RegisterPage = () => {
     const handleSubmit = (event) => { 
         // Prevent page reload
         event.preventDefault();
-        
-        register(formData);
+
+        const userData = {
+            username: formData.username,
+            password: formData.password,
+            userProfileId: formData.userProfile?._id,
+            maxBidSlots: formData.maxBidSlots,
+            phoneNumber: formData.phoneNumber
+        }
+
+        console.log(userData);
+
+        createUser(userData);
     };
 
-    const register = async (formData) => {
+    const createUser = async (userData) => {
         try {
-            const authView = new AuthView();
-            const res = await authView.register(formData);
+            const userView = new UserView();
+            const res = await userView.createUser(userData);
 
             toast.success(res.message);
           } catch(err){
@@ -103,29 +143,6 @@ const RegisterPage = () => {
 
             <div>
                 <FormControl
-                    sx={{m:'8px', width: '25ch' }}
-                >
-                    <InputLabel htmlFor="role" required>Role</InputLabel>
-                    <Select
-                    id="role"
-                    name="role"
-                    label="role"
-                    onChange={handleChange}
-                    value={formData.role}
-                    >
-                        {
-                            roles.map((role) => {
-                                let text = role.charAt(0).toUpperCase() + role.slice(1);
-
-                                return(
-                                    <MenuItem key={role} value={role}>{text}</MenuItem>
-                                )                
-                            })
-                        }
-                    </Select>
-                </FormControl>
-
-                <FormControl
                 sx={{m:'8px', width: '25ch' }}
                 >
                     <TextField 
@@ -138,9 +155,33 @@ const RegisterPage = () => {
                     required
                     />
                 </FormControl>
+
+                <FormControl
+                    sx={{m:'8px', width: '25ch' }}
+                >
+                    <InputLabel htmlFor="role" required>User Profile</InputLabel>
+                    <Select
+                    id="role"
+                    name="userProfileId"
+                    onChange={handleUserProfileChange}
+                    value={formData.userProfile}
+                    required
+                    >
+                        {
+                            userProfiles?.map((up) => {
+                                const role = up.role;
+                                let text = role.charAt(0).toUpperCase() + role.slice(1);
+
+                                return(
+                                    <MenuItem key={text} value={up}>{text}</MenuItem>
+                                )                
+                            })
+                        }
+                    </Select>
+                </FormControl>
             </div>
             <div>
-                {formData.role === 'staff' ? 
+                {currentRole === 'staff' ? 
                     <FormControl
                     sx={{m:'8px', width: '50ch'}}
                     >
@@ -176,4 +217,4 @@ const RegisterPage = () => {
     )
 }
 
-export default RegisterPage;
+export default UserNewPage;

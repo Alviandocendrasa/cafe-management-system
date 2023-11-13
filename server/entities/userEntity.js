@@ -1,7 +1,7 @@
 const db = require("../models");
 
 class UserEntity {
-  async createUser(username, password) {
+  async createUser(username, password, phoneNumber, maxBidSlots, userProfileId) {
     /*
       NOTE FOR DOCS TEAM
       return
@@ -11,7 +11,7 @@ class UserEntity {
       }
     */
 
-    return db.User.create({ username, password });
+    return db.User.create({ username, password, phoneNumber, maxBidSlots, userProfileId });
   }
 
   async getAllUsers() {
@@ -20,14 +20,14 @@ class UserEntity {
         NOTE FOR DOCS TEAM
         return
         [
-          {_id, username, password},
+          {_id, username, password, phoneNumber, maxBidSlots, userProfileIdObj},
           { .......... },
           { .......... },
           { .......... }
         ]
       */
 
-      return await db.User.find({});
+      return await db.User.find({}).populate('userProfileId');
     }
     catch (error) {
       throw error;
@@ -40,11 +40,14 @@ class UserEntity {
       return
       {
         username,
-        password
+        password,
+        phoneNumber, 
+        maxBidSlots, 
+        userProfileIdObj
       }
     */
 
-    return db.User.findById(userId);
+    return db.User.findById(userId).populate('userProfileId');
   }
 
   async updateUser(userId, data) {
@@ -54,7 +57,10 @@ class UserEntity {
         return
         {
           username,
-          password
+          password,
+          phoneNumber, 
+          maxBidSlots, 
+          userProfileId
         }
       */
 
@@ -88,11 +94,11 @@ class UserEntity {
       return
       {
         status: "success",
-        data: {_id, username, password}
+        data:  {_id, username, password, phoneNumber, maxBidSlots, userProfileIdObj},
       }
     */
 
-    return db.User.findOne({ username });
+    return db.User.findOne({ username }).populate('userProfileId');
   }
 
   async comparePassword(user, password) {

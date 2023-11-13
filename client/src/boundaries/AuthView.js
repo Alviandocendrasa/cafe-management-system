@@ -15,19 +15,6 @@ class AuthView {
         }
     }
 
-    async register(userData){
-        try{
-            const res = await apiCall("post", `/api/auth/register`, userData);
-
-            localStorage.setItem("jwtToken", res.data.token);
-            setTokenHeader(res.data.token);
-
-            return res;
-        } catch(err){
-            throw err;
-        }
-    }
-
     logout(){
         localStorage.clear();
         setTokenHeader(null);

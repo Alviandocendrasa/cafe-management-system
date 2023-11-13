@@ -10,8 +10,8 @@ const pages = [
         link: "/login"
     },
     {
-        title: "Register",
-        link: "/register"
+        title: "Create User",
+        link: "/users/new"
     },
     {
         title: "Workslots",
@@ -24,6 +24,10 @@ const pages = [
     {
         title: "Bids",
         link: "/bids"
+    },
+    {
+        title: "Users",
+        link: "/users"
     },
     {
         title: "Profile",

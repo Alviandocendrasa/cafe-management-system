@@ -12,11 +12,15 @@ import { AuthProvider } from './contexts';
 
 import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
 import WorkSlotsPage from './pages/WorkSlotsPage';
 import WorkSlotNewPage from './pages/WorkSlotNewPage';
 import WorkSlotEditPage from './pages/WorkSlotEditPage';
 import BidsPage from './pages/BidsPage';
+import BidPage from './pages/BidPage';
+import UserNewPage from './pages/UserNewPage';
+import UsersPage from './pages/UsersPage';
+import UserPage from './pages/UserPage';
+import UserEditPage from './pages/UserEditPage';
 import ProfilePage from './pages/ProfilePage';
 
 const theme = createTheme({
@@ -36,11 +40,15 @@ const App = () => {
           <Navbar />
           <Routes>
             <Route path="/login"  element ={ <LoginPage />} />
-            <Route path="/register"  element ={ <RegisterPage />} />
             <Route path="/workslots"  element ={ <WorkSlotsPage />} />
             <Route path="/workslots/new"  element ={ <WorkSlotNewPage />} />
             <Route path="/workslots/:id/edit"  element ={ <WorkSlotEditPage />} />
             <Route path="/bids"  element ={ <BidsPage />} />
+            <Route path="/bids/:id"  element ={ <BidPage />} />
+            <Route path="/users"  element ={ <UsersPage />} />
+            <Route path="/users/new"  element ={ <UserNewPage />} />
+            <Route path="/users/:id"  element ={ <UserPage />} />
+            <Route path="/users/:id/edit"  element ={ <UserEditPage />} />
             <Route path="/profile"  element ={ <ProfilePage />} />
           </Routes>
         </AuthProvider>
