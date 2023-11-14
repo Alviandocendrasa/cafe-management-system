@@ -85,6 +85,10 @@ const HomePage = () => {
   },[])
 
   const switchWithRole = () => {
+    if (!auth.isAuth){
+      return "/login";
+    }
+    
     switch(auth.role){
       case ROLE.admin:
         return "/users";
