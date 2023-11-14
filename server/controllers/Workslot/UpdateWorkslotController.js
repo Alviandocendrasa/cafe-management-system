@@ -10,7 +10,7 @@ class updateWorkslotController {
         throw Error("Workslot ID params cannot be empty");
       }
 
-      if (!data) {
+      if (!data || Object.keys(data).length === 0) {
         throw Error("Data cannot be empty")
       }
 
