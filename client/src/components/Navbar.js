@@ -14,20 +14,28 @@ const pages = [
         link: "/users/new"
     },
     {
-        title: "Workslots",
-        link: "/workslots"
+        title: "Users",
+        link: "/users"
     },
     {
         title: "New Workslot",
         link: "/workslots/new"
     },
     {
+        title: "Workslots",
+        link: "/workslots"
+    },
+    {
         title: "Bids",
         link: "/bids"
     },
     {
-        title: "Users",
-        link: "/users"
+        title: "User Profiles",
+        link: "/user-profiles"
+    },
+    {
+        title: "New User Profiles",
+        link: "/user-profiles/new"
     },
     {
         title: "Profile",

@@ -39,12 +39,12 @@ const UserEditPage = () => {
 
             const data =  {
                 username: res.data.username,                   
-                userProfileId: res.data.userProfileId._id,   
+                userProfileId: res.data.userProfileId?._id,   
                 phoneNumber: res.data.phoneNumber,
                 maxBidSlots: res.data.maxBidSlots    
             }
 
-            setCurrentUserProfileId(res.data.userProfileId._id);
+            setCurrentUserProfileId(res.data.userProfileId?._id);
             setFormData(data);               
         } catch(err){
             console.log(err);

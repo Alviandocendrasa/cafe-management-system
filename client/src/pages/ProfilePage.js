@@ -36,7 +36,7 @@ const ProfilePage = () => {
                 username: res.data.username,
                 maxBidSlots: res.data.maxBidSlots,
                 phoneNumber: res.data.phoneNumber,
-                role: res.data.userProfileId.role
+                role: res.data.userProfileId?.role
             }
 
             setProfile(profile);
@@ -47,6 +47,10 @@ const ProfilePage = () => {
     }
 
     const getCaptilize = (text) => {
+        if (!text){
+            return 'Unknown';
+        }
+        
         return text?.charAt(0).toUpperCase() + text?.slice(1);
     }
 

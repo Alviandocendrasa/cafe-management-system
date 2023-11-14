@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography } from '@mui/material';
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip, Stack, Button, Menu, MenuItem, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 
-import UserView from "../boundaries/UserView";
+import UserProfileView from "../boundaries/UserProfileView";
 
-const header = ["Username", "Role", ""];
+const header = ["Role", "Permissions", ""];
 
-const UserList = () => {
+const UserProfileList = () => {
     const navigate = useNavigate();
     
-    const [users, setUsers] = useState([]);
+    const [userProfiles, setUserProfiles] = useState([]);
 
     useEffect(()=>{
         fetchData();
@@ -19,36 +19,14 @@ const UserList = () => {
 
     const fetchData = async () => {
         try {
-            const userView = new UserView();
-            const res = await userView.fetchAllUsers();
+            const userProfileView = new UserProfileView();
+            const res = await userProfileView.fetchAllUserProfiles();
 
-            setUsers(res.data);
+            setUserProfiles(res.data);
         } catch(err){
             console.log(err);
             toast.error(err.message);
         }
-    }
-
-    const sortData = (data) => {
-        const compare = (a, b) => {        
-            if (a.username === null) {
-                return 1;
-              }
-            
-              if (b.username === null) {
-                return -1;
-              }
-            
-              if (a.username === b.username) {
-                return 0;
-              }
-            
-              return a.username > b.username ? 1 : -1;
-        }
-        
-        data.sort(compare);
-
-        return data;
     }
 
     const getTableHead = (header) => {    
@@ -60,11 +38,27 @@ const UserList = () => {
     }
 
     const getCaptilize = (text) => {
-        if (!text){
-            return 'Unknown';
-        }
-        
         return text?.charAt(0).toUpperCase() + text?.slice(1);
+    }
+
+    const renderPermissions = (permissions) => {
+        if (permissions?.length > 0){
+            return (
+                <Stack direction="row" spacing={1}>
+                     {permissions?.map((el) => {                            
+                         return (
+                             <Chip key={el} label={el} />
+                         )
+                     })}
+                </Stack>
+            )
+        }
+
+        return (
+            <>
+                None
+            </>
+        )
     }
 
     return (
@@ -78,23 +72,23 @@ const UserList = () => {
                     </TableHead>
 
                     <TableBody>
-                        {users.length > 0 ? sortData(users).map((user, i) => (
+                        {userProfiles.length > 0 ? userProfiles.map((up, i) => (
                             <TableRow key={i}>                            
                                 <TableCell component="th" scope="row">
-                                    {user.username}
+                                    {getCaptilize(up.role)}
                                 </TableCell>
                                 <TableCell>
-                                    {getCaptilize(user?.userProfileId?.role)}
+                                    {renderPermissions(up.permissions)}
                                 </TableCell>                            
                                 <TableCell>
                                 <Button 
                                 disabled={false} 
-                                id="bid-button" 
+                                id="up-button" 
                                 variant="contained" 
                                 size="small" 
-                                onClick={() => navigate(`/users/${user._id}`)}
+                                onClick={() => navigate(`/user-profiles/${up._id}/edit`)}
                                 >
-                                    View
+                                    Edit
                                 </Button>
                                 </TableCell>
                             </TableRow>
@@ -102,7 +96,7 @@ const UserList = () => {
                         <TableRow>
                             <TableCell colSpan={3} align='center'>
                                 <Typography variant="button" gutterBottom>
-                                    No user found
+                                    No user profile found
                                 </Typography>
                             </TableCell>                                   
                         </TableRow> 
@@ -114,4 +108,4 @@ const UserList = () => {
     )
 }
 
-export default UserList;
+export default UserProfileList;

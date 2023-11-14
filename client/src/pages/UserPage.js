@@ -68,6 +68,10 @@ const UserPage = () => {
     }
 
     const getCaptilize = (text) => {
+        if (!text){
+            return 'Unknown';
+        }
+        
         return text?.charAt(0).toUpperCase() + text?.slice(1);
     }
 
@@ -95,7 +99,7 @@ const UserPage = () => {
                                 Role :
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {user.userProfileId ? getCaptilize(user.userProfileId.role) : ""}
+                                {getCaptilize(user.userProfileId?.role)}
                             </Typography>
                         </div>
 

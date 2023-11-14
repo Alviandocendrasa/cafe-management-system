@@ -33,7 +33,7 @@ class UserProfileView {
 
     async createUserProfile(profileData){
         try{
-            const res = await apiCall("post", `/api/users-profiles/`, profileData);
+            const res = await apiCall("post", `/api/user-profiles/`, profileData);
 
             return res;
         } catch(err){

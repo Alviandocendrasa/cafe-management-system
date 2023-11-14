@@ -21,6 +21,9 @@ import UserNewPage from './pages/UserNewPage';
 import UsersPage from './pages/UsersPage';
 import UserPage from './pages/UserPage';
 import UserEditPage from './pages/UserEditPage';
+import UserProfilePage from './pages/UserProfilesPage';
+import UserProfileNewPage from './pages/UserProfileNewPage';
+import UserProfileEditPage from './pages/UserProfileEditPage';
 import ProfilePage from './pages/ProfilePage';
 
 const theme = createTheme({
@@ -49,6 +52,9 @@ const App = () => {
             <Route path="/users/new"  element ={ <UserNewPage />} />
             <Route path="/users/:id"  element ={ <UserPage />} />
             <Route path="/users/:id/edit"  element ={ <UserEditPage />} />
+            <Route path="/user-profiles"  element ={ <UserProfilePage />} />
+            <Route path="/user-profiles/new"  element ={ <UserProfileNewPage />} />
+            <Route path="/user-profiles/:id/edit"  element ={ <UserProfileEditPage />} />
             <Route path="/profile"  element ={ <ProfilePage />} />
           </Routes>
         </AuthProvider>
