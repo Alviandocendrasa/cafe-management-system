@@ -6,7 +6,7 @@ import { Visibility, VisibilityOff} from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
-import UserView from "../boundaries/UserView";
+import { apiCall } from '../services/api';
 import UserProfileView from "../boundaries/UserProfileView";
 
 const UserNewPage = () => {  
@@ -73,9 +73,10 @@ const UserNewPage = () => {
     const createUser = async (userData) => {
         try {
             setCanSubmit(false);
+
+            console.log(userData);
             
-            const userView = new UserView();
-            const res = await userView.createUser(userData);
+            const res = await apiCall("post", `/api/users/`, userData);
 
             toast.success(res.message);
           } catch(err){
