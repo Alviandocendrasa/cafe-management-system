@@ -111,6 +111,67 @@ class BidEntity {
       throw error;
     }
   }
+
+  async getPendingBidsByCafeStaffId(cafeStaffId) {
+    try {
+      // NOTE FOR DOCS TEAM
+      // return [
+      //  {_id, cafeStaffIdObj, jobTitle, bidStatus, workslotIdObj},
+      //  { .......... },
+      //  { .......... },
+      //  { .......... }
+      // ]
+
+      return await db.Bid.find({ cafeStaffId: cafeStaffId, bidStatus: "pending" })
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+
+  async approveBid(bidId, data) {
+    try {
+      // NOTE FOR DOCS TEAM
+      // return
+      // {
+      //   _id,
+      //  cafeStaffId,
+      //  jobTitle,
+      //  bidStatus,
+      //  workslotId
+      // }
+
+      return await db.Bid.findByIdAndUpdate(bidId, data, {
+        new: true,
+        runValidators: true
+      })
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+
+  async declineBid(bidId, data) {
+    try {
+      // NOTE FOR DOCS TEAM
+      // return
+      // {
+      //   _id,
+      //  cafeStaffId,
+      //  jobTitle,
+      //  bidStatus,
+      //  workslotId
+      // }
+
+      return await db.Bid.findByIdAndUpdate(bidId, data, {
+        new: true,
+        runValidators: true
+      })
+    }
+    catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = BidEntity;
