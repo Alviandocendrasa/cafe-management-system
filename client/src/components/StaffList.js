@@ -23,7 +23,7 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs}) => {
             const arr = [];            
 
             staffs.forEach(staff => {                
-                const bids = bidRes.data.filter(bid => bid.cafeStaffId._id === staff._id && bid.bidStatus == 'approved');
+                const bids = bidRes.data.filter(bid => bid.cafeStaffId?._id === staff._id && bid.bidStatus == 'approved');
                 console.log(bids);
 
                 if(staff.maxBidSlots > bids.length){
