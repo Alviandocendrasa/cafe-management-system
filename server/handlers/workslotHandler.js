@@ -3,7 +3,7 @@ const UpdateWorkslotController = require('../controllers/Workslot/UpdateWorkslot
 const SearchWorkslotController = require('../controllers/Workslot/SearchWorkslotController')
 const ViewAllWorkslotsController = require('../controllers/Workslot/ViewAllWorkslotsController')
 const DeleteWorkslotController = require('../controllers/Workslot/DeleteWorkslotController')
-const ViewAvailableWorkslots = require('../controllers/Workslot/ViewAvailableWorkslots')
+const ViewAvailableWorkslotsController = require('../controllers/Workslot/ViewAvailableWorkslotsController')
 
 exports.createWorkslot = async function (req, res, next) {
   try {
@@ -85,7 +85,7 @@ exports.viewAllWorkslots = async function (req, res, next) {
 
 exports.viewAvailableWorkslots = async function (req, res, next) {
   try {
-    const viewAvailableWorkslots = new ViewAvailableWorkslots();
+    const viewAvailableWorkslots = new ViewAvailableWorkslotsController();
     const doc = await viewAvailableWorkslots.viewAvailableWorkslots();
 
     res.status(200).json({

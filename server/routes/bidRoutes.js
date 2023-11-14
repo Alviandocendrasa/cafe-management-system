@@ -1,15 +1,11 @@
 const express = require("express");
+
 const { createBid, getOneBid, updateBid, deleteBid, getAllBids, viewBiddingHistory, viewAllPendingBids, approveBid, declineBid } = require("../handlers/bidHandler")
-
-const BidController = require("../controllers/bidController.js")
-const AuthController = require("../controllers/authController.js")
-
-const bidController = new BidController();
-const authController = new AuthController();
+const { protect } = require("../handlers/authHandler.js");
 
 const router = express.Router();
 
-router.use(authController.protect.bind(authController))
+// router.use(protect)
 
 router.route("/")
   .get(getAllBids)

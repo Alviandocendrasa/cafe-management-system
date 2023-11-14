@@ -1,15 +1,11 @@
 const express = require("express");
 
-const WorkslotController = require("../controllers/workslotController.js")
-const AuthController = require("../controllers/authController.js");
 const { createWorkslot, updateWorkslot, searchWorkslot, viewAllWorkslots, deleteWorkslot, viewAvailableWorkslots } = require("../handlers/workslotHandler.js");
-
-const workslotController = new WorkslotController();
-const authController = new AuthController();
+const { protect } = require("../handlers/authHandler.js");
 
 const router = express.Router();
 
-router.use(authController.protect.bind(authController))
+// router.use(protect)
 
 router.route("/")
   .get(viewAllWorkslots)

@@ -1,15 +1,11 @@
 const express = require("express");
 
-const UserProfileController = require("../controllers/userProfileController.js")
-const AuthController = require("../controllers/authController.js");
-const { createUserProfile, getUserProfile, updateUserProfile, deleteUserProfile, searchUserProfile, getAllUserProfiles } = require("../handlers/userProfileHandler.js");
-
-const userProfileController = new UserProfileController();
-const authController = new AuthController();
+const { createUserProfile, getUserProfile, updateUserProfile, deleteUserProfile, searchUserProfile, getAllUserProfiles, getUserProfileByRole } = require("../handlers/userProfileHandler.js");
+const { protect } = require("../handlers/authHandler.js");
 
 const router = express.Router();
 
-// router.use(authController.protect.bind(authController))
+// router.use(protect)
 
 router.route("/")
   .get(getAllUserProfiles)
@@ -19,7 +15,7 @@ router.route("/search/")
   .get(searchUserProfile)
 
 router.route("/role/")
-  .get(userProfileController.getUserProfileByRole.bind(userProfileController))
+  .get(getUserProfileByRole)
 
 router.route("/:id/")
   .get(getUserProfile)

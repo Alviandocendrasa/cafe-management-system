@@ -3,6 +3,7 @@ const CreateUserProfileController = require("../controllers/UserProfile/CreateUs
 const GetUserProfileController = require("../controllers/UserProfile/GetUserProfileController");
 const UpdateUserProfileController = require("../controllers/UserProfile/UpdateUserProfileController");
 const SearchUserProfileController = require("../controllers/UserProfile/SearchUserProfileController");
+const GetUserProfileByRoleController = require("../controllers/UserProfile/GetUserProfileByRoleController");
 
 exports.createUserProfile = async function (req, res, next) {
   try {
@@ -109,6 +110,27 @@ exports.searchUserProfile = async function (req, res, next) {
     res.status(200).json({
       status: 'success',
       message: `User profile documents retrieved successfully11rr`,
+      data: doc
+    });
+  }
+  catch (error) {
+    return next({
+      httpCode: 400,
+      message: error.message
+    })
+  }
+}
+
+exports.getUserProfileByRole = async function (req, res, next) {
+  try {
+    const { role } = req.body
+
+    const getUserProfileByRoleController = new GetUserProfileByRoleController();
+    const doc = await getUserProfileByRoleController.getUserProfileByRole(role);
+
+    res.status(200).json({
+      status: 'success',
+      message: 'User Profile retrieved successfully',
       data: doc
     });
   }
