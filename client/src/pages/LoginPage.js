@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
-import AuthView from "../boundaries/AuthView";
+import { apiCall, setTokenHeader} from '../services/api';
 
 
 const LoginPage = () => {
@@ -38,14 +38,16 @@ const LoginPage = () => {
       login(formData);  
   };
 
-  const login = async (formData) => {
+  const login = async (userData) => {
       try {
-        const authView = new AuthView();
-        const res = await authView.login(formData);
+        const res = await apiCall("post", `/api/auth/login`, userData);
+
+        localStorage.setItem("jwtToken", res.data.token);
+        setTokenHeader(res.data.token);
     
         setCurrentUser(res.data.user);
 
-        navigate('/profile');
+        navigate('/');
       } catch(err){
         console.log(err);
         toast.error(err.message);
