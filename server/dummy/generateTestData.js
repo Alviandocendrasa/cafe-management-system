@@ -28,6 +28,27 @@ Bid.remove({}, function (err) {
 // Function to generate ObjectId for random association
 const generateRandomObjectId = () => mongoose.Types.ObjectId();
 
+const generateRandomTime = () => {
+  // Generate a random hour between 7 and 10
+  const startHour = Math.floor(Math.random() * 3) + 7;
+
+  // Generate a random minute, either 0 or 30
+  const startMinute = Math.random() < 0.5 ? 0 : 30;
+
+  // Create a new Date object with today's date and the generated hour and minute
+  const startTime = new Date();
+  startTime.setHours(startHour, startMinute, 0, 0);
+
+  // Calculate the end time by adding 8 hours to the start time
+  const endTime = new Date(startTime);
+  endTime.setHours(startTime.getHours() + 8);
+
+  return {
+    startTime,
+    endTime
+  };
+};
+
 
 
 // Function to create test data
@@ -85,11 +106,13 @@ const createTestData = async () => {
     let pendingArr = faker.helpers.arrayElements(["chef", "waiter", "cashier", "bartender"], { min: 3, max: 4 });
     let deltaPending = faker.helpers.arrayElements(["chef", "waiter", "bartender"], { min: 0, max: 3 })
 
+    const { startTime, endTime } = generateRandomTime();
+
     const workslot = {
       pendingJob: pendingArr.concat(deltaPending),
       approvedJob: faker.helpers.arrayElements(["chef", "waiter", "cashier", "bartender"], { min: 1, max: 3 }),
-      startTime: faker.date.between({ from: '2023-01-01T08:00:00.000Z', to: '2023-01-01T10:00:00.000Z' }),
-      endTime: faker.date.between({ from: '2023-01-01T15:00:00.000Z', to: '2023-01-01T20:00:00.000Z' }),
+      startTime: startTime,
+      endTime: endTime,
       cafeManagerId: faker.helpers.arrayElement(userManager)._id
     }
 
