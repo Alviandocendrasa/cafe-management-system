@@ -17,15 +17,15 @@ export const AuthProvider = props => {
 
     const setCurrentUser = (user) => {
         setAuth({
-            isAuthenticated: true,
+            isAuth: true,
             role: user.userProfileId.role,
             userId: user._id
         });
     };
     
     const removeCurrentUser = () => {
-        localStorage.removeItem("auth");
         setAuth({});
+        localStorage.removeItem("auth");
     }
 
     return (
