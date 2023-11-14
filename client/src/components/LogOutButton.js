@@ -13,7 +13,7 @@ const LogoutButton = () => {
 
     const handleLogOut = () => {
         localStorage.clear();
-        setTokenHeader(null);
+        setTokenHeader(false);
 
         removeCurrentUser();
         navigate('/login');

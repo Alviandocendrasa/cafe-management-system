@@ -81,7 +81,6 @@ const HomePage = () => {
 
   useEffect(() => {
     navigate(switchWithRole());
-    console.log(auth.role);
   },[])
 
   const switchWithRole = () => {

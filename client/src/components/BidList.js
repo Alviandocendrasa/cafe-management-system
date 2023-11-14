@@ -6,7 +6,7 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Butto
 import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
-import BidView from "../boundaries/BidView";
+import { apiCall } from '../services/api';
 
 const header = ["Start Date", "End Date", "Position", "Status", ""];
 
@@ -30,8 +30,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
 
     const fetchAllbids = async () => {
         try {
-            const bidView = new BidView();
-            const res = await bidView.fetchAllBids();
+            const res = await apiCall("get", `/api/bids/`);
 
             setBids(res.data);
         } catch(err){
@@ -42,8 +41,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
 
     const fetchStaffBids = async () => {
         try {
-            const bidView = new BidView();
-            const res = await bidView.fetchBidFromStaffId(auth.userId);
+            const res = await apiCall("get", `/api/bids/cafe-staff-id/${auth.userId}`);
 
             setBids(res.data);
         } catch(err){
@@ -66,8 +64,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
         try {
             setCanSubmit(false);
 
-            const bidView = new BidView();
-            const res = await bidView.deleteBid(focusBid._id);
+            await apiCall("delete", `/api/bids/${focusBid._id}`);
 
             toast.success("Bid successfully removed!");            
         } catch(err){

@@ -6,9 +6,10 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip,
 import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
-import BidView from "../boundaries/BidView";
-import WorkslotView from "../boundaries/WorkslotView";
+import { apiCall } from '../services/api';
 import { ROLE } from "../constants";
+
+import axios from "axios";
 
 const header = ["Start Date", "End Date", "Positions", ""];
 
@@ -29,8 +30,9 @@ const WorkSlotList = () => {
 
     const fetchData = async () => {
         try {
-            const workslotView = new WorkslotView();
-            const res = await workslotView.fetchWorkslots();
+            console.log(axios.defaults.headers.common["Authorization"]);
+            
+            const res = await apiCall("get", `/api/workslots`);
 
             setWorkslots(res.data);
         } catch(err){
@@ -64,8 +66,7 @@ const WorkSlotList = () => {
 
     const createBid = async (bidData) => {
         try {
-            const bidView = new BidView();
-            const res = await bidView.createBid(bidData);
+            const res = await apiCall("post", `/api/bids`, bidData);
 
             toast.success(res.message);
         } catch(err){
