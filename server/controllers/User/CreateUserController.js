@@ -6,7 +6,7 @@ class CreateUserController {
 
   async createUser(username, password, phoneNumber, maxBidSlots, userProfileId) {
     try {
-      if (!username || !password || !phoneNumber || !maxBidSlots || !userProfileId) {
+      if (!username || !password || !phoneNumber || !userProfileId) {
         throw Error("Please fill in all required data");
       }
 
@@ -15,7 +15,7 @@ class CreateUserController {
 
       return doc;
     }
-    catch (error) {
+    catch (error) {    
       throw error;
     }
   }
