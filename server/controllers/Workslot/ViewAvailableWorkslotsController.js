@@ -1,6 +1,6 @@
 const WorkslotEntity = require("../../entities/workslotEntity");
 
-class viewAvailableWorkslots {
+class viewAvailableWorkslotsController {
 
   /* ============================= Controller methods ============================= */
 
@@ -17,4 +17,4 @@ class viewAvailableWorkslots {
   }
 }
 
-module.exports = viewAvailableWorkslots;
+module.exports = viewAvailableWorkslotsController;

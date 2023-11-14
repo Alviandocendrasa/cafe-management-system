@@ -1,15 +1,11 @@
 const express = require("express");
 
-const UserController = require("../controllers/userController.js")
-const AuthController = require("../controllers/authController.js");
 const { createUser, getAllUsers, getUser, deleteUser, updateUser, searchUser } = require("../handlers/userHandler.js");
-
-const userController = new UserController();
-const authController = new AuthController();
+const { protect } = require("../handlers/authHandler.js");
 
 const router = express.Router();
 
-// router.use(authController.protect.bind(authController))
+// router.use(protect)
 
 router.route("/")
   .get(getAllUsers)

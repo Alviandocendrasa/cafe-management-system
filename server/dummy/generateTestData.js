@@ -63,22 +63,22 @@ const createTestData = async () => {
     {
       _id: cafeStaffId,
       role: "staff",
-      permissions: ["read", "write"]
+      permissions: ["user", "user-profile", "bid"]
     },
     {
       _id: cafeManagerId,
       role: "manager",
-      permissions: ["read", "write"]
+      permissions: ["user", "user-profile", "bid", "workslot"]
     },
     {
       _id: cafeOwnerId,
       role: "owner",
-      permissions: ["read", "write"]
+      permissions: ["user", "user-profile", "bid", "workslot"]
     },
     {
       _id: systemAdmin,
       role: "admin",
-      permissions: ["read", "write"]
+      permissions: ["user", "user-profile", "bid", "workslot"]
     },
   ]
 
