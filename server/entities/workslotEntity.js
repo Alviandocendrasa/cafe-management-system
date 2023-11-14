@@ -105,6 +105,37 @@ class WorkslotEntity {
       throw error;
     }
   }
+
+  async getAllAvailableWorkslots() {
+    try {
+      /*
+        NOTE FOR DOCS TEAM
+        return
+        {
+          status: "success",
+          data: [
+            {_id, pendingJob, approvedJob, startTime, endTime, cafeManagerId},
+            { .......... },
+            { .......... },
+            { .......... }
+          ]
+        }
+      */
+
+      let response = [];
+
+      const approvedBids = await db.Bid.find({ bidStatus: "pending" }).populate('workslotId');
+
+      approvedBids.forEach((bid) => {
+        response.push(bid.workslotId);
+      })
+
+      return response;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = WorkslotEntity;
