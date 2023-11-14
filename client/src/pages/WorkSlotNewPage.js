@@ -92,7 +92,7 @@ const WorkSlotNewPage = () => {
         event.preventDefault();
 
         if (formData.pendingJob.length < 1){
-            toast.error("Please add in at least 1 job");
+            toast.error("Please add in at least 1 job.");
             return;
         }
 

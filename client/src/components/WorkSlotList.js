@@ -154,6 +154,27 @@ const WorkSlotList = () => {
         return data;
     }
 
+    const renderWorkSlots = (workslots) => {
+        const arr = workslots.filter(el => el.pendingJob?.length > 0);
+        
+        return sortData(arr).map((el, i) => {
+            return  (<TableRow key={i}>                            
+                        <TableCell component="th" scope="row">
+                            {getTime(el.startTime)}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                            {getTime(el.endTime)}
+                        </TableCell>
+                        <TableCell>
+                            {getPositions(el.pendingJob)}
+                        </TableCell>
+                        <TableCell>
+                            {renderButton(el)}
+                        </TableCell>
+                    </TableRow>)
+        })
+    }
+
     const renderButton = (workslot) => {
         switch(auth.role){
             case ROLE.owner:
@@ -176,6 +197,16 @@ const WorkSlotList = () => {
                         >
                             Bid
                         </Button>
+            case ROLE.manager:
+                return <Button 
+                        disabled={false} 
+                        id="bid-button" 
+                        variant="contained" 
+                        size="small" 
+                        onClick={() => navigate(`/workslots/${workslot._id}/arrange`)}
+                        >
+                            Offer
+                        </Button>
             default:
                 return <></>
         }
@@ -192,22 +223,7 @@ const WorkSlotList = () => {
                     </TableHead>
 
                     <TableBody>
-                        {workslots.length > 0 ? sortData(workslots).map((workslot, i) => (
-                            <TableRow key={i}>                            
-                                <TableCell component="th" scope="row">
-                                    {getTime(workslot.startTime)}
-                                </TableCell>
-                                <TableCell component="th" scope="row">
-                                    {getTime(workslot.endTime)}
-                                </TableCell>
-                                <TableCell>
-                                    {getPositions(workslot.pendingJob)}
-                                </TableCell>
-                                <TableCell>
-                                    {renderButton(workslot)}
-                                </TableCell>
-                            </TableRow>
-                        )) :
+                        {workslots.length > 0 ? renderWorkSlots(workslots):
                         <TableRow>
                             <TableCell colSpan={4} align='center'>
                                 <Typography variant="button" gutterBottom>

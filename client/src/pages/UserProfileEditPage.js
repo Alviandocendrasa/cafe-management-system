@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Paper, FormControl, IconButton, Button, TextField, Stack, Chip, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { Paper, FormControl, InputLabel, IconButton, Button, TextField, Stack, Chip, Typography, Select, MenuItem, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
 import UserProfileView from "../boundaries/UserProfileView";
 
+const permissions = ['user', 'user-profile', 'workslot', 'bid'];
 
 const UserProfileEditPage = () => {
     const navigate = useNavigate();
@@ -108,19 +109,15 @@ const UserProfileEditPage = () => {
         // Prevent page reload
         event.preventDefault();
 
-        const permissions = formData.permissions?.map(el => el.toLowerCase());
-
-        const userProfileData = {
-            permissions: permissions,
-            role: formData.role.toLowerCase()
+        if (formData.permissions.length < 1){
+            toast.error("Please add in at least 1 permission.");
+            return;
         }
 
-        console.log(userProfileData);
-
-        editUserProfile(userProfileData);
+        updateUserProfile(formData);
     };
 
-    const editUserProfile = async (formData) => {
+    const updateUserProfile = async (formData) => {
         try {
             setCanSubmit(false);
             
@@ -173,15 +170,23 @@ const UserProfileEditPage = () => {
 
                         <div style={{justifyContent:"space-between", alignItems: 'center', display: 'flex'}}>
                             <FormControl sx={{m:'8px', flex: 1 }}>
-                            <TextField 
-                            id="permissions"
-                            name="permissions" 
-                            label="Permissions" 
-                            variant="outlined" 
-                            value={currentPermission}
-                            onChange={handlePermissionChange}
-                            />
-                            </FormControl>
+                                    <InputLabel htmlFor="role" required>Permissions</InputLabel>
+                                    <Select
+                                    id="permissions"
+                                    name="permissions" 
+                                    label="Permissions" 
+                                    value={currentPermission}
+                                    onChange={handlePermissionChange}
+                                    >
+                                        {
+                                            permissions.map((el) => {                                       
+                                                return(
+                                                    <MenuItem key={el} value={el}>{el}</MenuItem>
+                                                )                
+                                            })
+                                        }
+                                    </Select>
+                                </FormControl>
                             <FormControl>
                                 <IconButton size="large" onClick={handleAddPermissions}>
                                     <AddCircleIcon fontSize="40"/>
