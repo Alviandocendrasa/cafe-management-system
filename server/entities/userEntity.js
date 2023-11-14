@@ -78,7 +78,14 @@ class UserEntity {
     try {
       /*
         NOTE FOR DOCS TEAM
-        return {}
+        return
+        {
+          username,
+          password,
+          phoneNumber, 
+          maxBidSlots, 
+          userProfileId
+        }
       */
 
       return await db.User.findByIdAndDelete(userId);
@@ -88,13 +95,21 @@ class UserEntity {
     }
   }
 
+  async searchUser(query) {
+    return db.User.find(query);
+  }
+
   async findUserByUsername(username) {
     /*
       NOTE FOR DOCS TEAM
       return
       {
-        status: "success",
-        data:  {_id, username, password, phoneNumber, maxBidSlots, userProfileIdObj},
+        _id,
+        username,
+        password,
+        phoneNumber, 
+        maxBidSlots, 
+        userProfileIdObj
       }
     */
 

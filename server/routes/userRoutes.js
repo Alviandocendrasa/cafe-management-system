@@ -1,7 +1,8 @@
 const express = require("express");
 
 const UserController = require("../controllers/userController.js")
-const AuthController = require("../controllers/authController.js")
+const AuthController = require("../controllers/authController.js");
+const { createUser, getAllUsers, getUser, deleteUser, updateUser, searchUser } = require("../handlers/userHandler.js");
 
 const userController = new UserController();
 const authController = new AuthController();
@@ -11,13 +12,18 @@ const router = express.Router();
 // router.use(authController.protect.bind(authController))
 
 router.route("/")
-  .get(userController.getAllUsers.bind(userController))
-  .post(userController.createUser.bind(userController))
+  .get(getAllUsers)
+  .post(createUser)
+
+router.route("/search/")
+  .get(searchUser)
 
 router.route("/:id/")
-  .get(userController.getUser.bind(userController))
-  .patch(userController.updateUser.bind(userController))
-  .delete(userController.deleteUser.bind(userController))
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser)
+
+
 
 
 module.exports = router;
