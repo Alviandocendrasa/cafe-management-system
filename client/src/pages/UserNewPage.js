@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
 import { apiCall } from '../services/api';
-import UserProfileView from "../boundaries/UserProfileView";
 
 const UserNewPage = () => {  
     const navigate = useNavigate();
@@ -32,8 +31,7 @@ const UserNewPage = () => {
 
     const fetchUserProfiles = async () => {
         try{
-            const userProfileView = new UserProfileView();
-            const res = await userProfileView.fetchAllUserProfiles();
+            const res = await apiCall("get", `/api/user-profiles/`);
 
             setUserProfile(res.data);
 

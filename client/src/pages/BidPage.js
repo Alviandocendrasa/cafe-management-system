@@ -6,8 +6,7 @@ import { Paper, Button, Typography, Dialog, DialogActions, DialogTitle } from '@
 import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
-import BidView from "../boundaries/BidView";
-
+import { apiCall } from '../services/api';
 
 const BidPage = () => {
     const navigate = useNavigate();
@@ -24,13 +23,12 @@ const BidPage = () => {
     const [openReject, setOpenReject] = useState(false);
 
     useEffect(() => {
-        fetchData();
+        fetchBidData();
     },[])
 
-    const fetchData = async () => {
+    const fetchBidData = async () => {
         try {
-            const bidView = new BidView();
-            const res = await bidView.fetchBid(id);
+            const res = await apiCall("get", `/api/bids/${id}`);
 
             setFormData(res.data);
         } catch(err){
@@ -51,13 +49,11 @@ const BidPage = () => {
         setOpenApprove(false);
     }
 
-    const updateBid = async (formData) => {
+    const updateBid = async (bidData) => {
         try {
             setCanSubmit(false);
             
-            const bidView = new BidView();
-            const res = await bidView.updateBid(formData, id);
-
+            const res = await apiCall("patch", `/api/bids/${id}`, bidData);
             toast.success(res.message);
         } catch(err){
             console.log(err);

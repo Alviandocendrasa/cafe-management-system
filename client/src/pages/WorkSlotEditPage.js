@@ -9,8 +9,7 @@ import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
-import WorkslotView from "../boundaries/WorkslotView";
-
+import { apiCall } from '../services/api';
 
 const jobRoles = ['barista', 'cashier', 'chef', 'waiter'];
 
@@ -37,13 +36,12 @@ const WorkSlotEditPage = () => {
     const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
-        fetchData();
+        fetchWorkslotData();
     },[])
 
-    const fetchData = async () => {
+    const fetchWorkslotData = async () => {
         try {
-            const workslotView = new WorkslotView();
-            const res = await workslotView.fetchWorkslot(id);
+            const res = await apiCall("get", `/api/workslots/${id}`);
 
             setFormData({
                 pendingJob: res.data.pendingJob,
@@ -115,8 +113,7 @@ const WorkSlotEditPage = () => {
         try {
             setCanSubmit(false);
             
-            const workslotView = new WorkslotView();
-            const res = await workslotView.deleteWorkslot(id);
+            const res = await apiCall("delete", `/api/workslots/${id}`);
 
             toast.success(res.message);
         } catch(err){
@@ -139,12 +136,11 @@ const WorkSlotEditPage = () => {
         updateWorkslot(formData);
     };
 
-    const updateWorkslot = async (formData) => {
+    const updateWorkslot = async (workslotData) => {
         try {
             setCanSubmit(false);
-            
-            const workslotView = new WorkslotView();
-            const res = await workslotView.updateWorkslot(formData, id);
+
+            const res = await apiCall("patch", `/api/workslots/${id}`, workslotData);
 
             toast.success(res.message);
         } catch(err){

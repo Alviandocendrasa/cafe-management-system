@@ -6,7 +6,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
-import UserProfileView from "../boundaries/UserProfileView";
+import { apiCall } from '../services/api';
 
 const permissions = ['user', 'user-profile', 'workslot', 'bid'];
 
@@ -25,13 +25,12 @@ const UserProfileEditPage = () => {
     const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
-        fetchData();
+        fetchUserProfileData();
     },[])
 
-    const fetchData = async () => {
+    const fetchUserProfileData = async () => {
         try {
-            const userProfileView = new UserProfileView();
-            const res = await userProfileView.fetchUserProfile(id);
+            const res = await apiCall("get", `/api/user-profiles/${id}`);
 
             setFormData(res.data);
         } catch(err){
@@ -94,8 +93,7 @@ const UserProfileEditPage = () => {
         try {
             setCanSubmit(false);
             
-            const userProfileView = new UserProfileView();
-            const res = await userProfileView.deleteUserProfile(id);
+            const res = await apiCall("delete", `/api/user-profiles/${id}`);
 
             toast.success(res.message);
         } catch(err){
@@ -119,12 +117,11 @@ const UserProfileEditPage = () => {
         updateUserProfile(formData);
     };
 
-    const updateUserProfile = async (formData) => {
+    const updateUserProfile = async (profileData) => {
         try {
             setCanSubmit(false);
             
-            const userProfileView = new UserProfileView();
-            const res = await userProfileView.updateUserProfile(formData, id);
+            const res = await apiCall("patch", `/api/user-profiles/${id}`, profileData);
 
             toast.success(res.message);
         } catch(err){

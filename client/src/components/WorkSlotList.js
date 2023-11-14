@@ -23,10 +23,10 @@ const WorkSlotList = () => {
     const shouldOpen = Boolean(anchor);
 
     useEffect(()=>{
-        fetchData();
+        fetchWorkslotList();
     },[])
 
-    const fetchData = async () => {
+    const fetchWorkslotList = async () => {
         try {
             const res = await apiCall("get", `/api/workslots`);
 

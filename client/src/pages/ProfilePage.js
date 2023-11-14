@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
 import BidList from "../components/BidList";
-import UserView from "../boundaries/UserView";
+import { apiCall } from '../services/api';
 import { ROLE } from "../constants";
 
 const ProfilePage = () => {
@@ -24,13 +24,12 @@ const ProfilePage = () => {
     const [canSubmit, setCanSubmit] = useState(true);
 
     useEffect(() => {
-        fetchData();
+        fetchUserData();
     },[]);
 
-    const fetchData = async () => {
+    const fetchUserData = async () => {
         try {
-            const userView = new UserView();
-            const res = await userView.fetchUser(auth.userId);
+            const res = await apiCall("get", `/api/users/${auth.userId}`);
 
             const profile =   {
                 username: res.data.username,

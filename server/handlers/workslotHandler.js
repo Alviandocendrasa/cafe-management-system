@@ -52,7 +52,7 @@ exports.searchWorkslot = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: 'Workslot retrieved successfully',
+      message: 'Workslot retrieved successfully.',
       data: doc
     });
   }
@@ -71,7 +71,7 @@ exports.viewAllWorkslots = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: 'All workslots retrieved successfully',
+      message: 'All workslots retrieved successfully.',
       data: doc
     });
   }
@@ -90,7 +90,7 @@ exports.viewAvailableWorkslots = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: 'All available workslots retrieved successfully',
+      message: 'All available workslots retrieved successfully.',
       data: doc
     });
   }
@@ -109,7 +109,7 @@ exports.deleteWorkslot = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: 'Workslot retrieved successfully',
+      message: 'Workslot deleted successfully.',
       data: doc
     });
   }

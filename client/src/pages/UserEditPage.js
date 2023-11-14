@@ -6,8 +6,7 @@ import { Visibility, VisibilityOff} from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
-import UserView from "../boundaries/UserView";
-import UserProfileView from "../boundaries/UserProfileView";
+import { apiCall } from '../services/api';
 
 const UserEditPage = () => {  
     const navigate = useNavigate();
@@ -29,13 +28,12 @@ const UserEditPage = () => {
   
     useEffect(() => {
         fetchUserProfiles();
-        fetchData();
+        fetchUserData();
     },[])
 
-    const fetchData = async () => {
+    const fetchUserData = async () => {
         try {
-            const userView = new UserView();
-            const res = await userView.fetchUser(id);
+            const res = await apiCall("get", `/api/users/${id}`);
 
             const data =  {
                 username: res.data.username,                   
@@ -54,8 +52,7 @@ const UserEditPage = () => {
 
     const fetchUserProfiles = async () => {
         try{
-            const userProfileView = new UserProfileView();
-            const res = await userProfileView.fetchAllUserProfiles();
+            const res = await apiCall("get", `/api/user-profiles/`);
 
             setUserProfile(res.data);
         } catch(err){
@@ -99,8 +96,7 @@ const UserEditPage = () => {
                 delete userData.password;
             }
 
-            const userView = new UserView();
-            const res = await userView.updateUser(userData, id);
+            const res = await apiCall("patch", `/api/users/${id}`, userData);
 
             toast.success(res.message);
         } catch(err){

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip, Stack, Button, Menu, MenuItem, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 
-import UserProfileView from "../boundaries/UserProfileView";
+import { apiCall } from '../services/api';
 
 const header = ["Role", "Permissions", ""];
 
@@ -14,13 +14,12 @@ const UserProfileList = () => {
     const [userProfiles, setUserProfiles] = useState([]);
 
     useEffect(()=>{
-        fetchData();
+        fetchUserProfileList();
     },[])
 
-    const fetchData = async () => {
+    const fetchUserProfileList = async () => {
         try {
-            const userProfileView = new UserProfileView();
-            const res = await userProfileView.fetchAllUserProfiles();
+            const res = await apiCall("get", `/api/user-profiles/`);
 
             setUserProfiles(res.data);
         } catch(err){

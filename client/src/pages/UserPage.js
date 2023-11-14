@@ -5,9 +5,8 @@ import { Typography, Card, CardContent, Button, Dialog, DialogActions, DialogTit
 import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
-import UserView from "../boundaries/UserView";
+import { apiCall } from '../services/api';
 import { ROLE } from "../constants";
-
 
 const UserPage = () => {
 
@@ -27,13 +26,12 @@ const UserPage = () => {
     const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
-        fetchData();
+        fetchUserData();
     },[]);
 
-    const fetchData = async () => {
+    const fetchUserData = async () => {
         try {
-            const userView = new UserView();
-            const res = await userView.fetchUser(id);
+            const res = await apiCall("get", `/api/users/${id}`);
 
             setUser(res.data);
         } catch(err){
@@ -55,8 +53,7 @@ const UserPage = () => {
         try {
             setCanSubmit(false);
             
-            const userView = new UserView();
-            const res = await userView.deleteUser(id);
+            const res = await apiCall("delete", `/api/users/${id}`);
 
             toast.success(res.message);
         } catch(err){

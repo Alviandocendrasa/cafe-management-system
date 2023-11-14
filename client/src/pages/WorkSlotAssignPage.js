@@ -41,10 +41,10 @@ const WorkSlotAssignPage = () => {
     const shouldOpenMenu = Boolean(menuAnchor);
 
     useEffect(() => {
-        fetchData();
+        fetchWorkSlotData();
     },[])
 
-    const fetchData = async () => {
+    const fetchWorkSlotData = async () => {
         try {
             const res = await apiCall("get", `/api/workslots/${id}`);
 

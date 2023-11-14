@@ -9,8 +9,7 @@ import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
-import WorkslotView from "../boundaries/WorkslotView";
-
+import { apiCall } from '../services/api';
 
 const jobRoles = ['barista', 'cashier', 'chef', 'waiter'];
 
@@ -99,12 +98,11 @@ const WorkSlotNewPage = () => {
         createWorkSlot(formData);
     };
 
-    const createWorkSlot = async (formData) => {
+    const createWorkSlot = async (workslotData) => {
         try {
             setCanSubmit(false);
             
-            const workslotView = new WorkslotView();
-            const res = await workslotView.createNewWorkslot(formData);
+            const res = await apiCall("post", `/api/workslots`, workslotData);
 
             toast.success(res.message);
         } catch(err){

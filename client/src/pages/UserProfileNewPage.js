@@ -6,7 +6,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
-import UserProfileView from "../boundaries/UserProfileView";
+import { apiCall } from '../services/api';
 
 const permissions = ['user', 'user-profile', 'workslot', 'bid'];
 
@@ -22,7 +22,6 @@ const UserProfileNewPage = () => {
 
     const [currentPermission, setCurrentPermission] = useState(""); 
     const [canSubmit, setCanSubmit] = useState(true); 
-
 
     const handleRoleChange = (event) => {
         setFormData(prevState => (
@@ -78,12 +77,11 @@ const UserProfileNewPage = () => {
         createUserProfile(formData);
     };
 
-    const createUserProfile = async (formData) => {
+    const createUserProfile = async (profileData) => {
         try {
             setCanSubmit(false);
             
-            const userProfileView = new UserProfileView();
-            const res = await userProfileView.createUserProfile(formData);
+            const res = await apiCall("post", `/api/user-profiles/`, profileData);
 
             toast.success(res.message);
         } catch(err){

@@ -9,7 +9,6 @@ import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
 import { apiCall, setTokenHeader} from '../services/api';
 
-
 const LoginPage = () => {
   const { setCurrentUser} = useContext(AuthContext);
 

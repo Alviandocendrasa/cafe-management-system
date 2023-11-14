@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 
-import UserView from "../boundaries/UserView";
+import { apiCall } from '../services/api';
 
 const header = ["Username", "Role", ""];
 
@@ -14,13 +14,12 @@ const UserList = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(()=>{
-        fetchData();
+        fetchUserList();
     },[])
 
-    const fetchData = async () => {
+    const fetchUserList = async () => {
         try {
-            const userView = new UserView();
-            const res = await userView.fetchAllUsers();
+            const res = await apiCall("get", `/api/users/`);
 
             setUsers(res.data);
         } catch(err){
