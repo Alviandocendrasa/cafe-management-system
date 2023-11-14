@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Paper, FormControl, InputLabel, IconButton, Button, TextField, Stack, Chip, Typography, Select, MenuItem } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -12,8 +12,6 @@ const permissions = ['user', 'user-profile', 'workslot', 'bid'];
 
 const UserProfileNewPage = () => {
     const navigate = useNavigate();
-
-    const { id } = useParams();
 
     const [formData, setFormData] = useState({
         role: "",
@@ -108,7 +106,7 @@ const UserProfileNewPage = () => {
     return (
         <>
             <div className="form-page">
-                <Toast onSuccessDone={() => navigate('/user-profiles')} />
+                <Toast onSuccessDone={() => navigate('/user-profiles', { replace: true })} />
 
                 <Paper className="paper" sx={{ minWidth: 500 }}>
                     <form className="register-form" name="registerForm" onSubmit={handleSubmit}>

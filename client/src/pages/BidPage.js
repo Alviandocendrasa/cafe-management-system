@@ -70,7 +70,7 @@ const BidPage = () => {
     return (
         <>
             <div className="form-page">
-                <Toast onSuccessDone={() => navigate("/bids")} />
+                <Toast onSuccessDone={() => navigate("/bids", { replace: true })} />
 
                 <Paper className="paper" sx={{ minWidth: 500 }}>
                     <div className="profile">

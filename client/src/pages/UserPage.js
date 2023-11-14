@@ -75,7 +75,7 @@ const UserPage = () => {
 
     return (
         <div className="form-page">
-            <Toast onSuccessDone={() => navigate('/users')} />
+            <Toast onSuccessDone={() => navigate('/users', { replace: true })} />
 
             <Card className="paper" sx={{ minWidth: 720 }}>
                 <div className="profile">

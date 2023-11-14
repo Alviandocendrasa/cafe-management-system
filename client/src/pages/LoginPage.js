@@ -46,7 +46,7 @@ const LoginPage = () => {
     
         setCurrentUser(res.data.user);
 
-        navigate('/');
+        navigate('/', { replace: true });
       } catch(err){
         console.log(err);
         toast.error(err.message);

@@ -146,7 +146,7 @@ const WorkSlotNewPage = () => {
 
     return (
         <div className="form-page">
-        <Toast onSuccessDone={() => navigate(0)} />
+        <Toast onSuccessDone={() => navigate('/workslots', { replace: true })} />
 
         <Paper className="paper" sx={{ minWidth: 500 }}>
             <form className="register-form" name="registerForm" onSubmit={handleSubmit}>

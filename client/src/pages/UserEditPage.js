@@ -113,7 +113,7 @@ const UserEditPage = () => {
 
     return (
         <div className="form-page">
-        <Toast onSuccessDone={() => navigate('/users')}/>
+        <Toast onSuccessDone={() => navigate('/users', { replace: true })}/>
 
         <Paper className="paper" sx={{ minWidth: 325, minHeight: 350 }}>
             <form className="register-form" name="registerForm" onSubmit={handleSubmit}>

@@ -56,7 +56,7 @@ const ProfilePage = () => {
 
     return (
         <div className="form-page">
-            <Toast onSuccessDone={() => navigate(0)} />
+            <Toast onSuccessDone={() => navigate(0, { replace: true })} />
 
             <Card className="paper" sx={{ minWidth: 720 }}>
                 <div className="profile">
