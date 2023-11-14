@@ -67,7 +67,7 @@ const UserPage = () => {
         }
     }
 
-    const getCaptilize = (text) => {
+    const getCaptalize = (text) => {
         if (!text){
             return '-';
         }
@@ -99,7 +99,7 @@ const UserPage = () => {
                                 Role :
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {getCaptilize(user.userProfileId?.role)}
+                                {getCaptalize(user.userProfileId?.role)}
                             </Typography>
                         </div>
 

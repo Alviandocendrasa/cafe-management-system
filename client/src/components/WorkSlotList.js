@@ -18,8 +18,8 @@ const WorkSlotList = () => {
     const navigate = useNavigate();
     
     const [workslots, setWorkslots] = useState([]);
-    const [anchor, setAnchor] = useState(null);
     const [focusWorkslot, setFocusWorkslot] = useState(null);
+    const [anchor, setAnchor] = useState(null);
 
     const shouldOpen = Boolean(anchor);
 
@@ -78,29 +78,29 @@ const WorkSlotList = () => {
         return dayjs(time).format("DD-MM-YYYY") + " " + dayjs(time).format("hh:mm A");
     }
 
-    const getUniqueRoles = (jobTitle) => {
-        let uniqueRoles = [];
+    const getUniqueJobs = (jobTitle) => {
+        let uniqueJobs = [];
 
         jobTitle.forEach((el) => {        
-            if(!uniqueRoles.includes(el))
+            if(!uniqueJobs.includes(el))
             {
-                uniqueRoles.push(el);            
+                uniqueJobs.push(el);            
             }
         });
         
-        uniqueRoles.sort();
+        uniqueJobs.sort();
 
-        return uniqueRoles;
+        return uniqueJobs;
     }
 
     const getPositions = (jobTitle) => {
-        let uniqueRoles = [];
+        let uniqueJobs = [];
         let mapNumber = {};
 
         jobTitle.forEach((el) => {        
-            if(!uniqueRoles.includes(el))
+            if(!uniqueJobs.includes(el))
             {
-                uniqueRoles.push(el);
+                uniqueJobs.push(el);
                 mapNumber[el] = 1;
             }
             else
@@ -109,11 +109,11 @@ const WorkSlotList = () => {
             }
         });
         
-        uniqueRoles.sort();
+        uniqueJobs.sort();
 
         return (
            <Stack direction="row" spacing={1}>
-                {uniqueRoles?.map((el) => {
+                {uniqueJobs?.map((el) => {
                     let text = el.charAt(0).toUpperCase() + el.slice(1);
 
                     return (
@@ -156,6 +156,16 @@ const WorkSlotList = () => {
 
     const renderWorkSlots = (workslots) => {
         const arr = workslots.filter(el => el.pendingJob?.length > 0);
+
+        if (arr.length <= 0){
+            return(<TableRow>
+                <TableCell colSpan={4} align='center'>
+                    <Typography variant="button" gutterBottom>
+                        No Workslot found
+                    </Typography>
+                </TableCell>                                   
+            </TableRow> )
+        }
         
         return sortData(arr).map((el, i) => {
             return  (<TableRow key={i}>                            
@@ -203,9 +213,9 @@ const WorkSlotList = () => {
                         id="bid-button" 
                         variant="contained" 
                         size="small" 
-                        onClick={() => navigate(`/workslots/${workslot._id}/arrange`)}
+                        onClick={() => navigate(`/workslots/${workslot._id}/assign`)}
                         >
-                            Offer
+                            Assign
                         </Button>
             default:
                 return <></>
@@ -223,15 +233,7 @@ const WorkSlotList = () => {
                     </TableHead>
 
                     <TableBody>
-                        {workslots.length > 0 ? renderWorkSlots(workslots):
-                        <TableRow>
-                            <TableCell colSpan={4} align='center'>
-                                <Typography variant="button" gutterBottom>
-                                    No Workslot found
-                                </Typography>
-                            </TableCell>                                   
-                        </TableRow> 
-                        }                    
+                        {renderWorkSlots(workslots)}                    
                     </TableBody>               
                 </Table>          
             </TableContainer>
@@ -241,7 +243,7 @@ const WorkSlotList = () => {
              anchorEl={anchor}
              open={shouldOpen}
              >
-                {getUniqueRoles(focusWorkslot.pendingJob)?.map((jobTitle, i) => {
+                {getUniqueJobs(focusWorkslot.pendingJob)?.map((jobTitle, i) => {
                         let text = jobTitle.charAt(0).toUpperCase() + jobTitle.slice(1);
                     
                     return (

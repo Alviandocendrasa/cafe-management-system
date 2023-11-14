@@ -37,12 +37,19 @@ const UserProfileList = () => {
         )
     }
 
-    const getCaptilize = (text) => {
-        return text?.charAt(0).toUpperCase() + text?.slice(1);
+    const getCaptalize = (text) => {
+        if (!text){
+            return '-';
+        }
+        
+        return text.charAt(0).toUpperCase() + text.slice(1);
     }
 
     const renderPermissions = (permissions) => {
-        if (permissions?.length > 0){
+        
+        if (permissions.length > 0){
+            permissions.sort();
+            
             return (
                 <Stack direction="row" spacing={1}>
                      {permissions?.map((el) => {                            
@@ -75,7 +82,7 @@ const UserProfileList = () => {
                         {userProfiles.length > 0 ? userProfiles.map((up, i) => (
                             <TableRow key={i}>                            
                                 <TableCell component="th" scope="row">
-                                    {getCaptilize(up.role)}
+                                    {getCaptalize(up.role)}
                                 </TableCell>
                                 <TableCell>
                                     {renderPermissions(up.permissions)}

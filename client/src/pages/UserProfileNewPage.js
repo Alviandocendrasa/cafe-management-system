@@ -38,7 +38,9 @@ const UserProfileNewPage = () => {
     }
   
     const handleAddPermissions = () => {
-        if (!currentPermission) return; 
+        if (!currentPermission) return;
+        
+        if (formData.permissions.includes(currentPermission)) return;
 
         setFormData(prevState => (
             {

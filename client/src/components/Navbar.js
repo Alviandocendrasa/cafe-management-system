@@ -61,8 +61,7 @@ const Navbar = () => {
                             <NavLink to={page.link}>{page.title}</NavLink>
                         </Button>
                     ))}
-                </Box>
-                
+                </Box>                
             </Toolbar>
         </Container>
     </AppBar>

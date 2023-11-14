@@ -59,7 +59,7 @@ const UserList = () => {
         )
     }
 
-    const getCaptilize = (text) => {
+    const getCaptalize = (text) => {
         if (!text){
             return '-';
         }
@@ -84,7 +84,7 @@ const UserList = () => {
                                     {user.username}
                                 </TableCell>
                                 <TableCell>
-                                    {getCaptilize(user?.userProfileId?.role)}
+                                    {getCaptalize(user?.userProfileId?.role)}
                                 </TableCell>                            
                                 <TableCell>
                                 <Button 

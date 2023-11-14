@@ -92,8 +92,12 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
         )
     }
 
-    const getCaptilize = (text) => {
-        return text?.charAt(0).toUpperCase() + text?.slice(1);
+    const getCaptalize = (text) => {
+        if (!text){
+            return '-';
+        }
+        
+        return text.charAt(0).toUpperCase() + text.slice(1);
     }
 
     const sortData = (data) => {
@@ -147,7 +151,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
         if (bid.bidStatus === 'pending'){
             if (isManager){
                 return <Button 
-                        id="View-button" 
+                        id="view-button" 
                         variant="contained" 
                         size="small"
                         onClick={() => navigate(`/bids/${bid._id}/`)} 
@@ -190,7 +194,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
                                     {getTime(bid?.workslotId?.endTime)}
                                 </TableCell>
                                 <TableCell>
-                                    {getCaptilize(bid.jobTitle)}
+                                    {getCaptalize(bid.jobTitle)}
                                 </TableCell>
                                 <TableCell>
                                     {bid.bidStatus}

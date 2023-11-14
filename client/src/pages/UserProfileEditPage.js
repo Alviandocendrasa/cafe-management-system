@@ -56,6 +56,8 @@ const UserProfileEditPage = () => {
     const handleAddPermissions = () => {
         if (!currentPermission) return; 
 
+        if (formData.permissions.includes(currentPermission)) return;
+
         setFormData(prevState => (
             {
                 ...prevState,

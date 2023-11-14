@@ -15,6 +15,7 @@ import LoginPage from './pages/LoginPage';
 import WorkSlotsPage from './pages/WorkSlotsPage';
 import WorkSlotNewPage from './pages/WorkSlotNewPage';
 import WorkSlotEditPage from './pages/WorkSlotEditPage';
+import WorkSlotAssignPage from './pages/WorkSlotAssignPage';
 import BidsPage from './pages/BidsPage';
 import BidPage from './pages/BidPage';
 import UserNewPage from './pages/UserNewPage';
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="/workslots"  element ={ <WorkSlotsPage />} />
             <Route path="/workslots/new"  element ={ <WorkSlotNewPage />} />
             <Route path="/workslots/:id/edit"  element ={ <WorkSlotEditPage />} />
+            <Route path="/workslots/:id/assign"  element ={ <WorkSlotAssignPage />} />
             <Route path="/bids"  element ={ <BidsPage />} />
             <Route path="/bids/:id"  element ={ <BidPage />} />
             <Route path="/users"  element ={ <UsersPage />} />
