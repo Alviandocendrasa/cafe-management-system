@@ -28,31 +28,58 @@ Bid.remove({}, function (err) {
 // Function to generate ObjectId for random association
 const generateRandomObjectId = () => mongoose.Types.ObjectId();
 
+
+
 // Function to create test data
 const createTestData = async () => {
+  // USER PROFILES
+  const cafeStaffId = generateRandomObjectId();
+  const cafeManagerId = generateRandomObjectId();
+  const cafeOwnerId = generateRandomObjectId();
+  const systemAdmin = generateRandomObjectId();
+
+  const userProfiles = [
+    {
+      _id: cafeStaffId,
+      role: "staff",
+      permissions: ["read", "write"]
+    },
+    {
+      _id: cafeManagerId,
+      role: "manager",
+      permissions: ["read", "write"]
+    },
+    {
+      _id: cafeOwnerId,
+      role: "owner",
+      permissions: ["read", "write"]
+    },
+    {
+      _id: systemAdmin,
+      role: "admin",
+      permissions: ["read", "write"]
+    },
+  ]
+
+  await UserProfile.insertMany(userProfiles);
+
   // USERS
   const users = [];
   for (let i = 0; i < 100; i++) {
     const newUser = {
       username: faker.person.firstName() + faker.person.middleName(),
       password: "123",
+      phoneNumber: faker.phone.number(),
+      maxBidSlots: faker.number.int({ min: 1, max: 10 }),
+      userProfileId: faker.helpers.arrayElement(userProfiles)._id
     };
     const createdUser = await User.create(newUser);
     users.push(createdUser);
   }
 
-  // USER PROFILES
-  const userProfiles = users.map((user) => ({
-    role: faker.helpers.arrayElement(["staff", "manager", "owner", "admin"]),
-    userId: user._id,
-    phoneNumber: faker.phone.number(),
-    maxBidSlots: faker.number.int({ min: 1, max: 10 }),
-  }));
-
-  await UserProfile.insertMany(userProfiles);
-
   // WORKSLOTS
-  const userProfileManager = userProfiles.filter((userProfile) => userProfile.role === "manager")
+  const userManager = users.filter((user) => user.userProfileId === cafeManagerId)
+  console.log("USER MANAGER: ", userManager)
   let workslots = [];
   for (let i = 0; i < 100; i++) {
     let pendingArr = faker.helpers.arrayElements(["chef", "waiter", "cashier", "bartender"], { min: 3, max: 4 });
@@ -63,7 +90,7 @@ const createTestData = async () => {
       approvedJob: faker.helpers.arrayElements(["chef", "waiter", "cashier", "bartender"], { min: 1, max: 3 }),
       startTime: faker.date.between({ from: '2023-01-01T08:00:00.000Z', to: '2023-01-01T10:00:00.000Z' }),
       endTime: faker.date.between({ from: '2023-01-01T15:00:00.000Z', to: '2023-01-01T20:00:00.000Z' }),
-      cafeManagerId: faker.helpers.arrayElement(userProfileManager).userId
+      cafeManagerId: faker.helpers.arrayElement(userManager)._id
     }
 
     const createWorkslot = await Workslot.create(workslot);
@@ -72,13 +99,12 @@ const createTestData = async () => {
 
   // BIDS
   const bids = [];
-  const userProfileStaff = userProfiles.filter((userProfile) => userProfile.role === "staff")
   for (let i = 0; i < 100; i++) {
     const selectedWorkslot = faker.helpers.arrayElement(workslots);
     const selectedJobTitle = faker.helpers.arrayElement(selectedWorkslot.pendingJob);
 
     const newBid = {
-      cafeStaffId: faker.helpers.arrayElement(userProfileStaff).userId,
+      cafeStaffId: cafeStaffId,
       jobTitle: selectedJobTitle,
       bidStatus: faker.helpers.arrayElement(["pending", "approved", "rejected"]),
       workslotId: faker.helpers.arrayElement(workslots)._id
