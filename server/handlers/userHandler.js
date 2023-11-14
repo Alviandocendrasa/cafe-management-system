@@ -14,7 +14,7 @@ exports.createUser = async function (req, res, next) {
 
     res.status(201).json({
       status: 'success',
-      message: 'User document created successfully.',
+      message: 'User has been created successfully.',
       data: doc
     });
   }
@@ -78,7 +78,7 @@ exports.deleteUser = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `User document deleted successfully`,
+      message: `User has been successfully deleted.`,
       data: doc
     });
   }
@@ -97,7 +97,7 @@ exports.updateUser = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `User document deleted successfully`,
+      message: `User data has been successfully updated.`,
       data: doc
     });
   }
@@ -117,7 +117,7 @@ exports.searchUser = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `User documents retrieved successfully`,
+      message: `User documents retrieved successfully.`,
       data: doc
     });
   }

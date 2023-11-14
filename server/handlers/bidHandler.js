@@ -33,11 +33,11 @@ exports.updateBid = async function (req, res, next) {
   try {
     console.log(req.body)
     if (!req.params.id) {
-      throw Error("Bid id params cannot be empty");
+      throw Error("Bid id params cannot be empty.");
     }
 
     if (!req.body) {
-      throw Error("Bid data cannot be empty")
+      throw Error("Bid data cannot be empty.")
     }
 
     const updateBidController = new UpdateBidController();
@@ -45,7 +45,7 @@ exports.updateBid = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: 'Bid updated successfully',
+      message: 'Bid updated successfully.',
       data: doc
     });
   }
@@ -60,7 +60,7 @@ exports.updateBid = async function (req, res, next) {
 exports.getOneBid = async function (req, res, next) {
   try {
     if (!req.params.id) {
-      throw Error("Bid id params cannot be empty");
+      throw Error("Bid id params cannot be empty.");
     }
 
     const getOneBid = new SearchBidController();
@@ -68,7 +68,7 @@ exports.getOneBid = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: 'Bid retrieved successfully',
+      message: 'Bid retrieved successfully.',
       data: doc
     });
   }
@@ -83,7 +83,7 @@ exports.getOneBid = async function (req, res, next) {
 exports.deleteBid = async function (req, res, next) {
   try {
     if (!req.params.id) {
-      throw Error("Bid id params cannot be empty");
+      throw Error("Bid id params cannot be empty.");
     }
 
     const deleteBid = new DeleteBidController();
@@ -91,7 +91,7 @@ exports.deleteBid = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: 'Bid deleted1 successfully',
+      message: 'Bid deleted successfully.',
       data: doc
     });
   }
@@ -110,7 +110,7 @@ exports.getAllBids = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `All bids retrieved successfully`,
+      message: `All bids retrieved successfully.`,
       data: doc
     });
   }
@@ -125,7 +125,7 @@ exports.getAllBids = async function (req, res, next) {
 exports.viewBiddingHistory = async function (req, res, next) {
   try {
     if (!req.params.cafeStaffId) {
-      throw Error("Please provide cafe staff id")
+      throw Error("Please provide cafe staff id.")
     }
 
     const viewBiddingHistory = new ViewBiddingHistoryController();
@@ -133,7 +133,7 @@ exports.viewBiddingHistory = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `All bids by ${req.params.cafeStaffId} retrieved successfully`,
+      message: `All bids by ${req.params.cafeStaffId} retrieved successfully.`,
       data: doc
     });
   }
@@ -152,7 +152,7 @@ exports.viewAllPendingBids = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `All pending bids by ${req.params.cafeStaffId} retrieved successfully`,
+      message: `All pending bids by ${req.params.cafeStaffId} retrieved successfully.`,
       data: doc
     });
   }
@@ -171,7 +171,7 @@ exports.approveBid = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `Bid ${req.params.id} approved successfully`,
+      message: `Bid ${req.params.id} approved successfully.`,
       data: doc
     });
   }
@@ -190,7 +190,7 @@ exports.declineBid = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `Bid ${req.params.id} declined successfully`,
+      message: `Bid ${req.params.id} declined successfully.`,
       data: doc
     });
   }

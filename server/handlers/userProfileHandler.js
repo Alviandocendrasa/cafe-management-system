@@ -13,7 +13,7 @@ exports.createUserProfile = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `User profile documents retrieved successfully`,
+      message: `User profile has been successfully created.`,
       data: doc
     });
   }
@@ -37,7 +37,7 @@ exports.getUserProfile = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `User profile document retrieved successfully`,
+      message: `User profile document retrieved successfully.`,
       data: doc
     });
   }
@@ -56,7 +56,7 @@ exports.getAllUserProfiles = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `All user profiles retrieved successfully`,
+      message: `All user profiles retrieved successfully.`,
       data: doc
     });
   }
@@ -75,7 +75,7 @@ exports.updateUserProfile = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `User document updated successfully`,
+      message: `User document has been updated successfully.`,
       data: doc
     });
   }
@@ -94,7 +94,7 @@ exports.deleteUserProfile = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `User document deleted successfully`,
+      message: `User document has been deleted successfully.`,
       data: doc
     });
   }
@@ -114,7 +114,7 @@ exports.searchUserProfile = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `User profile documents retrieved successfully11rr`,
+      message: `User profile documents retrieved successfully.`,
       data: doc
     });
   }
@@ -135,7 +135,7 @@ exports.getUserProfileByRole = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: 'User Profile retrieved successfully',
+      message: 'User profile retrieved successfully',
       data: doc
     });
   }

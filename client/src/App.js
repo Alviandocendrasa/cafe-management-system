@@ -37,7 +37,6 @@ const theme = createTheme({
 });
 
 const App = () => {
-  console.log(process.env);
 
   return (
     <ThemeProvider theme={theme}>
