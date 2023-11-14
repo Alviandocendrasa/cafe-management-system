@@ -101,6 +101,11 @@ class UserProfileEntity {
       throw error;
     }
   }
+
+  async searchUserProfile(query) {
+    return db.UserProfile.find(query);
+  }
+
 }
 
 module.exports = UserProfileEntity;
