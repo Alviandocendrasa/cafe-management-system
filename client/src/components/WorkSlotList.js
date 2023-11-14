@@ -9,8 +9,6 @@ import { AuthContext } from "../contexts";
 import { apiCall } from '../services/api';
 import { ROLE } from "../constants";
 
-import axios from "axios";
-
 const header = ["Start Date", "End Date", "Positions", ""];
 
 const WorkSlotList = () => {
@@ -30,8 +28,6 @@ const WorkSlotList = () => {
 
     const fetchData = async () => {
         try {
-            console.log(axios.defaults.headers.common["Authorization"]);
-            
             const res = await apiCall("get", `/api/workslots`);
 
             setWorkslots(res.data);
