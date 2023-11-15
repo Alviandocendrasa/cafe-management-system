@@ -12,9 +12,5 @@
 - npm install
 - npm start
 
-## To see API docs
-
-- cd server
-- npm install
-- npm start
-- go to http://localhost:3140/api-docs/
+## Live Demo
+https://cafe-management-system-client-five.vercel.app/
