@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import { Typography, Card, CardContent, Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -14,6 +14,7 @@ const UserPage = () => {
     const { auth } = useContext(AuthContext);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const { id } = useParams();
 
@@ -121,6 +122,20 @@ const UserPage = () => {
         }
     }
 
+    const renderAvalWorkSlot = () =>{
+        if (location && location.state && location.state.avalSlot){
+            return (<div className="profile-group">
+                        <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
+                            Available Work Slot :
+                        </Typography>
+                        <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
+                            {location.state.avalSlot}
+                        </Typography>
+                    </div>)
+        }
+
+        return <></>
+    }
 
     return (
         <div className="form-page">
@@ -163,14 +178,18 @@ const UserPage = () => {
                         </div>
 
                         {user.userProfileId?.role === ROLE.staff ?
-                        <div className="profile-group">
-                            <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
-                                Max Bids For Work Slot :
-                            </Typography>
-                            <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {user.maxBidSlots}
-                            </Typography>
-                        </div> : <></>   
+                        <>
+                            <div className="profile-group">
+                                <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
+                                    Max Bids For Work Slot :
+                                </Typography>
+                                <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
+                                    {user.maxBidSlots}
+                                </Typography>
+                            </div>
+                            {renderAvalWorkSlot()} 
+                        </>: 
+                        <></>   
                         }       
                     </CardContent>
                     {renderButton()}                                                                               

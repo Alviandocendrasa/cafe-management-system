@@ -149,7 +149,7 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
                             id="offer-button" 
                             variant="contained" 
                             size="small" 
-                            onClick={() => navigate(`/users/${el._id}`, {replace: true})}
+                            onClick={() => navigate(`/users/${el._id}`, {state: {avalSlot: el.availableSlots} , replace: true})}
                             >
                                 View
                             </Button>
