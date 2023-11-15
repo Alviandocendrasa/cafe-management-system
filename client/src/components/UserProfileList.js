@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip, Stack, Button, Menu, MenuItem, Typography } from '@mui/material';
+import { Autocomplete, TextField, Toolbar, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip, Stack, Button, Menu, MenuItem, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 
 import { apiCall } from '../services/api';
@@ -26,6 +26,23 @@ const UserProfileList = () => {
             console.log(err);
             toast.error(err.message);
         }
+    }
+
+    const handleSearchClick = (event, value) => {
+        if (!value){
+            toast.error("No value from search.");
+            return;
+        }
+        
+        const id = getIdByName(value);
+
+        navigate(`/user-profiles/${id}/edit`, {replace: true});
+    }
+    
+    const getIdByName = (name) => {
+        const userProfile = userProfiles.find(el => el.role === name);
+
+        return userProfile._id;
     }
 
     const getTableHead = (header) => {    
@@ -69,6 +86,14 @@ const UserProfileList = () => {
 
     return (
         <>
+            <Toolbar sx={{justifyContent: 'space-between', margin: '32px 0'}} disableGutters>
+                <Autocomplete
+                sx={{width: '50ch'}}
+                options={userProfiles.map(el=>el.role)}
+                renderInput={params => <TextField {...params} label="Search User Profile"/>}
+                onChange={handleSearchClick}
+                />              
+            </Toolbar>  
             <TableContainer>
                 <Table sx={{ minWidth:650 }}>
                     <TableHead>

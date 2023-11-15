@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography } from '@mui/material';
+import { Autocomplete, TextField, Toolbar, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 
 import { apiCall } from '../services/api';
@@ -26,6 +26,23 @@ const UserList = () => {
             console.log(err);
             toast.error(err.message);
         }
+    }
+
+    const handleSearchClick = (event, value) => {
+        if (!value){
+            toast.error("No value from search.");
+            return;
+        }
+        
+        const id = getIdByName(value);
+
+        navigate(`/users/${id}`, {replace: true});
+    }
+    
+    const getIdByName = (name) => {
+        const user = users.find(el => el.username === name);
+
+        return user._id;
     }
 
     const sortData = (data) => {
@@ -68,6 +85,14 @@ const UserList = () => {
 
     return (
         <>
+            <Toolbar sx={{justifyContent: 'space-between', margin: '32px 0'}} disableGutters>
+                <Autocomplete
+                sx={{width: '50ch'}}
+                options={sortData(users).map(el=>el.username)}
+                renderInput={params => <TextField {...params} label="Search User"/>}
+                onChange={handleSearchClick}
+                />              
+            </Toolbar>  
             <TableContainer>
                 <Table sx={{ minWidth:650 }}>
                     <TableHead>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Typography, Card, CardContent, Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
@@ -74,6 +75,19 @@ const UserPage = () => {
         return text?.charAt(0).toUpperCase() + text?.slice(1);
     }
 
+    const handleBack = () => {
+        switch(auth.role){
+            case ROLE.admin:
+                navigate('/users', {replace: true});
+                break;
+            case ROLE.manager:
+                navigate('/staffs', {replace: true});
+                break;
+            default:
+                break;
+        }
+    }
+
     const renderButton = () => {
         switch(auth.role){
             case ROLE.admin:
@@ -102,20 +116,6 @@ const UserPage = () => {
                         </Button>             
                      </div>
                 );
-            case ROLE.manager:
-                return(
-                    <div style={{marginTop: '12px', textAlign: 'center'}}>                          
-                        <Button 
-                        sx={{margin: "0 8px"}}
-                        id="return-button" 
-                        variant="contained" 
-                        size="small" 
-                        onClick={() => navigate('/staffs', {replace: true})}
-                        >
-                            Back
-                        </Button>                                   
-                     </div>
-                );
             default:
                 return <></>
         }
@@ -128,6 +128,10 @@ const UserPage = () => {
 
             <Card className="paper" sx={{ minWidth: 720 }}>
                 <div className="profile">
+                    <Button onClick={handleBack}>
+                        <ChevronLeftIcon />
+                        {'Back to list'}
+                    </Button>
                     <CardContent>
                         <h1>User Details</h1>
 

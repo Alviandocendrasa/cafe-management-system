@@ -174,12 +174,14 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
                 renderInput={params => <TextField {...params} label="Search Staff"/>}
                 onChange={handleSearchClick}
                 />
+                {shouldAssign ? <></> :
                 <Button
                 variant="outlined"
                 onClick={() =>  setFilterAvailable(!filterAvailable)}
                 >
-                    {filterAvailable ? 'Unfilter Staff' : 'Filter Staff'}
+                    {filterAvailable ? 'Show Available' : 'Show All'}
                 </Button>
+                }
             </Toolbar>
             <TableContainer>
                 <Table sx={{ minWidth:650 }}>

@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Paper, FormControl, InputLabel, IconButton, Button, TextField, Stack, Chip, Typography, Select, MenuItem, Dialog, DialogTitle, DialogActions } from '@mui/material';
+import { Toolbar, Paper, FormControl, InputLabel, IconButton, Button, TextField, Stack, Chip, Typography, Select, MenuItem, Dialog, DialogTitle, DialogActions } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
@@ -152,7 +153,15 @@ const UserProfileEditPage = () => {
 
                 <Paper className="paper" sx={{ minWidth: 500 }}>
                     <form className="register-form" name="registerForm" onSubmit={handleSubmit}>
+                        <Toolbar sx={{justifyContent: 'space-between'}} disableGutters>
+                            <Button onClick={() => navigate('/user-profiles', {replace: true})}>
+                                <ChevronLeftIcon />
+                                {'Back to list'}
+                            </Button>
+                        </Toolbar>
+                        
                         <h1>Edit User Profile</h1>
+                        
                         <div>
                             <FormControl sx={{m:'8px', width: '50ch' }}>
                             <TextField 
