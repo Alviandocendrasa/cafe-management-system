@@ -123,7 +123,7 @@ const UserPage = () => {
     }
 
     const renderAvalWorkSlot = () =>{
-        if (location && location.state && location.state.avalSlot){
+        if (location && location.state && location.state.avalSlot >= 0){
             return (<div className="profile-group">
                         <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
                             Available Work Slot :
