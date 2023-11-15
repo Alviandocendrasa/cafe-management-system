@@ -34,15 +34,9 @@ const UserList = () => {
             return;
         }
         
-        const id = getIdByName(value);
+        const id = users.find(el => el.username === value)._id;
 
         navigate(`/users/${id}`, {replace: true});
-    }
-    
-    const getIdByName = (name) => {
-        const user = users.find(el => el.username === name);
-
-        return user._id;
     }
 
     const sortData = (data) => {

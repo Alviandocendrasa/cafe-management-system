@@ -34,15 +34,9 @@ const UserProfileList = () => {
             return;
         }
         
-        const id = getIdByName(value);
+        const id = userProfiles.find(el => el.role === value)._id;
 
         navigate(`/user-profiles/${id}/edit`, {replace: true});
-    }
-    
-    const getIdByName = (name) => {
-        const userProfile = userProfiles.find(el => el.role === name);
-
-        return userProfile._id;
     }
 
     const getTableHead = (header) => {    

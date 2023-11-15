@@ -2,15 +2,16 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
 
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogActions, DialogTitle, Typography } from '@mui/material';
+import { Autocomplete, TextField, Toolbar, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Dialog, DialogActions, DialogTitle, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
 import { apiCall } from '../services/api';
+import { ROLE } from "../constants";
 
 const header = ["Start Date", "End Date", "Job", "Status", ""];
 
-const BidList = ({isManager, canSubmit, setCanSubmit}) => {
+const BidList = () => {
     const { auth } = useContext(AuthContext);
     
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
     const [bids, setBids] = useState([]);
 
     useEffect(()=>{
-        if (isManager){
+        if (auth.role === ROLE.manager){
             fetchAllbids();   
         }
         else{
@@ -45,6 +46,32 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
         } catch(err){
             console.log(err);
             toast.error(err.message);
+        }
+    }
+
+    const handleSearchClick = (event, value) => {
+        if (!value){
+            toast.error("No value from search.");
+            return;
+        }
+
+        const id = value._id;
+
+        switch(auth.role){
+            case ROLE.manager:
+                navigate(`/bids/${id}`, {replace: true});
+                break;
+            case ROLE.staff:
+                if(value.bidStatus === 'pending')
+                {
+                    navigate(`/bids/${id}/edit`, {replace: true});
+                } else {
+                    navigate(`/bids/${id}/`, {replace: true});
+                }   
+
+                break;
+            default:
+                break;
         }
     }
 
@@ -117,7 +144,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
 
     const renderButton = (bid) => {
         if (bid.bidStatus === 'pending'){
-            if (isManager){
+            if (auth.role === ROLE.manager){
                 return <Button 
                         id="view-button" 
                         variant="contained" 
@@ -142,51 +169,70 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
 
     const renderBidTable = (bids) => {
         return (
-            <TableContainer>
-                <Table sx={{ minWidth:650 }}>
-                    <TableHead>
-                        <TableRow>
-                            {getTableHead(header)}
-                        </TableRow>
-                    </TableHead>
+            <>
+                <Toolbar sx={{justifyContent: 'space-between', margin: '32px 0'}} disableGutters>
+                    <Autocomplete
+                    sx={{width: '50ch'}}
+                    options={bids}
+                    getOptionLabel={option => getTime(option.workslotId?.startTime)}
+                    renderOption={(props, option) => {                
+                        return (
+                            <li {...props} key={option._id}>                       
+                            {getTime(option.workslotId?.startTime)}
+                            </li>
+                        );
+                    }}
 
-                    <TableBody>
-                        {bids.length > 0 ? 
-                        bids.map((bid, i) => (
-                            <TableRow key={i}>                            
-                                <TableCell component="th" scope="row">
-                                    {getTime(bid?.workslotId?.startTime)}
-                                </TableCell>
-                                <TableCell component="th" scope="row">
-                                    {getTime(bid?.workslotId?.endTime)}
-                                </TableCell>
-                                <TableCell>
-                                    {getCaptalize(bid.jobTitle)}
-                                </TableCell>
-                                <TableCell>
-                                    {bid.bidStatus}
-                                </TableCell>
-                                <TableCell>
-                                {renderButton(bid)}
-                                </TableCell>                                                                       
+                    renderInput={params => <TextField {...params} label="Search bid by start time"/>}
+                    onChange={handleSearchClick}
+                    /> 
+                </Toolbar>      
+                <TableContainer>
+                    <Table sx={{ minWidth:650 }}>
+                        <TableHead>
+                            <TableRow>
+                                {getTableHead(header)}
                             </TableRow>
-                        )): 
-                        <TableRow>
-                            <TableCell colSpan={4} align='center'>
-                                <Typography variant="button" gutterBottom>
-                                    No Bid
-                                </Typography>
-                            </TableCell>                                   
-                        </TableRow>
-                        }                    
-                    </TableBody>                 
-                </Table>          
-            </TableContainer>            
+                        </TableHead>
+
+                        <TableBody>
+                            {bids.length > 0 ? 
+                            bids.map((bid, i) => (
+                                <TableRow key={i}>                            
+                                    <TableCell component="th" scope="row">
+                                        {getTime(bid?.workslotId?.startTime)}
+                                    </TableCell>
+                                    <TableCell component="th" scope="row">
+                                        {getTime(bid?.workslotId?.endTime)}
+                                    </TableCell>
+                                    <TableCell>
+                                        {getCaptalize(bid.jobTitle)}
+                                    </TableCell>
+                                    <TableCell>
+                                        {bid.bidStatus}
+                                    </TableCell>
+                                    <TableCell>
+                                    {renderButton(bid)}
+                                    </TableCell>                                                                       
+                                </TableRow>
+                            )): 
+                            <TableRow>
+                                <TableCell colSpan={4} align='center'>
+                                    <Typography variant="button" gutterBottom>
+                                        No Bid
+                                    </Typography>
+                                </TableCell>                                   
+                            </TableRow>
+                            }                    
+                        </TableBody>                 
+                    </Table>          
+                </TableContainer>            
+            </>
        );
     }
 
     const renderSortedBidList = () => {
-        if (isManager){
+        if (auth.role === ROLE.manager){
             return renderBidTable(getFilteredBids('pending'));
         } else{
            return (

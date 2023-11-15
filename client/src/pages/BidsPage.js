@@ -13,7 +13,7 @@ const BidsPage = () => {
 
             <Container className="container">
             <h1>Bid List</h1>
-            <BidList isManager={true}/>
+            <BidList />
             </Container>
         </div>
     )

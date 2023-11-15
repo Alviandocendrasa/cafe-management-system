@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from "dayjs";
 
-import { Card, CardContent, Menu, MenuItem, Button, Chip, Stack, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { Toolbar, Card, CardContent, Menu, MenuItem, Button, Chip, Stack, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
@@ -180,6 +181,13 @@ const WorkSlotAssignPage = () => {
                 <Card className="paper" sx={{ minWidth: 720 }}>
                     <div className="profile">
                         <CardContent>
+                            <Toolbar sx={{justifyContent: 'space-between'}} disableGutters>
+                                <Button sx={{marginLeft: '-16px'}} onClick={() => navigate('/workslots', {replace: true})}>
+                                    <ChevronLeftIcon />
+                                    {'Back to list'}
+                                </Button>
+                            </Toolbar>
+
                             <h1>Assign Work Slot</h1>
 
                             <div className="profile-group">

@@ -57,15 +57,9 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
             return;
         }
         
-        const id = getIdByName(value);
+        const id = allStaffs.find(el => el.username === value)._id;
 
         navigate(`/users/${id}`, {replace: true});
-    }
-    
-    const getIdByName = (name) => {
-        const staff = allStaffs.find(el => el.username === name);
-
-        return staff._id;
     }
 
     const sortData = (data) => {

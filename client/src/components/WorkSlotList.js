@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip, Stack, Button, Menu, MenuItem, Typography } from '@mui/material';
+import { Autocomplete, TextField, Toolbar, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Chip, Stack, Button, Menu, MenuItem, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
@@ -11,7 +11,7 @@ import { ROLE } from "../constants";
 
 const header = ["Start Date", "End Date", "Pending Jobs", ""];
 
-const WorkSlotList = ({isOwner}) => {
+const WorkSlotList = () => {
     const { auth } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -36,6 +36,31 @@ const WorkSlotList = ({isOwner}) => {
             toast.error(err.message);
         }
     }
+
+    const handleSearchClick = (event, value) => {
+        if (!value){
+            toast.error("No value from search.");
+            return;
+        }
+
+        const id = value._id;
+        console.log(value);
+
+        switch(auth.role){
+            case ROLE.manager:
+                navigate(`/workslots/${id}/assign`, {replace: true});
+                break;
+            case ROLE.owner:
+                navigate(`/workslots/${id}/edit`, {replace: true});
+                break;
+            case ROLE.staff:
+                navigate(`/bids/${id}/new`, {replace: true});
+                break;
+            default:
+                break;
+        }
+    }
+
 
     const handleOpenBid = (event, workslot) => {
         setAnchor(event.currentTarget);
@@ -76,6 +101,8 @@ const WorkSlotList = ({isOwner}) => {
     }
 
     const getUniqueJobs = (jobTitle) => {
+        if (!jobTitle) return;
+        
         let uniqueJobs = [];
 
         jobTitle.forEach((el) => {        
@@ -151,13 +178,21 @@ const WorkSlotList = ({isOwner}) => {
         return data;
     }
 
-    const renderWorkSlots = (workslots) => {
-        let arr = workslots.filter(el => el.pendingJob?.length > 0);
-        
-        if (isOwner){
-            arr = workslots;
+    
+    const getWorkSlots = (workslots) => {
+        switch(auth.role){
+            case ROLE.owner:
+                return workslots;
+            case ROLE.manager:
+                return workslots.filter(el => el.pendingJob?.length > 0);
+            case ROLE.staff:
+                return workslots.filter(el => el.pendingJob?.length > 0);
+            default:
+                return workslots;
         }
+    }
 
+    const renderWorkSlots = (arr) => {
         if (arr.length <= 0){
             return(<TableRow>
                 <TableCell colSpan={4} align='center'>
@@ -225,19 +260,37 @@ const WorkSlotList = ({isOwner}) => {
 
     return (
         <>
+            <Toolbar sx={{justifyContent: 'space-between', margin: '32px 0'}} disableGutters>
+                <Autocomplete
+                sx={{width: '50ch'}}
+                options={getWorkSlots(workslots)}
+                getOptionLabel={option => getTime(option.startTime)}
+                renderOption={(props, option) => {                
+                    return (
+                      <li {...props} key={option._id}>                       
+                        {getTime(option.startTime)}
+                      </li>
+                    );
+                }}
+
+                renderInput={params => <TextField {...params} label="Search work slot by start time"/>}
+                onChange={handleSearchClick}
+                />              
+            </Toolbar>  
             <TableContainer>
                 <Table sx={{ minWidth:650 }}>
                     <TableHead>
                         <TableRow>
-                            {getTableHead(header)}
+                        {getTableHead(header)}
                         </TableRow>
                     </TableHead>
 
                     <TableBody>
-                        {renderWorkSlots(workslots)}                    
+                        {renderWorkSlots(getWorkSlots(workslots))}                    
                     </TableBody>               
                 </Table>          
             </TableContainer>
+
             {focusWorkslot ? 
              <Menu
              onClose={handleClose}

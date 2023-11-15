@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from "dayjs";
 
-import { Paper, Button, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { Toolbar, Paper, Button, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { toast } from 'react-toastify';
 
+import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
 import { apiCall } from '../services/api';
+import { ROLE } from "../constants";
 
 const BidPage = () => {
+    const { auth } = useContext(AuthContext);
+
     const navigate = useNavigate();
 
     const { id } = useParams();
@@ -64,6 +69,14 @@ const BidPage = () => {
         return dayjs(time).format("DD-MM-YYYY") + " " + dayjs(time).format("hh:mm A");
     }
 
+    const handleBack = () => {
+        if (auth.role === ROLE.manager){
+            navigate('/bids', {replace: true})
+        } else {
+            navigate('/profile', {replace: true})
+        }
+    }
+
     return (
         <>
             <div className="form-page">
@@ -71,6 +84,13 @@ const BidPage = () => {
 
                 <Paper className="paper" sx={{ minWidth: 500 }}>
                     <div className="profile">
+                        <Toolbar sx={{justifyContent: 'space-between'}} disableGutters>
+                            <Button sx={{marginLeft: '-16px'}} onClick={handleBack}>
+                                <ChevronLeftIcon />
+                                {auth.role === ROLE.manager ? 'Back to list' : 'Back'}
+                            </Button>
+                        </Toolbar>
+
                         <h1>Bid</h1>
 
                         <div className="profile-group">
@@ -118,10 +138,13 @@ const BidPage = () => {
                             </Typography>
                         </div>
                     
-                        <div className="profile-group" style={{marginTop: '40px', justifyContent: 'space-around'}}>
+                       {auth.role === ROLE.manager?  
+                       <div className="profile-group" style={{marginTop: '40px', justifyContent: 'space-around'}}>
                             <Button sx={{margin: "0 8px"}} disabled={!canSubmit} variant="contained" size="large" onClick={() => setOpenReject(true)} color="error">Reject</Button>
                             <Button sx={{margin: "0 8px"}} disabled={!canSubmit} variant="contained" size="large" onClick={() => setOpenApprove(true)}>Approve</Button>
-                        </div>        
+                        </div> : 
+                        <></>
+                       }    
 
                     </div>
                 </Paper>
