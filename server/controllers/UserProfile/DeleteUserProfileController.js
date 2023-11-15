@@ -1,4 +1,3 @@
-const UserEntity = require("../../entities/userEntity");
 const UserProfileEntity = require("../../entities/userProfileEntity");
 
 class DeleteUserProfileController {
