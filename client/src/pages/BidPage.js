@@ -13,10 +13,7 @@ const BidPage = () => {
 
     const { id } = useParams();
 
-    const currentDate = new Date();
-    currentDate.setHours(10, 0, 0, 0);
-
-    const [formData, setFormData] = useState({});
+    const [bidData, setBidData] = useState({});
 
     const [canSubmit, setCanSubmit] = useState(true); 
     const [openApprove, setOpenApprove] = useState(false);
@@ -30,7 +27,7 @@ const BidPage = () => {
         try {
             const res = await apiCall("get", `/api/bids/${id}`);
 
-            setFormData(res.data);
+            setBidData(res.data);
         } catch(err){
             console.log(err);
             toast.error(err.message);
@@ -81,7 +78,7 @@ const BidPage = () => {
                                 Status:
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {formData.bidStatus}
+                                {bidData.bidStatus}
                             </Typography>
                         </div>
 
@@ -90,7 +87,7 @@ const BidPage = () => {
                                 Start Time:
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {getTime(formData?.workId?.startTime)}
+                                {getTime(bidData?.workslotId?.startTime)}
                             </Typography>
                         </div>
 
@@ -99,7 +96,7 @@ const BidPage = () => {
                                 End Time:
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {getTime(formData?.workId?.endTime)}
+                                {getTime(bidData?.workslotId?.endTime)}
                             </Typography>
                         </div>
 
@@ -108,7 +105,7 @@ const BidPage = () => {
                                 Applicant:
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {formData?.cafeStaffId?.username}
+                                {bidData?.cafeStaffId?.username}
                             </Typography>
                         </div>
 
@@ -117,7 +114,7 @@ const BidPage = () => {
                                 Job:
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {formData?.jobTitle}
+                                {bidData?.jobTitle}
                             </Typography>
                         </div>
                     
@@ -138,7 +135,7 @@ const BidPage = () => {
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setOpenReject(false)}>Cancel</Button>
-                    <Button onClick={event => handleReject(event)} color="error">Confirm</Button>
+                    <Button onClick={handleReject} color="error">Confirm</Button>
                 </DialogActions>
             </Dialog>
 
@@ -151,7 +148,7 @@ const BidPage = () => {
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setOpenApprove(false)}>Cancel</Button>
-                    <Button onClick={event => handleApprove(event)} color="error">Confirm</Button>
+                    <Button onClick={handleApprove} color="error">Confirm</Button>
                 </DialogActions>
             </Dialog>
         </>

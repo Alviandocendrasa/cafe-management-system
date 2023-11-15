@@ -159,7 +159,8 @@ const UserNewPage = () => {
                     id="role"
                     name="userProfileId"
                     onChange={handleUserProfileChange}
-                    value={formData.userProfileId}
+                    value={formData.userProfileId ? formData.userProfileId : ""}
+                    label="User Profile"
                     required
                     >
                         {

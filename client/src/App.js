@@ -17,6 +17,7 @@ import WorkSlotEditPage from './pages/WorkSlotEditPage';
 import WorkSlotAssignPage from './pages/WorkSlotAssignPage';
 import BidsPage from './pages/BidsPage';
 import BidPage from './pages/BidPage';
+import BidEditPage from './pages/BidEditPage';
 import UserNewPage from './pages/UserNewPage';
 import UsersPage from './pages/UsersPage';
 import UserPage from './pages/UserPage';
@@ -56,6 +57,9 @@ const App = () => {
               <Route path="/workslots/:id/assign"  element ={<WorkSlotAssignPage />} />
               <Route path="/bids"  element ={<BidsPage />} />
               <Route path="/bids/:id"  element ={<BidPage />} />
+            </Route>
+            <Route element={<ProtectedRoute allowedRoles={['staff']}/>}>
+              <Route path="/bids/:id/edit"  element ={<BidEditPage />} />
             </Route>
             <Route element={<ProtectedRoute allowedRoles={['admin']}/>}>
               <Route path="/users"  element ={<UsersPage />} />

@@ -176,10 +176,11 @@ const UserEditPage = () => {
                 >
                     <InputLabel htmlFor="role" required>User Profile</InputLabel>
                     <Select
-                    id="role"
+                    id="userProfileId"
                     name="userProfileId"
                     onChange={handleUserProfileChange}
-                    value={formData.userProfileId}
+                    value={formData.userProfileId ? formData.userProfileId : ""}
+                    label="User Profile"
                     required
                     >
                         {

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from "../contexts";
 import { apiCall } from '../services/api';
 
-const header = ["Start Date", "End Date", "Position", "Status", ""];
+const header = ["Start Date", "End Date", "Job", "Status", ""];
 
 const BidList = ({isManager, canSubmit, setCanSubmit}) => {
     const { auth } = useContext(AuthContext);
@@ -16,8 +16,6 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
     const navigate = useNavigate();
 
     const [bids, setBids] = useState([]);
-    const [openDialog, setOpenDialog] = useState(false);
-    const [focusBid, setFocusBid] = useState(null);
 
     useEffect(()=>{
         if (isManager){
@@ -48,33 +46,6 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
             console.log(err);
             toast.error(err.message);
         }
-    }
-
-    const handleOpenDialog = (bid) => {
-        setOpenDialog(true);
-        setFocusBid(bid);
-    }
-
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-        setFocusBid(null);
-    }
-
-    const handleDeleteBid = async () => {
-        try {
-            setCanSubmit(false);
-
-            await apiCall("delete", `/api/bids/${focusBid._id}`);
-
-            toast.success("Bid successfully removed!");            
-        } catch(err){
-            console.log(err);
-            toast.error(err.message);
-
-            setCanSubmit(true);
-        }
-                 
-        handleCloseDialog();
     }
 
     const getTime = (time) => {
@@ -157,14 +128,13 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
                         </Button>;
             } else {
                 return <Button 
-                        disabled={!canSubmit} 
-                        color="error" 
                         id="bid-button" 
                         variant="contained" 
                         size="small" 
-                        onClick={() => handleOpenDialog(bid)}
+                        // onClick={() => handleOpenDialog(bid)}
+                        onClick={() => navigate(`/bids/${bid._id}/edit`)}
                         >
-                            Cancel
+                            Edit
                         </Button>;
             }      
         }
@@ -240,19 +210,7 @@ const BidList = ({isManager, canSubmit, setCanSubmit}) => {
 
     return (
         <>
-            {renderSortedBidList()}
-            <Dialog
-            open={openDialog}
-            onClose={handleCloseDialog}
-            >
-                <DialogTitle>
-                    Confirm delete?
-                </DialogTitle>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog}>Cancel</Button>
-                    <Button onClick={handleDeleteBid} color="error">Confirm</Button>
-                </DialogActions>
-            </Dialog>
+            {renderSortedBidList()}        
         </>
     )
 }

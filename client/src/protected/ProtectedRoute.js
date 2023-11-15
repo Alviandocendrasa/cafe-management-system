@@ -1,16 +1,15 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { AuthContext } from '../contexts';
 
 const ProtectedRoute = ({ allowedRoles }) => {
-    const { auth } = useContext(AuthContext);
-
     const location = useLocation();
 
     const getComponent = () => {        
-        if (auth.isAuth && localStorage.getItem('jwtToken')){
+        const authObj = JSON.parse(localStorage.getItem("auth"));
+        
+        if (authObj.isAuth && localStorage.getItem('jwtToken')){
             if (allowedRoles) {
-                if(allowedRoles.includes(auth.role)) {                
+                if(allowedRoles.includes(authObj.role)) {                
                     return <Outlet />
                 } else {
                     return <Navigate to="/" state={{from: location}} replace />

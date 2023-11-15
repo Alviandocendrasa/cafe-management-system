@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from "dayjs";
 
-import { Paper, Button, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { Paper, Button, Typography, Dialog, DialogActions, DialogTitle, InputLabel, Select, MenuItem } from '@mui/material';
 import { toast } from 'react-toastify';
 
 import Toast from "../components/Toast";
@@ -13,14 +13,10 @@ const BidEditPage = () => {
 
     const { id } = useParams();
 
-    const currentDate = new Date();
-    currentDate.setHours(10, 0, 0, 0);
-
-    const [formData, setFormData] = useState({});
-
+    const [bidData, setBidData] = useState({});
     const [canSubmit, setCanSubmit] = useState(true); 
     const [openApprove, setOpenApprove] = useState(false);
-    const [openReject, setOpenReject] = useState(false);
+    const [openRemove, setOpenRemove] = useState(false);
 
     useEffect(() => {
         fetchBidData();
@@ -30,23 +26,26 @@ const BidEditPage = () => {
         try {
             const res = await apiCall("get", `/api/bids/${id}`);
 
-            setFormData(res.data);
+            setBidData(res.data);
         } catch(err){
             console.log(err);
             toast.error(err.message);
         }
     }
 
-    const handleReject = () => {
-        updateBid({ bidStatus: 'rejected' });
-
-        setOpenReject(false);
+    const handleJobChange = (event) => {        
+        setBidData(prevState => (
+            {
+                ...prevState,
+                jobTitle: event.target.value
+            }
+        ));
     }
 
-    const handleApprove = () => {
-        updateBid({ bidStatus: 'approved' });
-
+    const handleUpdate = () => {
         setOpenApprove(false);
+
+        updateBid({ jobTitle: bidData.jobTitle });
     }
 
     const updateBid = async (bidData) => {
@@ -63,25 +62,61 @@ const BidEditPage = () => {
         }
     }
 
+    const handleRemove = () => {
+        setOpenRemove(false);
+
+        cancelBid();
+    }
+
+    const cancelBid = async () => {
+        try {
+            setCanSubmit(false);
+
+            const res = await apiCall("delete", `/api/bids/${id}`);
+         
+            toast.success(res.message);            
+        } catch(err){
+            console.log(err);
+            toast.error(err.message);
+
+            setCanSubmit(true);
+        }
+    }
+
     const getTime = (time) => {
         return dayjs(time).format("DD-MM-YYYY") + " " + dayjs(time).format("hh:mm A");
+    }
+
+    const getUniqueJobs = (jobTitle) => {
+        let uniqueJobs = [];
+
+        jobTitle?.forEach((el) => {        
+            if(!uniqueJobs.includes(el))
+            {
+                uniqueJobs.push(el);            
+            }
+        });
+        
+        uniqueJobs.sort();
+
+        return uniqueJobs;
     }
 
     return (
         <>
             <div className="form-page">
-                <Toast onSuccessDone={() => navigate("/bids", { replace: true })} />
+                <Toast onSuccessDone={() => navigate("/profile", { replace: true })} />
 
                 <Paper className="paper" sx={{ minWidth: 500 }}>
                     <div className="profile">
-                        <h1>Bid</h1>
+                        <h1>Edit Bid</h1>
 
                         <div className="profile-group">
                             <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
-                                Status:
+                                Applicant:
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {formData.bidStatus}
+                                {bidData?.cafeStaffId?.username}
                             </Typography>
                         </div>
 
@@ -90,7 +125,7 @@ const BidEditPage = () => {
                                 Start Time:
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {getTime(formData?.workId?.startTime)}
+                                {getTime(bidData?.workslotId?.startTime)}
                             </Typography>
                         </div>
 
@@ -99,46 +134,49 @@ const BidEditPage = () => {
                                 End Time:
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {getTime(formData?.workId?.endTime)}
+                                {getTime(bidData?.workslotId?.endTime)}
                             </Typography>
                         </div>
 
-                        <div className="profile-group">
-                            <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
-                                Applicant:
-                            </Typography>
-                            <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {formData?.cafeStaffId?.username}
-                            </Typography>
-                        </div>
-
-                        <div className="profile-group">
+                        <div className="profile-group" style={{marginTop: '16px'}}>
                             <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
                                 Job:
                             </Typography>
-                            <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
-                                {formData?.jobTitle}
-                            </Typography>
+                            <Select
+                            sx={{ width: '20ch' }}
+                            id="jobTitle"
+                            name="jobTitle"
+                            onChange={handleJobChange}
+                            value={bidData.jobTitle ? bidData.jobTitle : ""}                            
+                            >
+                                {getUniqueJobs(bidData.workslotId?.pendingJob)?.map((jobTitle, i) => {
+                                    let text = jobTitle.charAt(0).toUpperCase() + jobTitle.slice(1);
+                                    
+                                    return (
+                                        <MenuItem key={i} value={jobTitle}>{text}</MenuItem>
+                                    )
+                                })}
+                            </Select>
                         </div>
                     
                         <div className="profile-group" style={{marginTop: '40px', justifyContent: 'space-around'}}>
-                            <Button sx={{margin: "0 8px"}} disabled={!canSubmit} variant="contained" size="large" onClick={() => setOpenReject(true)} color="error">Reject</Button>
-                            <Button sx={{margin: "0 8px"}} disabled={!canSubmit} variant="contained" size="large" onClick={() => setOpenApprove(true)}>Approve</Button>
+                            <Button sx={{margin: "0 8px"}} disabled={!canSubmit} variant="contained" size="large" onClick={() => setOpenRemove(true)} color="error">Remove</Button>
+                            <Button sx={{margin: "0 8px"}} disabled={!canSubmit} variant="contained" size="large" onClick={() => setOpenApprove(true)}>Update</Button>
                         </div>        
 
                     </div>
                 </Paper>
             </div>
             <Dialog
-            open={openReject}
-            onClose={() => setOpenReject(false)}
+            open={openRemove}
+            onClose={() => setOpenRemove(false)}
             >
                 <DialogTitle>
-                    Confirm reject?
+                    Confirm remove bid?
                 </DialogTitle>
                 <DialogActions>
-                    <Button onClick={() => setOpenReject(false)}>Cancel</Button>
-                    <Button onClick={event => handleReject(event)} color="error">Confirm</Button>
+                    <Button onClick={() => setOpenRemove(false)}>Cancel</Button>
+                    <Button onClick={handleRemove} color="error">Confirm</Button>
                 </DialogActions>
             </Dialog>
 
@@ -147,11 +185,11 @@ const BidEditPage = () => {
             onClose={() => setOpenApprove(false)}
             >
                 <DialogTitle>
-                    Confirm approve?
+                    Confirm update bid?
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setOpenApprove(false)}>Cancel</Button>
-                    <Button onClick={event => handleApprove(event)} color="error">Confirm</Button>
+                    <Button onClick={handleUpdate} color="error">Confirm</Button>
                 </DialogActions>
             </Dialog>
         </>
