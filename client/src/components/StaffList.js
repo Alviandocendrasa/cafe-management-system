@@ -173,7 +173,7 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
                 variant="outlined"
                 onClick={() =>  setFilterAvailable(!filterAvailable)}
                 >
-                    {filterAvailable ? 'Show Available' : 'Show All'}
+                    {filterAvailable ? 'Show Available Only' : 'Show All'}
                 </Button>
                 }
             </Toolbar>
