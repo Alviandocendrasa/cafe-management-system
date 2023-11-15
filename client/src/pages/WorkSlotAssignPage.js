@@ -209,7 +209,7 @@ const WorkSlotAssignPage = () => {
                             <div>
                             </div>
                         </CardContent>
-                        <StaffList pendingJobs={workslotData.pendingJob} canSubmit={canSubmit} handleOpenMenu={handleOpenMenu}/>                      
+                        <StaffList shouldAssign={true} pendingJobs={workslotData.pendingJob} canSubmit={canSubmit} handleOpenMenu={handleOpenMenu}/>                      
                     </div>
                 </Card>
             </div>

@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Typography, Card, CardContent, Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import { toast } from 'react-toastify';
 
+import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
 import { apiCall } from '../services/api';
 import { ROLE } from "../constants";
 
 const UserPage = () => {
+    const { auth } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -72,6 +74,53 @@ const UserPage = () => {
         return text?.charAt(0).toUpperCase() + text?.slice(1);
     }
 
+    const renderButton = () => {
+        switch(auth.role){
+            case ROLE.admin:
+                return(
+                    <div style={{marginTop: '12px', textAlign: 'center'}}>                          
+                        <Button 
+                        sx={{margin: "0 8px"}}
+                        disabled={!canSubmit} 
+                        id="delete-button" 
+                        variant="contained" 
+                        size="small" 
+                        onClick={() => setOpenDialog(true)}
+                        color="error"
+                        >
+                            Delete
+                        </Button>   
+                        <Button 
+                        sx={{margin: "0 8px"}}
+                        disabled={!canSubmit} 
+                        id="edit-button" 
+                        variant="contained" 
+                        size="small" 
+                        onClick={() => navigate(`/users/${user._id}/edit`)}
+                        >
+                            Edit
+                        </Button>             
+                     </div>
+                );
+            case ROLE.manager:
+                return(
+                    <div style={{marginTop: '12px', textAlign: 'center'}}>                          
+                        <Button 
+                        sx={{margin: "0 8px"}}
+                        id="return-button" 
+                        variant="contained" 
+                        size="small" 
+                        onClick={() => navigate('/staffs', {replace: true})}
+                        >
+                            Back
+                        </Button>                                   
+                     </div>
+                );
+            default:
+                return <></>
+        }
+    }
+
 
     return (
         <div className="form-page">
@@ -120,30 +169,7 @@ const UserPage = () => {
                         </div> : <></>   
                         }       
                     </CardContent>
-
-                    <div style={{marginTop: '12px', textAlign: 'center'}}>                          
-                        <Button 
-                        sx={{margin: "0 8px"}}
-                        disabled={!canSubmit} 
-                        id="delete-button" 
-                        variant="contained" 
-                        size="small" 
-                        onClick={() => setOpenDialog(true)}
-                        color="error"
-                        >
-                            Delete
-                        </Button>   
-                        <Button 
-                        sx={{margin: "0 8px"}}
-                        disabled={!canSubmit} 
-                        id="edit-button" 
-                        variant="contained" 
-                        size="small" 
-                        onClick={() => navigate(`/users/${user._id}/edit`)}
-                        >
-                            Edit
-                        </Button>             
-                    </div>                                                          
+                    {renderButton()}                                                                               
                 </div>
             </Card>
             <Dialog

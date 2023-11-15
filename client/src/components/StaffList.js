@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 
 import { apiCall } from '../services/api';
 
-const header = ["Username", "Available Slot", ""];
+const header = ["Username", "Max Bid Slot", "Available Slot", ""];
 
-const StaffList = ({canSubmit, handleOpenMenu, pendingJobs}) => {
+const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
     const [availableStaffs, setAvailableStaffs] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(()=>{
         fetchStaffUsers();
@@ -31,8 +34,7 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs}) => {
                     arr.push({...staff, availableSlots});
                 }
             });
-        
-            console.log(arr);
+
             setAvailableStaffs(arr);
         } catch(err){
             console.log(err);
@@ -72,7 +74,7 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs}) => {
 
 
     const renderStaffs = (staffs) => {
-        if (pendingJobs.length <= 0){
+        if (pendingJobs?.length <= 0){
             return(<TableRow>
                 <TableCell colSpan={3} align='center'>
                     <Typography variant="button" gutterBottom>
@@ -98,18 +100,31 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs}) => {
                             {el.username}
                         </TableCell>
                         <TableCell>
-                            {el.availableSlots}
-                        </TableCell>                            
+                            {el.maxBidSlots}
+                        </TableCell> 
                         <TableCell>
-                        <Button 
-                        disabled={!canSubmit} 
-                        id="offer-button" 
-                        variant="contained" 
-                        size="small" 
-                        onClick={(event) => handleOpenMenu(event, el._id, el.username)}
-                        >
-                            Assign
-                        </Button>
+                            {el.availableSlots}
+                        </TableCell>
+                        <TableCell> 
+                            {shouldAssign ?
+                            <Button 
+                            disabled={!canSubmit} 
+                            id="offer-button" 
+                            variant="contained" 
+                            size="small" 
+                            onClick={(event) => handleOpenMenu(event, el._id, el.username)}
+                            >
+                                Assign
+                            </Button>:
+                            <Button 
+                            id="offer-button" 
+                            variant="contained" 
+                            size="small" 
+                            onClick={() => navigate(`/users/${el._id}`, {replace: true})}
+                            >
+                                View
+                            </Button>
+                            }                                                 
                         </TableCell>
                     </TableRow>)
         })

@@ -56,6 +56,10 @@ const managerPages = [
         link: "/workslots"
     },
     {
+        title: "Staffs",
+        link: "/staffs"
+    },
+    {
         title: "Profile",
         link: "/profile"
     }

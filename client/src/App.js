@@ -26,6 +26,7 @@ import UserProfilePage from './pages/UserProfilesPage';
 import UserProfileNewPage from './pages/UserProfileNewPage';
 import UserProfileEditPage from './pages/UserProfileEditPage';
 import ProfilePage from './pages/ProfilePage';
+import StaffsPage from './pages/StaffsPage';
 
 import ProtectedRoute from './protected/ProtectedRoute';
 import { ROLE } from './constants';
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="/workslots/:id/assign"  element ={<WorkSlotAssignPage />} />
               <Route path="/bids"  element ={<BidsPage />} />
               <Route path="/bids/:id"  element ={<BidPage />} />
+              <Route path="/staffs"  element ={<StaffsPage />} />
             </Route>
             <Route element={<ProtectedRoute allowedRoles={['staff']}/>}>
               <Route path="/bids/:id/edit"  element ={<BidEditPage />} />
@@ -64,10 +66,12 @@ const App = () => {
             <Route element={<ProtectedRoute allowedRoles={['admin']}/>}>
               <Route path="/users"  element ={<UsersPage />} />
               <Route path="/users/new"  element ={<UserNewPage />} />
-              <Route path="/users/:id"  element ={<UserPage />} />
               <Route path="/user-profiles"  element ={<UserProfilePage />} />
               <Route path="/user-profiles/new"  element ={<UserProfileNewPage />} />
               <Route path="/user-profiles/:id/edit"  element ={<UserProfileEditPage />} />
+            </Route>
+            <Route element={<ProtectedRoute allowedRoles={['admin', 'manager']}/>}>
+              <Route path="/users/:id"  element ={<UserPage />} />
             </Route>
             <Route element={<ProtectedRoute />}>
               <Route path="/users/:id/edit"  element ={<UserEditPage />} />
