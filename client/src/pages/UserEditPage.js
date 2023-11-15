@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 import { Paper, FormControl, OutlinedInput, InputLabel, InputAdornment, IconButton, TextField, Button, Select, MenuItem, Slider, Typography } from '@mui/material';
 import { Visibility, VisibilityOff} from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
+import { AuthContext } from "../contexts";
 import Toast from "../components/Toast";
 import { apiCall } from '../services/api';
+import { ROLE } from "../constants";
 
 const UserEditPage = () => {  
+    const { auth } = useContext(AuthContext);
+    
     const navigate = useNavigate();
 
     const { id } = useParams();
@@ -24,7 +28,8 @@ const UserEditPage = () => {
     const [userProfiles, setUserProfile] = useState([]);
     const [currentUserProfileId, setCurrentUserProfileId] = useState(""); 
     const [canSubmit, setCanSubmit] = useState(true); 
-    const [showPassword, setShowPassword] = useState(false);  
+    const [showPassword, setShowPassword] = useState(false);
+    const [displayRole, setDisplayRole] = useState("");  
   
     useEffect(() => {
         fetchUserProfiles();
@@ -42,6 +47,7 @@ const UserEditPage = () => {
                 maxBidSlots: res.data.maxBidSlots    
             }
 
+            setDisplayRole(res.data.userProfileId?.role);
             setCurrentUserProfileId(res.data.userProfileId?._id);
             setFormData(data);               
         } catch(err){
@@ -111,9 +117,19 @@ const UserEditPage = () => {
         return userProfiles.find(el => el._id === userProfileId)?.role;
     }
 
+    const handleNavigate = () => {
+        if (auth.role === ROLE.admin){
+            navigate('/users', { replace: true });
+        }
+        else{
+            navigate('/profile', { replace: true });
+        }
+
+    }
+
     return (
         <div className="form-page">
-        <Toast onSuccessDone={() => navigate('/users', { replace: true })}/>
+        <Toast onSuccessDone={handleNavigate}/>
 
         <Paper className="paper" sx={{ minWidth: 325, minHeight: 350 }}>
             <form className="register-form" name="registerForm" onSubmit={handleSubmit}>
@@ -140,7 +156,7 @@ const UserEditPage = () => {
                     id="password"
                     name="password"  
                     label="Password" 
-                    value={formData.password}
+                    value={formData.password ? formData.password : ""}
                     type={showPassword ? 'text' : 'password'}
                     onChange={handleChange}
                     endAdornment={
@@ -174,31 +190,43 @@ const UserEditPage = () => {
                 <FormControl
                     sx={{m:'8px', width: '25ch' }}
                 >
-                    <InputLabel htmlFor="role" required>User Profile</InputLabel>
-                    <Select
-                    id="userProfileId"
-                    name="userProfileId"
-                    onChange={handleUserProfileChange}
-                    value={formData.userProfileId ? formData.userProfileId : ""}
-                    label="User Profile"
-                    required
-                    >
-                        {
-                            userProfiles?.map((up) => {
-                                const role = up.role;
-                                let text = role.charAt(0).toUpperCase() + role.slice(1);
+                    {auth.role === ROLE.admin ? 
+                    <>
+                        <InputLabel htmlFor="role" required>User Profile</InputLabel>
+                        <Select
+                        id="userProfileId"
+                        name="userProfileId"
+                        onChange={handleUserProfileChange}
+                        value={formData.userProfileId ? formData.userProfileId : ""}
+                        label="User Profile"
+                        required
+                        >
+                            {
+                                userProfiles?.map((up) => {
+                                    const role = up.role;
+                                    let text = role.charAt(0).toUpperCase() + role.slice(1);
 
-                                return(
-                                    <MenuItem key={text} value={up._id}>{text}</MenuItem>
-                                )                
-                            })
-                        }
-                    </Select>
+                                    return(
+                                        <MenuItem key={text} value={up._id}>{text}</MenuItem>
+                                    )                
+                                })
+                            }
+                        </Select> 
+                    </> :
+                    <TextField 
+                    id="userProfileId"
+                    name="userProfileId" 
+                    label="User Profile"
+                    variant="outlined" 
+                    value={displayRole}
+                    disabled
+                    />
+                   }
                 </FormControl>
             </div>
 
             <div>
-                {getRole(currentUserProfileId) === 'staff' ? 
+                {auth.role === ROLE.admin && getRole(currentUserProfileId) === 'staff' ? 
                     <FormControl
                     sx={{m:'8px', width: '50ch'}}
                     >

@@ -65,12 +65,12 @@ const App = () => {
               <Route path="/users"  element ={<UsersPage />} />
               <Route path="/users/new"  element ={<UserNewPage />} />
               <Route path="/users/:id"  element ={<UserPage />} />
-              <Route path="/users/:id/edit"  element ={<UserEditPage />} />
               <Route path="/user-profiles"  element ={<UserProfilePage />} />
               <Route path="/user-profiles/new"  element ={<UserProfileNewPage />} />
               <Route path="/user-profiles/:id/edit"  element ={<UserProfileEditPage />} />
             </Route>
             <Route element={<ProtectedRoute />}>
+              <Route path="/users/:id/edit"  element ={<UserEditPage />} />
               <Route path="/profile"  element ={<ProfilePage />} />
             </Route>
           </Routes>

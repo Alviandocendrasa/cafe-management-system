@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import { Typography, Card, CardContent } from '@mui/material';
+import { Typography, Card, CardContent, Button } from '@mui/material';
 import { toast } from 'react-toastify';
 
 import { AuthContext } from "../contexts";
@@ -99,7 +99,17 @@ const ProfilePage = () => {
                                 {profile.maxBidSlots}
                             </Typography>
                         </div> : <></>     
-                        }          
+                        } 
+
+                        <div className="profile-group" style={{marginTop: "40px", justifyContent: "center"}}>
+                            <Button 
+                            variant="contained" 
+                            size="small"
+                            onClick={() => navigate(`/users/${auth.userId}/edit`, { replace: true})}
+                            >
+                                Edit Account
+                            </Button>
+                        </div>         
                     </CardContent>
 
                     {auth.role === ROLE.staff ? 
