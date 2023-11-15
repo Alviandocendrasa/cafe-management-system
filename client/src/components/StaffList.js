@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography } from '@mui/material';
+import { Autocomplete, TextField, Toolbar, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 
 import { apiCall } from '../services/api';
@@ -9,7 +9,9 @@ import { apiCall } from '../services/api';
 const header = ["Username", "Max Bid Slot", "Available Slot", ""];
 
 const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
+    const [allStaffs, setAllStaffs] = useState([]);
     const [availableStaffs, setAvailableStaffs] = useState([]);
+    const [filterAvailable, setFilterAvailable] = useState(false);
 
     const navigate = useNavigate();
 
@@ -23,23 +25,47 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
             const bidRes = await apiCall("get", `/api/bids/`);
 
             const staffs = userRes.data?.filter(el => el.userProfileId?.role === 'staff');
-            const arr = [];            
+            const availArr = [];   
+            const allArr = [];         
 
+            // get available slot for each staff
             staffs.forEach(staff => {                
                 const bids = bidRes.data.filter(bid => bid.cafeStaffId?._id === staff._id && bid.bidStatus == 'approved');
 
                 if(staff.maxBidSlots > bids.length){
                     let availableSlots = staff.maxBidSlots - bids.length;
                     
-                    arr.push({...staff, availableSlots});
-                }
+                    availArr.push({...staff, availableSlots});
+                } 
+
+                let availableSlots = staff.maxBidSlots - bids.length;
+                
+                allArr.push({...staff, availableSlots: availableSlots > 0 ? availableSlots : 0});
             });
 
-            setAvailableStaffs(arr);
+            setAllStaffs(allArr);
+            setAvailableStaffs(availArr);
         } catch(err){
             console.log(err);
             toast.error(err.message);
         }
+    }
+    
+    const handleSearchClick = (event, value) => {
+        if (!value){
+            toast.error("No value from search.");
+            return;
+        }
+        
+        const id = getIdByName(value);
+
+        navigate(`/users/${id}`, {replace: true});
+    }
+    
+    const getIdByName = (name) => {
+        const staff = allStaffs.find(el => el.username === name);
+
+        return staff._id;
     }
 
     const sortData = (data) => {
@@ -72,7 +98,6 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
         )
     }
 
-
     const renderStaffs = (staffs) => {
         if (pendingJobs?.length <= 0){
             return(<TableRow>
@@ -84,7 +109,7 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
             </TableRow> )
         }
         
-        if (staffs.length <= 0){
+        if (shouldAssign && staffs.length <= 0){
             return(<TableRow>
                 <TableCell colSpan={3} align='center'>
                     <Typography variant="button" gutterBottom>
@@ -92,7 +117,17 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
                     </Typography>
                 </TableCell>                                   
             </TableRow> )
-        }        
+        }
+        
+        if (staffs.length <= 0){
+            return(<TableRow>
+                <TableCell colSpan={3} align='center'>
+                    <Typography variant="button" gutterBottom>
+                        No staff users
+                    </Typography>
+                </TableCell>                                   
+            </TableRow> )
+        } 
 
         return sortData(staffs).map((el, i) => {
             return  (<TableRow key={i}>                            
@@ -132,6 +167,20 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
 
     return (
         <>
+            <Toolbar sx={{justifyContent: 'space-between', margin: '32px 0'}} disableGutters>
+                <Autocomplete
+                sx={{width: '50ch'}}
+                options={shouldAssign ? sortData(availableStaffs).map(el=>el.username) : sortData(allStaffs).map(el=>el.username)}
+                renderInput={params => <TextField {...params} label="Search Staff"/>}
+                onChange={handleSearchClick}
+                />
+                <Button
+                variant="outlined"
+                onClick={() =>  setFilterAvailable(!filterAvailable)}
+                >
+                    {filterAvailable ? 'Unfilter Staff' : 'Filter Staff'}
+                </Button>
+            </Toolbar>
             <TableContainer>
                 <Table sx={{ minWidth:650 }}>
                     <TableHead>
@@ -141,7 +190,7 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
                     </TableHead>
 
                     <TableBody>
-                        {renderStaffs(availableStaffs)}                    
+                        {renderStaffs(shouldAssign || filterAvailable ? availableStaffs : allStaffs)}                    
                     </TableBody>               
                 </Table>          
             </TableContainer>
