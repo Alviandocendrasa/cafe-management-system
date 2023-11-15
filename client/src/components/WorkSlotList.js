@@ -44,7 +44,6 @@ const WorkSlotList = () => {
         }
 
         const id = value._id;
-        console.log(value);
 
         switch(auth.role){
             case ROLE.manager:
