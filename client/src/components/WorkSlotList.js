@@ -9,9 +9,9 @@ import { AuthContext } from "../contexts";
 import { apiCall } from '../services/api';
 import { ROLE } from "../constants";
 
-const header = ["Start Date", "End Date", "Positions", ""];
+const header = ["Start Date", "End Date", "Pending Jobs", ""];
 
-const WorkSlotList = () => {
+const WorkSlotList = ({isOwner}) => {
     const { auth } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -152,7 +152,11 @@ const WorkSlotList = () => {
     }
 
     const renderWorkSlots = (workslots) => {
-        const arr = workslots.filter(el => el.pendingJob?.length > 0);
+        let arr = workslots.filter(el => el.pendingJob?.length > 0);
+        
+        if (isOwner){
+            arr = workslots;
+        }
 
         if (arr.length <= 0){
             return(<TableRow>

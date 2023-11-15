@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from "dayjs";
 
@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import Toast from "../components/Toast";
 import { apiCall } from '../services/api';
 
-const BidPage = () => {
+const BidEditPage = () => {
     const navigate = useNavigate();
 
     const { id } = useParams();
@@ -159,4 +159,4 @@ const BidPage = () => {
     )
 }
 
-export default BidPage;
+export default BidEditPage;

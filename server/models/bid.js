@@ -31,7 +31,6 @@ bidSchema.pre('save', async function (next) {
 
     const staffBidList = await Bid.find({ cafeStaffId: bidData.cafeStaffId })
     const { maxBidSlots } = await User.findOne({ userId: bidData.cafeStaffId })
-
     
     const holdingWorkslots = staffBidList.filter(el => (el.bidStatus == 'pending'));
 
