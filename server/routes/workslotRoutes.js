@@ -11,6 +11,9 @@ router.route("/")
   .get(viewAllWorkslots)
   .post(createWorkslot)
 
+router.route("/search/")
+  .get(searchWorkslot)
+
 router.route("/available-workslots/")
   .get(viewAvailableWorkslots)
 

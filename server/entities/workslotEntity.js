@@ -136,6 +136,10 @@ class WorkslotEntity {
       throw error;
     }
   }
+
+  async searchWorkslot(query) {
+    return db.Workslot.find(query);
+  }
 }
 
 module.exports = WorkslotEntity;

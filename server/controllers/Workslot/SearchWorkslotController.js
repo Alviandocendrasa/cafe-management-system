@@ -1,21 +1,13 @@
-const BidEntity = require("../../entities/bidEntity");
 const WorkslotEntity = require("../../entities/workslotEntity");
 
 class SearchWorkslotController {
 
   /* ============================= Controller methods ============================= */
 
-  async searchWorkslot(workslotId) {
+  async searchWorkslot(query) {
     try {
-      if (!workslotId) {
-        throw Error("Workslot Id params cannot be empty");
-      }
       const workslotEntity = new WorkslotEntity();
-      const doc = await workslotEntity.getWorkslot(workslotId);
-
-      if (!doc) {
-        throw Error("No document found with that ID")
-      }
+      const doc = await workslotEntity.searchWorkslot(query);
 
       return doc;
     }

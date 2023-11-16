@@ -121,3 +121,22 @@ exports.deleteWorkslot = async function (req, res, next) {
     })
   }
 }
+
+exports.searchWorkslot = async function (req, res, next) {
+  try {
+    const searchWorkslotController = new SearchWorkslotController();
+    const doc = await searchWorkslotController.searchWorkslot(req.query)
+
+    res.status(200).json({
+      status: 'success',
+      message: `Workslot documents retrieved s11uccessfully.`,
+      data: doc
+    });
+  }
+  catch (error) {
+    return next({
+      httpCode: 400,
+      message: error.message
+    })
+  }
+}

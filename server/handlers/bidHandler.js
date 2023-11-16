@@ -210,7 +210,7 @@ exports.searchBid = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `Bid documents retrieved s11uccessfully.`,
+      message: `Bid documents retrieved successfully.`,
       data: doc
     });
   }
