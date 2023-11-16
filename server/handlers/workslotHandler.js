@@ -4,6 +4,7 @@ const SearchWorkslotController = require('../controllers/Workslot/SearchWorkslot
 const ViewAllWorkslotsController = require('../controllers/Workslot/ViewAllWorkslotsController')
 const DeleteWorkslotController = require('../controllers/Workslot/DeleteWorkslotController')
 const ViewAvailableWorkslotsController = require('../controllers/Workslot/ViewAvailableWorkslotsController')
+const GetWorkslotController = require('../controllers/Workslot/GetWorkslotController')
 
 exports.createWorkslot = async function (req, res, next) {
   try {
@@ -45,10 +46,10 @@ exports.updateWorkslot = async function (req, res, next) {
   }
 }
 
-exports.searchWorkslot = async function (req, res, next) {
+exports.getWorkslot = async function (req, res, next) {
   try {
-    const searchWorkslotController = new SearchWorkslotController();
-    const doc = await searchWorkslotController.searchWorkslot(req.params.id);
+    const getWorkslotController = new GetWorkslotController();
+    const doc = await getWorkslotController.getWorkslot(req.params.id);
 
     res.status(200).json({
       status: 'success',

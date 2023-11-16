@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { createWorkslot, updateWorkslot, searchWorkslot, viewAllWorkslots, deleteWorkslot, viewAvailableWorkslots } = require("../handlers/workslotHandler.js");
+const { createWorkslot, updateWorkslot, searchWorkslot, viewAllWorkslots, deleteWorkslot, viewAvailableWorkslots, getWorkslot } = require("../handlers/workslotHandler.js");
 const { protect } = require("../handlers/authHandler.js");
 
 const router = express.Router();
@@ -15,7 +15,7 @@ router.route("/available-workslots/")
   .get(viewAvailableWorkslots)
 
 router.route("/:id/")
-  .get(searchWorkslot)
+  .get(getWorkslot)
   .patch(updateWorkslot)
   .delete(deleteWorkslot)
 
