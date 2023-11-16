@@ -172,7 +172,7 @@ exports.approveBid = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `Bid ${req.params.id} approved successfully.`,
+      message: `Bid approved successfully.`,
       data: doc
     });
   }
@@ -191,7 +191,7 @@ exports.declineBid = async function (req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: `Bid ${req.params.id} declined successfully.`,
+      message: `Bid rejected successfully.`,
       data: doc
     });
   }

@@ -129,7 +129,7 @@ class BidEntity {
     }
   }
 
-  async approveBid(bidId, data) {
+  async approveBid(bidId) {
     try {
       // NOTE FOR DOCS TEAM
       // return
@@ -141,7 +141,7 @@ class BidEntity {
       //  workslotId
       // }
 
-      return await db.Bid.findByIdAndUpdate(bidId, data, {
+      return await db.Bid.findByIdAndUpdate(bidId, {bidStatus: 'approved'}, {
         new: true,
         runValidators: true
       })
@@ -167,7 +167,7 @@ class BidEntity {
       //  workslotId
       // }
 
-      return await db.Bid.findByIdAndUpdate(bidId, data, {
+      return await db.Bid.findByIdAndUpdate(bidId, {bidStatus: 'rejected'}, {
         new: true,
         runValidators: true
       })

@@ -40,22 +40,36 @@ const BidPage = () => {
     }
 
     const handleReject = () => {
-        updateBid({ bidStatus: 'rejected' });
+        rejectBid();
 
         setOpenReject(false);
     }
 
     const handleApprove = () => {
-        updateBid({ bidStatus: 'approved' });
+        approveBid();
 
         setOpenApprove(false);
     }
 
-    const updateBid = async (bidData) => {
+    const approveBid = async () => {
         try {
             setCanSubmit(false);
             
-            const res = await apiCall("patch", `/api/bids/${id}`, bidData);
+            const res = await apiCall("patch", `/api/bids/approve/${id}`, {bidStatus: 'approved'});
+            toast.success(res.message);
+        } catch(err){
+            console.log(err);
+            toast.error(err.message);
+
+            setCanSubmit(true);
+        }
+    }
+
+    const rejectBid = async () => {
+        try {
+            setCanSubmit(false);
+            
+            const res = await apiCall("patch", `/api/bids/decline/${id}`);
             toast.success(res.message);
         } catch(err){
             console.log(err);

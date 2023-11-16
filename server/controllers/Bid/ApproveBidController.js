@@ -4,22 +4,22 @@ class ApproveBidController {
 
   /* ============================= Controller methods ============================= */
 
-  async approvedBid(bidId, data) {
+  async approvedBid(bidId) {
     try {
       if (!bidId) {
         throw Error("Bid id cannot by empty");
       }
 
-      if (!data) {
-        throw Error("Data cannot be empty");
-      }
+      // if (!data) {
+      //   throw Error("Data cannot be empty");
+      // }
 
-      if (data.bidStatus !== "approved") {
-        throw Error("You should update the bid status to approved")
-      }
+      // if (data.bidStatus !== "approved") {
+      //   throw Error("You should update the bid status to approved")
+      // }
 
       const bidEntity = new BidEntity();
-      const doc = await bidEntity.approveBid(bidId, data);
+      const doc = await bidEntity.approveBid(bidId);
 
       return doc;
     }
