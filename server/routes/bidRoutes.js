@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { createBid, getOneBid, updateBid, deleteBid, getAllBids, viewBiddingHistory, viewAllPendingBids, approveBid, declineBid } = require("../handlers/bidHandler")
+const { createBid, getOneBid, updateBid, deleteBid, getAllBids, viewBiddingHistory, viewAllPendingBids, approveBid, declineBid, searchBid } = require("../handlers/bidHandler")
 const { protect } = require("../handlers/authHandler.js");
 
 const router = express.Router();
@@ -10,6 +10,9 @@ const router = express.Router();
 router.route("/")
   .get(getAllBids)
   .post(createBid)
+
+router.route("/search/")
+  .get(searchBid)
 
 router.route("/:id/")
   .get(getOneBid)

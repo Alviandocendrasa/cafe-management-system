@@ -1,12 +1,13 @@
 const CreateBidController = require('../controllers/Bid/CreateBidController')
 const UpdateBidController = require('../controllers/Bid/UpdateBidController');
-const SearchBidController = require('../controllers/Bid/SearchBidController');
+const GetBidController = require('../controllers/Bid/GetBidController');
 const GetAllBidsController = require('../controllers/Bid/GetAllBidsController');
 const DeleteBidController = require('../controllers/Bid/DeleteBidController');
 const ViewBiddingHistoryController = require('../controllers/Bid/ViewBiddingHistoryController');
 const ViewAllPendingBidsController = require('../controllers/Bid/ViewAllPendingBidsController');
 const ApproveBidController = require('../controllers/Bid/ApproveBidController');
 const DeclineBidController = require('../controllers/Bid/DeclineBidController');
+const SearchBidController = require('../controllers/Bid/SearchBidController');
 
 exports.createBid = async function (req, res, next) {
   try {
@@ -63,7 +64,7 @@ exports.getOneBid = async function (req, res, next) {
       throw Error("Bid id params cannot be empty.");
     }
 
-    const getOneBid = new SearchBidController();
+    const getOneBid = new GetBidController();
     const doc = await getOneBid.getOneBid(req.params.id);
 
     res.status(200).json({
@@ -191,6 +192,25 @@ exports.declineBid = async function (req, res, next) {
     res.status(200).json({
       status: 'success',
       message: `Bid ${req.params.id} declined successfully.`,
+      data: doc
+    });
+  }
+  catch (error) {
+    return next({
+      httpCode: 400,
+      message: error.message
+    })
+  }
+}
+
+exports.searchBid = async function (req, res, next) {
+  try {
+    const searchBidController = new SearchBidController();
+    const doc = await searchBidController.searchBid(req.query)
+
+    res.status(200).json({
+      status: 'success',
+      message: `Bid documents retrieved s11uccessfully.`,
       data: doc
     });
   }

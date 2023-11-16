@@ -1,17 +1,13 @@
-const BidEntity = require("../../entities/bidEntity")
+const BidEntity = require("../../entities/bidEntity");
 
 class SearchBidController {
 
   /* ============================= Controller methods ============================= */
 
-  async getOneBid(bidId) {
+  async searchBid(query) {
     try {
       const bidEntity = new BidEntity();
-      const doc = await bidEntity.getBid(bidId);
-
-      if (!doc) {
-        throw Error("No document found with that ID")
-      }
+      const doc = await bidEntity.searchBid(query);
 
       return doc;
     }

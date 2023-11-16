@@ -151,6 +151,10 @@ class BidEntity {
     }
   }
 
+  async searchBid(query) {
+    return db.Bid.find(query);
+  }
+
   async declineBid(bidId, data) {
     try {
       // NOTE FOR DOCS TEAM
