@@ -15,7 +15,7 @@ class CreateUserController {
 
       return doc;
     }
-    catch (error) {    
+    catch (error) {
       throw error;
     }
   }
