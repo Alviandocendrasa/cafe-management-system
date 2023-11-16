@@ -9,7 +9,7 @@ exports.createUserProfile = async function (req, res, next) {
   try {
     const { role, permissions } = req.body;
     const createUserProfileController = new CreateUserProfileController();
-    const doc = await createUserProfileController.createUser(role, permissions)
+    const doc = await createUserProfileController.createUserProfile(role, permissions)
 
     res.status(200).json({
       status: 'success',

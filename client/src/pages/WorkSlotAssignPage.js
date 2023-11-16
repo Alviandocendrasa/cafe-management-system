@@ -104,7 +104,7 @@ const WorkSlotAssignPage = () => {
             
             const bidRes = await apiCall("post", `/api/bids`, bidData); 
 
-            await apiCall("patch", `/api/bids/approve/${bidRes.data._id}`, bidData);  
+            await apiCall("patch", `/api/bids/approve/${bidRes.data._id}`);  
             
             toast.success('Successfully assign job.');
         } catch(err){

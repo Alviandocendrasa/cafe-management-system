@@ -21,10 +21,12 @@ const ProfilePage = () => {
         maxBidSlots: 0,
         phoneNumber: ""
     });
+    const [pendingBids, setPendingBids] = useState([]);
     const [canSubmit, setCanSubmit] = useState(true);
 
     useEffect(() => {
         fetchUserData();
+        fetchPendingBids();
     },[]);
 
     const fetchUserData = async () => {
@@ -44,6 +46,19 @@ const ProfilePage = () => {
             toast.error(err.message);
         }
     }
+
+    const fetchPendingBids = async () => {
+        try {
+            const res = await apiCall("get", `/api/bids/pending/${auth.userId}`); 
+            console.log(auth.userId);
+
+            setPendingBids(res.data);
+        } catch(err){
+            console.log(err);
+            toast.error(err.message);
+        }
+    }
+
 
     const getCaptalize = (text) => {
         if (!text){
@@ -91,14 +106,25 @@ const ProfilePage = () => {
                         </div>
 
                         {profile.role === ROLE.staff ? 
+                        <>
                         <div className="profile-group">
                             <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
                                 Max Bids For Work Slot :
                             </Typography>
                             <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
                                 {profile.maxBidSlots}
+                            </Typography>                          
+                        </div> 
+                        <div className="profile-group">
+                            <Typography sx={{flex: 1}} variant="subtitle1" gutterBottom>
+                                Available Work Slot :
                             </Typography>
-                        </div> : <></>     
+                            <Typography sx={{fontWeight: 'bold'}} variant="subtitle1" gutterBottom>
+                                {profile.maxBidSlots - pendingBids.length}
+                            </Typography>
+                        </div>
+                        </>
+                        : <></>     
                         } 
 
                         <div className="profile-group" style={{marginTop: "40px", justifyContent: "center"}}>

@@ -4,7 +4,7 @@ class CreateUserProfileController {
 
   /* ============================= Controller methods ============================= */
 
-  async createUser(role, permissions) {
+  async createUserProfile(role, permissions) {
     try {
       if (!role || !permissions) {
         throw Error("Please fill in all required data");

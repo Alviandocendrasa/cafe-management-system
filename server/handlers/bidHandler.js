@@ -148,6 +148,10 @@ exports.viewBiddingHistory = async function (req, res, next) {
 
 exports.viewAllPendingBids = async function (req, res, next) {
   try {
+    if (!req.params.cafeStaffId) {
+      throw Error("Please provide cafe staff id.")
+    }
+    
     const viewAllPendingBids = new ViewAllPendingBidsController();
     const doc = await viewAllPendingBids.viewAllPendingBids(req.params.cafeStaffId);
 
