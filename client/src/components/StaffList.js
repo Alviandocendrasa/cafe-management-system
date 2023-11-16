@@ -8,16 +8,16 @@ import { apiCall } from '../services/api';
 
 const header = ["Username", "Max Bid Slot", "Available Slot", ""];
 
-const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
+const StaffList = ({ canSubmit, handleOpenMenu, pendingJobs, shouldAssign }) => {
     const [allStaffs, setAllStaffs] = useState([]);
     const [availableStaffs, setAvailableStaffs] = useState([]);
     const [filterAvailable, setFilterAvailable] = useState(false);
 
     const navigate = useNavigate();
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchStaffUsers();
-    },[])
+    }, [])
 
     const fetchStaffUsers = async () => {
         try {
@@ -25,66 +25,66 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
             const bidRes = await apiCall("get", `/api/bids/`);
 
             const staffs = userRes.data?.filter(el => el.userProfileId?.role === 'staff');
-            const availArr = [];   
-            const allArr = [];         
+            const availArr = [];
+            const allArr = [];
 
             // get available slot for each staff
-            staffs.forEach(staff => {                
+            staffs.forEach(staff => {
                 const bids = bidRes.data.filter(bid => bid.cafeStaffId?._id === staff._id && bid.bidStatus == 'approved');
 
-                if(staff.maxBidSlots > bids.length){
+                if (staff.maxBidSlots > bids.length) {
                     let availableSlots = staff.maxBidSlots - bids.length;
-                    
-                    availArr.push({...staff, availableSlots});
-                } 
+
+                    availArr.push({ ...staff, availableSlots });
+                }
 
                 let availableSlots = staff.maxBidSlots - bids.length;
-                
-                allArr.push({...staff, availableSlots: availableSlots > 0 ? availableSlots : 0});
+
+                allArr.push({ ...staff, availableSlots: availableSlots > 0 ? availableSlots : 0 });
             });
 
             setAllStaffs(allArr);
             setAvailableStaffs(availArr);
-        } catch(err){
+        } catch (err) {
             console.log(err);
             toast.error(err.message);
         }
     }
-    
+
     const handleSearchClick = (event, value) => {
-        if (!value){
+        if (!value) {
             toast.error("No value from search.");
             return;
         }
-        
+
         const id = allStaffs.find(el => el.username === value)._id;
 
-        navigate(`/users/${id}`, {replace: true});
+        navigate(`/users/${id}`, { replace: true });
     }
 
     const sortData = (data) => {
-        const compare = (a, b) => {        
+        const compare = (a, b) => {
             if (a.username === null) {
                 return 1;
-              }
-            
-              if (b.username === null) {
+            }
+
+            if (b.username === null) {
                 return -1;
-              }
-            
-              if (a.username === b.username) {
+            }
+
+            if (a.username === b.username) {
                 return 0;
-              }
-            
-              return a.username > b.username ? 1 : -1;
+            }
+
+            return a.username > b.username ? 1 : -1;
         }
-        
+
         data.sort(compare);
 
         return data;
     }
 
-    const getTableHead = (header) => {    
+    const getTableHead = (header) => {
         return (
             header.map((header) => (
                 <TableCell key={header}>{header}</TableCell>
@@ -93,92 +93,92 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
     }
 
     const renderStaffs = (staffs) => {
-        if (pendingJobs?.length <= 0){
-            return(<TableRow>
+        if (pendingJobs?.length <= 0) {
+            return (<TableRow>
                 <TableCell colSpan={3} align='center'>
                     <Typography variant="button" gutterBottom>
                         There is no pending job to assign
                     </Typography>
-                </TableCell>                                   
-            </TableRow> )
+                </TableCell>
+            </TableRow>)
         }
-        
-        if (shouldAssign && staffs.length <= 0){
-            return(<TableRow>
+
+        if (shouldAssign && staffs.length <= 0) {
+            return (<TableRow>
                 <TableCell colSpan={3} align='center'>
                     <Typography variant="button" gutterBottom>
                         No available staff users
                     </Typography>
-                </TableCell>                                   
-            </TableRow> )
+                </TableCell>
+            </TableRow>)
         }
-        
-        if (staffs.length <= 0){
-            return(<TableRow>
+
+        if (staffs.length <= 0) {
+            return (<TableRow>
                 <TableCell colSpan={3} align='center'>
                     <Typography variant="button" gutterBottom>
                         No staff users
                     </Typography>
-                </TableCell>                                   
-            </TableRow> )
-        } 
+                </TableCell>
+            </TableRow>)
+        }
 
         return sortData(staffs).map((el, i) => {
-            return  (<TableRow key={i}>                            
-                        <TableCell component="th" scope="row">
-                            {el.username}
-                        </TableCell>
-                        <TableCell>
-                            {el.maxBidSlots}
-                        </TableCell> 
-                        <TableCell>
-                            {el.availableSlots}
-                        </TableCell>
-                        <TableCell> 
-                            {shouldAssign ?
-                            <Button 
-                            disabled={!canSubmit} 
-                            id="offer-button" 
-                            variant="contained" 
-                            size="small" 
+            return (<TableRow key={i}>
+                <TableCell component="th" scope="row">
+                    {el.username}
+                </TableCell>
+                <TableCell>
+                    {el.maxBidSlots}
+                </TableCell>
+                <TableCell>
+                    {el.availableSlots}
+                </TableCell>
+                <TableCell>
+                    {shouldAssign ?
+                        <Button
+                            disabled={!canSubmit}
+                            id="offer-button"
+                            variant="contained"
+                            size="small"
                             onClick={(event) => handleOpenMenu(event, el._id, el.username)}
-                            >
-                                Assign
-                            </Button>:
-                            <Button 
-                            id="offer-button" 
-                            variant="contained" 
-                            size="small" 
-                            onClick={() => navigate(`/users/${el._id}`, {state: {avalSlot: el.availableSlots} , replace: true})}
-                            >
-                                View
-                            </Button>
-                            }                                                 
-                        </TableCell>
-                    </TableRow>)
+                        >
+                            Assign
+                        </Button> :
+                        <Button
+                            id="offer-button"
+                            variant="contained"
+                            size="small"
+                            onClick={() => navigate(`/users/${el._id}`, { state: { avalSlot: el.availableSlots }, replace: true })}
+                        >
+                            View
+                        </Button>
+                    }
+                </TableCell>
+            </TableRow>)
         })
     }
 
     return (
         <>
-            <Toolbar sx={{justifyContent: 'space-between', margin: '32px 0'}} disableGutters>
+            <Toolbar sx={{ justifyContent: 'space-between', margin: '32px 0' }} disableGutters>
                 <Autocomplete
-                sx={{width: '50ch'}}
-                options={shouldAssign ? sortData(availableStaffs).map(el=>el.username) : sortData(allStaffs).map(el=>el.username)}
-                renderInput={params => <TextField {...params} label="Search Staff"/>}
-                onChange={handleSearchClick}
+                    sx={{ width: '50ch' }}
+                    options={shouldAssign ? sortData(availableStaffs).map(el => el.username) : sortData(allStaffs).map(el => el.username)}
+                    renderInput={params => <TextField {...params} label="Search Staff" />}
+                    onChange={handleSearchClick}
                 />
                 {shouldAssign ? <></> :
-                <Button
-                variant="outlined"
-                onClick={() =>  setFilterAvailable(!filterAvailable)}
-                >
-                    {filterAvailable ? 'Show All' : 'Show Available Only' }
-                </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={() => setFilterAvailable(!filterAvailable)}
+                    >
+                        {filterAvailable ? 'Show All' : 'Show Available Only'}
+                    </Button>
                 }
             </Toolbar>
             <TableContainer>
-                <Table sx={{ minWidth:650 }}>
+                <Table sx={{ minWidth: 650 }}>
                     <TableHead>
                         <TableRow>
                             {getTableHead(header)}
@@ -186,9 +186,9 @@ const StaffList = ({canSubmit, handleOpenMenu, pendingJobs, shouldAssign}) => {
                     </TableHead>
 
                     <TableBody>
-                        {renderStaffs(shouldAssign || filterAvailable ? availableStaffs : allStaffs)}                    
-                    </TableBody>               
-                </Table>          
+                        {renderStaffs(shouldAssign || filterAvailable ? availableStaffs : allStaffs)}
+                    </TableBody>
+                </Table>
             </TableContainer>
         </>
     )

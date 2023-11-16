@@ -10,36 +10,36 @@ const header = ["Role", "Permissions", ""];
 
 const UserProfileList = () => {
     const navigate = useNavigate();
-    
+
     const [userProfiles, setUserProfiles] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchUserProfileList();
-    },[])
+    }, [])
 
     const fetchUserProfileList = async () => {
         try {
             const res = await apiCall("get", `/api/user-profiles/`);
 
             setUserProfiles(res.data);
-        } catch(err){
+        } catch (err) {
             console.log(err);
             toast.error(err.message);
         }
     }
 
     const handleSearchClick = (event, value) => {
-        if (!value){
+        if (!value) {
             toast.error("No value from search.");
             return;
         }
-        
+
         const id = userProfiles.find(el => el.role === value)._id;
 
-        navigate(`/user-profiles/${id}/edit`, {replace: true});
+        navigate(`/user-profiles/${id}/edit`, { replace: true });
     }
 
-    const getTableHead = (header) => {    
+    const getTableHead = (header) => {
         return (
             header.map((header) => (
                 <TableCell key={header}>{header}</TableCell>
@@ -48,25 +48,25 @@ const UserProfileList = () => {
     }
 
     const getCaptalize = (text) => {
-        if (!text){
+        if (!text) {
             return '-';
         }
-        
+
         return text.charAt(0).toUpperCase() + text.slice(1);
     }
 
     const renderPermissions = (permissions) => {
-        
-        if (permissions.length > 0){
+
+        if (permissions.length > 0) {
             permissions.sort();
-            
+
             return (
                 <Stack direction="row" spacing={1}>
-                     {permissions?.map((el) => {                            
-                         return (
-                             <Chip key={el} label={el} />
-                         )
-                     })}
+                    {permissions?.map((el) => {
+                        return (
+                            <Chip key={el} label={el} />
+                        )
+                    })}
                 </Stack>
             )
         }
@@ -80,16 +80,16 @@ const UserProfileList = () => {
 
     return (
         <>
-            <Toolbar sx={{justifyContent: 'space-between', margin: '32px 0'}} disableGutters>
+            <Toolbar sx={{ justifyContent: 'space-between', margin: '32px 0' }} disableGutters>
                 <Autocomplete
-                sx={{width: '50ch'}}
-                options={userProfiles.map(el=>el.role)}
-                renderInput={params => <TextField {...params} label="Search User Profile"/>}
-                onChange={handleSearchClick}
-                />              
-            </Toolbar>  
+                    sx={{ width: '50ch' }}
+                    options={userProfiles.map(el => el.role)}
+                    renderInput={params => <TextField {...params} label="Search User Profile" />}
+                    onChange={handleSearchClick}
+                />
+            </Toolbar>
             <TableContainer>
-                <Table sx={{ minWidth:650 }}>
+                <Table sx={{ minWidth: 650 }}>
                     <TableHead>
                         <TableRow>
                             {getTableHead(header)}
@@ -98,36 +98,36 @@ const UserProfileList = () => {
 
                     <TableBody>
                         {userProfiles.length > 0 ? userProfiles.map((up, i) => (
-                            <TableRow key={i}>                            
+                            <TableRow key={i}>
                                 <TableCell component="th" scope="row">
                                     {getCaptalize(up.role)}
                                 </TableCell>
                                 <TableCell>
                                     {renderPermissions(up.permissions)}
-                                </TableCell>                            
+                                </TableCell>
                                 <TableCell>
-                                <Button 
-                                disabled={false} 
-                                id="up-button" 
-                                variant="contained" 
-                                size="small" 
-                                onClick={() => navigate(`/user-profiles/${up._id}/edit`)}
-                                >
-                                    Edit
-                                </Button>
+                                    <Button
+                                        disabled={false}
+                                        id="up-button"
+                                        variant="contained"
+                                        size="small"
+                                        onClick={() => navigate(`/user-profiles/${up._id}/edit`)}
+                                    >
+                                        Edit
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         )) :
-                        <TableRow>
-                            <TableCell colSpan={3} align='center'>
-                                <Typography variant="button" gutterBottom>
-                                    No user profile found
-                                </Typography>
-                            </TableCell>                                   
-                        </TableRow> 
-                        }                    
-                    </TableBody>               
-                </Table>          
+                            <TableRow>
+                                <TableCell colSpan={3} align='center'>
+                                    <Typography variant="button" gutterBottom>
+                                        No user profile found
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        }
+                    </TableBody>
+                </Table>
             </TableContainer>
         </>
     )

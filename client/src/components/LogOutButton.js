@@ -1,14 +1,14 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "../contexts";
 
-import { setTokenHeader} from '../services/api';
+import { setTokenHeader } from '../services/api';
 
 const LogoutButton = () => {
     const { removeCurrentUser } = useContext(AuthContext);
-    
+
     const navigate = useNavigate();
 
     const handleLogOut = () => {
@@ -20,13 +20,13 @@ const LogoutButton = () => {
     }
 
     return (
-            <Button 
-            sx={{color: 'white', display: 'block', fontWeight: '900'}} 
+        <Button
+            sx={{ color: 'white', display: 'block', fontWeight: '900' }}
             variant="text"
             onClick={handleLogOut}
-            >
-                Log Out
-            </Button>
+        >
+            Log Out
+        </Button>
     )
 }
 

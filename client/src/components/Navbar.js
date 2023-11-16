@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 
-import { AppBar, Box, Button, Container, IconButton, Toolbar, Typography  } from '@mui/material';
+import { AppBar, Box, Button, Container, IconButton, Toolbar, Typography } from '@mui/material';
 import CoffeeIcon from '@mui/icons-material/Coffee';
 
 import { AuthContext } from '../contexts';
@@ -80,7 +80,7 @@ const Navbar = () => {
     const { auth } = useContext(AuthContext);
 
     const switchRoleContent = () => {
-        switch(auth.role){
+        switch (auth.role) {
             case ROLE.admin:
                 return renderLinks(adminPages);
             case ROLE.owner:
@@ -90,16 +90,16 @@ const Navbar = () => {
             case ROLE.staff:
                 return renderLinks(staffPages);
             default:
-                return <></>;            
+                return <></>;
         }
     }
 
     const renderLinks = (arr) => {
-        if(arr.length <=0) return <></>;
-        
+        if (arr.length <= 0) return <></>;
+
         return (
             arr.map((el) => (
-                <Button    
+                <Button
                     key={el.title}
                     sx={{ my: 2, color: 'white', display: 'block', fontWeight: '900' }}
                 >
@@ -110,25 +110,26 @@ const Navbar = () => {
     }
 
     return (
-    <AppBar position='relative'>
-        <Container maxWidth="xl">
-            <Toolbar disableGutters>
-                <CoffeeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />         
-                {auth.isAuth ?
-                    <>
-                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            {switchRoleContent()}
-                        </Box>
-                        <LogoutButton />
-                    </>:
-                    <Typography sx={{fontWeight: '900'}}>
-                        Cafe Management System
-                    </Typography>
-                }                                
-            </Toolbar>
-        </Container>
-    </AppBar>
+        <AppBar position='relative'>
+            <Container maxWidth="xl">
+                <Toolbar disableGutters>
+                    <CoffeeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    {auth.isAuth ?
+                        <>
+                            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                                {switchRoleContent()}
+                            </Box>
+                            <LogoutButton />
+                        </> :
+                        <Typography sx={{ fontWeight: '900' }}>
+                            Cafe Management System
+                        </Typography>
+                    }
+                </Toolbar>
+            </Container>
+        </AppBar>
     )
 }
 
 export default Navbar
+
