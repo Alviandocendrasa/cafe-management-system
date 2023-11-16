@@ -28,6 +28,23 @@ userSchema.pre("save", async function (next) {
   }
 });
 
+userSchema.pre("findOneAndUpdate", async function (next) {
+  console.log(this);
+  
+  try {
+    if (this._update.password) {
+      const hashedPassword = await bcrypt.hash(this._update.password, 10);
+      this._update.password = hashedPassword;
+
+      return next();
+    }
+
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+});
+
 userSchema.methods.comparePassword = async function (candidatePassword, next) {
   try {
     const isMatch = await bcrypt.compare(candidatePassword, this.password);
