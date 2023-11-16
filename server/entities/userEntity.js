@@ -96,8 +96,28 @@ class UserEntity {
   }
 
   async searchUser(query) {
-    return db.User.find(query);
+    const regexQuery = {};
+
+    Object.keys(query).forEach((key) => {
+      if (key === "username") {
+        const partialValue = query[key] || "";
+        const regex = new RegExp(partialValue, "i");
+        regexQuery[key] = { $regex: regex };
+      }
+      else if (key === "phoneNumber") {
+        const partialValue = query[key] || "";
+        const regex = new RegExp(partialValue, "i");
+        regexQuery[key] = { $regex: regex };
+      }
+      else {
+        regexQuery[key] = query[key];
+      }
+
+    });
+
+    return await db.User.find(regexQuery);
   }
+
 
   async findUserByUsername(username) {
     /*

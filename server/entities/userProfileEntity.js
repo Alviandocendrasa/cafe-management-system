@@ -103,7 +103,21 @@ class UserProfileEntity {
   }
 
   async searchUserProfile(query) {
-    return db.UserProfile.find(query);
+    const regexQuery = {};
+
+    Object.keys(query).forEach((key) => {
+      if (key === "role") {
+        const partialValue = query[key] || "";
+        const regex = new RegExp(partialValue, "i");
+        regexQuery[key] = { $regex: regex };
+      }
+      else {
+        regexQuery[key] = query[key];
+      }
+
+    });
+
+    return await db.UserProfile.find(regexQuery);
   }
 
 }
