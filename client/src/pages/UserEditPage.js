@@ -145,13 +145,14 @@ const UserEditPage = () => {
                     variant="outlined" 
                     value={formData.username}
                     onChange={handleChange}
+                    required
                     />
                 </FormControl>
 
                 <FormControl
                     sx={{m:'8px', width: '25ch' }}
                 >
-                    <InputLabel htmlFor="password" required>Password</InputLabel>
+                    <InputLabel htmlFor="password">Password</InputLabel>
                     <OutlinedInput 
                     id="password"
                     name="password"  
@@ -184,6 +185,7 @@ const UserEditPage = () => {
                     variant="outlined" 
                     value={formData.phoneNumber}
                     onChange={handleChange}
+                    required
                     />
                 </FormControl>
 
