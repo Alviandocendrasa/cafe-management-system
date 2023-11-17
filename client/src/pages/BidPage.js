@@ -69,7 +69,7 @@ const BidPage = () => {
         try {
             setCanSubmit(false);
             
-            const res = await apiCall("patch", `/api/bids/decline/${id}`);
+            const res = await apiCall("patch", `/api/bids/decline/${id}`, {bidStatus: 'rejected'});
             toast.success(res.message);
         } catch(err){
             console.log(err);
