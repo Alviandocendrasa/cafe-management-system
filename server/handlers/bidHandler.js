@@ -172,7 +172,7 @@ exports.viewAllPendingBids = async function (req, res, next) {
 exports.approveBid = async function (req, res, next) {
   try {
     const approveBid = new ApproveBidController();
-    const doc = await approveBid.approvedBid(req.params.id, req.body)
+    const doc = await approveBid.approvedBid(req.params.id)
 
     res.status(200).json({
       status: 'success',
@@ -191,7 +191,7 @@ exports.approveBid = async function (req, res, next) {
 exports.declineBid = async function (req, res, next) {
   try {
     const declineBid = new DeclineBidController();
-    const doc = await declineBid.declineBid(req.params.id, req.body)
+    const doc = await declineBid.declineBid(req.params.id)
 
     res.status(200).json({
       status: 'success',
